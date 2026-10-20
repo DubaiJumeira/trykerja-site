@@ -227,11 +227,11 @@ html:has(.menu[open]) { overflow: hidden; }
 .tags li { display: inline-flex; align-items: center; height: 36px; padding: 0 14px; border-radius: 999px; background: var(--sand); font: 600 15px/1 var(--font-body); color: var(--ink); white-space: nowrap; }
 .who .body { margin-top: 22px; }
 
-.notdating { margin-top: 88px; border-top: 3px solid var(--ink); padding-top: 24px; }
-.notdating .h2 { font-size: 40px; line-height: 44px; letter-spacing: -.035em; }
+.no-block { margin-top: 88px; border-top: 3px solid var(--ink); padding-top: 24px; }
+.no-block .h2 { font-size: 40px; line-height: 44px; letter-spacing: -.035em; }
 .nos { margin-top: 18px; }
 .nos li { font: 700 32px/40px var(--font-head); letter-spacing: -.025em; color: var(--ink); }
-.notdating .after { margin-top: 22px; font: 600 18px/27px var(--font-body); color: var(--ink); text-wrap: pretty; }
+.no-block .after { margin-top: 22px; font: 600 18px/27px var(--font-body); color: var(--ink); text-wrap: pretty; }
 
 .promise3 { margin-top: 88px; }
 
@@ -401,11 +401,11 @@ main:has(> .lost) + .foot { margin-top: 0; }
   .tags li { height: 44px; padding: 0 18px; font-size: 17px; }
   .who .body { margin-top: 28px; }
 
-  .notdating { margin-top: 150px; border-top-width: 4px; padding-top: 40px; }
-  .notdating .h2 { font-size: 80px; line-height: 84px; letter-spacing: -.045em; }
+  .no-block { margin-top: 150px; border-top-width: 4px; padding-top: 40px; }
+  .no-block .h2 { font-size: 80px; line-height: 84px; letter-spacing: -.045em; }
   .nos { margin-top: 36px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(4, auto); grid-auto-flow: column; column-gap: 48px; }
   .nos li { font-size: 52px; line-height: 64px; letter-spacing: -.03em; }
-  .notdating .after { margin-top: 36px; font-size: 22px; line-height: 32px; }
+  .no-block .after { margin-top: 36px; font-size: 22px; line-height: 32px; }
 
   .promise3 { margin-top: 150px; }
 
