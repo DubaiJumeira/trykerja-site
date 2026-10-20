@@ -1,0 +1,64 @@
+/* Our promise (/promise/), frames 47c-1 (mobile) and 47c-2 (desktop).
+   Calm: no effects on this page. Colours only from site.css's :root. */
+
+/* ---------- Sections ---------- */
+.pr-1 { margin-top: 64px; }
+.pr-2, .pr-5, .pr-6, .pr-7 { margin-top: 76px; }
+/* "Where you are stays on your phone" gets the most room. */
+.pr-3, .pr-4 { margin-top: 136px; }
+
+.pr-h { font-size: 28px; line-height: 32px; letter-spacing: -.03em; }
+.pr-3 .pr-h { font-size: 32px; line-height: 36px; }
+
+.pr-p { margin-top: 14px; font: 400 17px/27px var(--font-body); color: var(--ink-2); text-wrap: pretty; }
+
+.pr-dots { margin-top: 16px; gap: 12px; }
+
+.pr-big { margin-top: 22px; display: flex; flex-direction: column; gap: 16px; }
+.pr-big p { font: 500 20px/29px var(--font-body); color: var(--ink); text-wrap: pretty; }
+
+/* The Privacy screen sits beside section 2 on desktop only (frame 47c-1 has no screen). */
+.pr-shot { display: none; }
+
+/* Section 7: three text links, then the page's one pill. Links keep 44 px targets;
+   the negative margins put their words where the frame draws them. */
+.pr-links { margin: 5px 0 -10px; display: flex; flex-wrap: wrap; column-gap: 22px; }
+.pr-pill { margin-top: 24px; }
+
+.foot { margin-top: 96px; }
+
+/* ---------- Desktop ---------- */
+@media (min-width: 1080px) {
+  .pr-top .lede { max-width: 680px; }
+
+  .pr-1 { margin-top: 88px; }
+  .pr-2, .pr-5, .pr-6, .pr-7 { margin-top: 110px; }
+  .pr-3, .pr-4 { margin-top: 190px; }
+  /* Section 2's grid ends with the "Sample profiles" caption (10 + 16 px), which frame 47c-2 doesn't draw;
+     take it off here so the gap from the screen to section 3 is the frame's. */
+  .pr-3 { margin-top: 164px; }
+
+  .pr-text { max-width: 720px; }
+  .pr-3 .pr-text { max-width: 820px; }
+
+  .pr-h { font-size: 32px; line-height: 38px; }
+  .pr-3 .pr-h { font-size: 34px; line-height: 40px; }
+
+  .pr-p { margin-top: 16px; font-size: 19px; line-height: 31px; }
+
+  .pr-dots { margin-top: 20px; gap: 14px; }
+
+  .pr-big { margin-top: 28px; gap: 20px; }
+  .pr-big p { font-size: 24px; line-height: 35px; }
+
+  /* 720 px of text, the screen at the right edge (frame 47c-2). Below 1200 px of container the
+     text column gives way, so the screen keeps its size. */
+  .pr-2 { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: clamp(48px, 6vw, 80px); align-items: start; }
+  .pr-shot { display: block; justify-self: end; }
+  .pr-shot .phone { width: 330.1px; }
+
+  .pr-links { margin: 11px 0 -9px; }
+  .pr-pill { margin-top: 32px; }
+
+  .foot { margin-top: 150px; }
+}
