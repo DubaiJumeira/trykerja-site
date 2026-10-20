@@ -185,6 +185,9 @@ html:has(.menu[open]) { overflow: hidden; }
 .foot-meaning { grid-area: meaning; font: 400 14px/20px var(--font-body); color: var(--ink-2); }
 .foot-small { grid-area: small; display: flex; flex-direction: column; gap: 4px; font: 400 12px/18px var(--font-body); color: var(--ink-soft); }
 
+/* A page's top block under the bar (How it works, Our promise). */
+.page-top { padding-top: 40px; }
+
 /* Section rhythm: the gap between a page's sections (88 on mobile, 150 on desktop). */
 .sec { margin-top: 88px; }
 
@@ -236,6 +239,7 @@ main:has(> .lost) + .foot { margin-top: 0; }
   .last .pill { margin-top: 0; flex: none; }
 
   .sec { margin-top: 150px; }
+  .page-top { padding-top: 96px; }
   .foot { margin-top: 150px; }
   .foot-in {
     padding: 56px 0; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 80px; row-gap: 14px;
@@ -247,6 +251,13 @@ main:has(> .lost) + .foot { margin-top: 0; }
   .foot-links, .foot .contact { margin: 0; align-self: center; }
   .foot-links .link, .foot .contact .link, .foot .contact .plain { font-size: 16px; line-height: 23px; }
   .foot-small { margin-top: 26px; padding-top: 24px; border-top: 1px solid var(--hairline); flex-direction: row; justify-content: space-between; font-size: 13px; line-height: 18px; }
+}
+
+/* One orange pill on screen (47e-4): the timelines the bar pill follows. The page's last pill
+   (the Last call card, Our promise's closing pill) and, on Welcome, the hero pill. */
+@supports (animation-timeline: view()) {
+  body { timeline-scope: --hero-cta, --end-cta; }
+  .last .pill, .pr-pill { view-timeline: --end-cta block; }
 }
 
 /* ---------- Effects: only when the visitor allows motion ---------- */
@@ -262,6 +273,11 @@ main:has(> .lost) + .foot { margin-top: 0; }
     /* Blocks fade and rise as they scroll in (Welcome and How it works, never the first screen). */
     .rise { animation: rise linear both; animation-timeline: view(); animation-range: entry 0% entry 160px; }
     @keyframes rise { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
+
+    /* The bar pill fades out while the page's last pill comes into view, so the two are never on screen together.
+       Without support, or with reduced motion, both simply show. */
+    body:has(.last .pill, .pr-pill) .bar-pill { animation: bar-pill-out linear forwards; animation-timeline: --end-cta; animation-range: entry 0% entry 100%; }
+    @keyframes bar-pill-out { from { opacity: 1; visibility: visible; } to { opacity: 0; visibility: hidden; } }
   }
 }
 

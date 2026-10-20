@@ -1,6 +1,5 @@
 /* How it works (frames 47b). Loaded after site.css; every colour comes from site.css's :root. */
 
-.page-top { padding-top: 40px; }
 .chips-bar {
   position: sticky; top: var(--bar-h); z-index: 20; margin-top: 24px; padding: 12px 0;
   background: var(--cream); box-shadow: 0 1px 0 var(--hairline), 0 -1px 0 var(--hairline);
@@ -67,7 +66,6 @@ body:has(#control:target) .chips a[href="#control"] { background: var(--lemon); 
 
 /* Desktop */
 @media (min-width: 1080px) {
-  .page-top { padding-top: 96px; }
   .chips-bar { position: static; margin-top: 36px; padding: 0; background: none; box-shadow: none; }
   .chips-bar::after { display: none; }
   .chips { gap: 10px; padding: 0; width: min(100% - 80px, 1200px); margin-inline: auto; overflow: visible; }
