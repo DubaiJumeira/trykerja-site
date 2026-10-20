@@ -22,7 +22,7 @@ In `download/index.html`, the "Open the Canggu beta invite" button has `href="#R
 
 ## The domain
 
-There is no `CNAME` file yet. It goes in at the domain switch, with one line: `trykerja.com`.
+`CNAME` is in: one line, `trykerja.com`, for GitHub Pages' custom domain.
 
 Pages link to each other with relative paths, so they also work on a preview address before the switch. `404.html` uses root-absolute paths (`/assets/...`), because Pages serves it at any depth; on a preview address under a sub-path it shows unstyled.
 
