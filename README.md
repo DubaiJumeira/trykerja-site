@@ -28,8 +28,8 @@ Pages link to each other with relative paths, so they also work on a preview add
 
 ## Where things are
 
-- `assets/site.css`: colours (once, on `:root`, from the app's tokens), fonts, the shared parts, Welcome and How it works.
-- `assets/promise.css`, `assets/download.css`: Our promise and Join the beta.
+- `assets/site.css`: colours (once, on `:root`, from the app's tokens), fonts and the shared parts (top bar, menu, footer, pills, links, lists, Coming soon, last call, the 404 block).
+- `assets/welcome.css`, `assets/how.css`, `assets/promise.css`, `assets/download.css`: each page's own layout, loaded after `site.css`.
 - `assets/fonts/`: Latin subsets of Bricolage Grotesque and Plus Jakarta Sans (WOFF2), with their OFL licences.
 - `assets/screens/`: the app screens (WebP, drawn for the site, sample profiles only).
 - `assets/og.jpg`: the share preview (1200 × 630). `assets/qr-download.svg`: the QR code to https://trykerja.com/download.

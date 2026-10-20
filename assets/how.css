@@ -1,0 +1,104 @@
+/* How it works (frames 47b). Loaded after site.css; every colour comes from site.css's :root. */
+
+.page-top { padding-top: 40px; }
+.chips-bar {
+  position: sticky; top: var(--bar-h); z-index: 20; margin-top: 24px; padding: 12px 0;
+  background: var(--cream); box-shadow: 0 1px 0 var(--hairline), 0 -1px 0 var(--hairline);
+}
+.chips-bar::after {
+  content: ""; position: absolute; right: 0; top: 0; bottom: 0; width: 48px; pointer-events: none;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--cream) 0%, transparent), var(--cream) 80%);
+}
+.chips { display: flex; gap: 8px; overflow-x: auto; padding: 0 max(20px, (100% - 640px) / 2); scrollbar-width: none; }
+.chips::-webkit-scrollbar { display: none; }
+.chips::after { content: ""; flex: none; width: 28px; }
+.chip {
+  flex: none; display: inline-flex; align-items: center; height: 44px; padding: 0 16px;
+  border-radius: 999px; border: 1px solid var(--ink); background: var(--cream); color: var(--ink);
+  font: 600 15px/1 var(--font-body); white-space: nowrap; text-decoration: none;
+}
+.chip:hover { background: var(--sand); }
+.chips a[href="#profile"] { background: var(--lemon); font-weight: 700; }
+body:has(.chapter:target) .chips a[href="#profile"] { background: var(--cream); font-weight: 600; }
+body:has(#profile:target) .chips a[href="#profile"],
+body:has(#people:target) .chips a[href="#people"],
+body:has(#cafes:target) .chips a[href="#cafes"],
+body:has(#sessions:target) .chips a[href="#sessions"],
+body:has(#connect:target) .chips a[href="#connect"],
+body:has(#control:target) .chips a[href="#control"] { background: var(--lemon); font-weight: 700; }
+
+.chapter { margin-top: 88px; scroll-margin-top: 152px; display: flex; flex-direction: column; }
+.ch-text { display: contents; }
+.ch-label { order: -1; }
+.chapter:first-of-type { margin-top: 44px; }
+.ch-label { font: 700 13px/16px var(--font-body); color: var(--ink-soft); }
+.ch-shots { margin-top: 14px; display: flex; flex-direction: column; align-items: center; }
+.pair { display: flex; gap: 8px; justify-content: center; }
+.pair .phone { width: 171.7px; }
+.single .phone { width: 290.8px; }
+.ch-title { margin-top: 28px; font: 800 30px/34px var(--font-head); letter-spacing: -.03em; text-wrap: balance; }
+.ch-text .lede { margin-top: 10px; }
+.also { margin-top: 24px; font: 700 14px/20px var(--font-body); color: var(--ink); }
+.also + .dots { margin-top: 12px; }
+.ch-line { margin-top: 22px; font: 700 20px/26px var(--font-title); letter-spacing: -.01em; }
+.reason { margin-top: 20px; display: flex; }
+.reason span { padding: 8px 12px; background: var(--lemon); color: var(--ink); font: 700 18px/26px var(--font-body); }
+.ch-more { margin-top: 10px; }
+
+.timeline { position: relative; margin-top: 24px; }
+.timeline::before { content: ""; position: absolute; left: 7px; top: 26px; bottom: 26px; width: 2px; background: var(--ink); }
+.timeline li { position: relative; display: flex; align-items: center; gap: 14px; min-height: 52px; }
+.timeline li::before { content: ""; position: relative; z-index: 1; flex: none; width: 16px; height: 16px; border-radius: 50%; background: var(--cream); box-shadow: inset 0 0 0 2.5px var(--ink); }
+.tl-time { flex: none; width: 78px; }
+.tl-time span { display: inline-block; padding: 2px 8px; background: var(--lemon); color: var(--ink); font: 700 20px/28px var(--font-title); letter-spacing: -.01em; font-variant-numeric: tabular-nums; }
+.tl-what { font: 600 17px/24px var(--font-body); color: var(--ink); }
+
+.every { margin-top: 88px; padding: 20px; border-radius: 24px; background: var(--white); box-shadow: inset 0 0 0 1px var(--hairline); }
+.every summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 16px; border-radius: 12px; }
+.every summary::-webkit-details-marker { display: none; }
+.every-title { font: 800 22px/28px var(--font-head); letter-spacing: -.02em; }
+.every .v { transition: opacity .15s; }
+.every[open] .v { opacity: 0; }
+.every-body { margin-top: 20px; }
+.every-sec + .every-sec { margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--hairline); }
+.every-sec h3 { font: 700 20px/26px var(--font-title); letter-spacing: -.01em; }
+.every-sec .dots { margin-top: 12px; gap: 8px; }
+.hiw-cs { margin-top: 56px; }
+
+/* Desktop */
+@media (min-width: 1080px) {
+  .page-top { padding-top: 96px; }
+  .chips-bar { position: static; margin-top: 36px; padding: 0; background: none; box-shadow: none; }
+  .chips-bar::after { display: none; }
+  .chips { gap: 10px; padding: 0; width: min(100% - 80px, 1200px); margin-inline: auto; overflow: visible; }
+  .chips::after { display: none; }
+  .chapter { margin-top: 150px; scroll-margin-top: 104px; display: grid; grid-template-columns: 480px minmax(0, 1fr); column-gap: clamp(56px, 7vw, 104px); align-items: center; }
+  .chapter:first-of-type { margin-top: 110px; }
+  .chapter.flip { grid-template-columns: minmax(0, 1fr) 480px; }
+  .chapter.flip .ch-shots { order: 2; }
+  .ch-shots { margin-top: 0; }
+  .ch-text { display: block; }
+  .ch-label { order: 0; }
+  .ch-label { font-size: 15px; line-height: 20px; }
+  .pair { gap: 14px; }
+  .pair .phone { width: 204px; }
+  .single .phone { width: 345.8px; }
+  .ch-title { margin-top: 12px; font-size: 52px; line-height: 56px; letter-spacing: -.04em; }
+  .ch-text .lede { margin-top: 16px; font-size: 21px; line-height: 32px; text-wrap: pretty; }
+  .also { margin-top: 32px; font-size: 15px; }
+  .ch-line { margin-top: 28px; font-size: 24px; line-height: 30px; }
+  .reason span { padding: 10px 14px; font-size: 22px; line-height: 30px; }
+  .ch-more { margin-top: 14px; }
+  .timeline::before { top: 28px; bottom: 28px; }
+  .timeline li { min-height: 56px; }
+  .tl-time { width: 90px; }
+  .tl-time span { font-size: 22px; line-height: 30px; }
+  .tl-what { font-size: 19px; }
+  .every { margin-top: 150px; padding: 28px; border-radius: 32px; }
+  .every-title { font-size: 30px; line-height: 36px; }
+  .every-body { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 56px; }
+  .every-sec + .every-sec { margin-top: 0; }
+  .every-sec { padding: 24px 0; border-top: 1px solid var(--hairline); }
+  .every-sec:nth-child(-n+2) { border-top: 0; padding-top: 4px; }
+  .hiw-cs { margin-top: 120px; }
+}

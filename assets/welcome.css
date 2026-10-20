@@ -1,0 +1,126 @@
+/* Welcome (frames 47a). Loaded after site.css; every colour comes from site.css's :root. */
+
+.hero { padding-top: 48px; }
+.hl {
+  background-image: linear-gradient(var(--lemon), var(--lemon));
+  background-repeat: no-repeat; background-size: 100% 100%;
+  padding: 0 .08em; margin: 0 -.03em;
+  -webkit-box-decoration-break: clone; box-decoration-break: clone;
+}
+.hero .lede { margin-top: 18px; }
+.hero-cta { margin-top: 28px; }
+.hero-more { display: flex; justify-content: center; margin-top: 6px; }
+.hero-small { text-align: center; font: 500 13px/18px var(--font-body); color: var(--ink-soft); }
+.hero-card { margin-top: 26px; }
+.hero-phone { display: none; }
+
+.card {
+  padding: 18px; border-radius: 24px; background: var(--white); box-shadow: inset 0 0 0 1px var(--hairline);
+  display: flex; flex-direction: column; gap: 16px;
+}
+.card-top { display: flex; gap: 14px; align-items: center; }
+.icon-tile { flex: none; width: 44px; height: 44px; border-radius: 50%; background: var(--sand); display: flex; align-items: center; justify-content: center; color: var(--ink); }
+.card-title { font: 700 20px/24px var(--font-title); letter-spacing: -.01em; color: var(--ink); }
+.card-meta { margin-top: 3px; font: 500 15px/20px var(--font-body); color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.card-bottom { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.faces { width: 120px; height: 52px; margin: -2px 0 -2px -2px; }
+.seats { display: inline-flex; align-items: center; height: 28px; padding: 0 12px; border-radius: 999px; background: var(--sand); font: 700 13px/1 var(--font-body); color: var(--ink); white-space: nowrap; }
+
+.morning { margin-top: 60px; }
+.steps { margin-top: 28px; display: flex; flex-direction: column; gap: 48px; }
+.step { display: grid; grid-template-columns: 44px minmax(0, 1fr); column-gap: 14px; }
+.step-n { font: 800 56px/52px var(--font-head); letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
+.step-t { font: 700 22px/28px var(--font-title); letter-spacing: -.02em; }
+.step-d { margin-top: 4px; }
+.step .phone { margin: 18px 0 0; width: 235.8px; }
+
+.who { margin-top: 88px; }
+.tags { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 8px; }
+.tags li { display: inline-flex; align-items: center; height: 36px; padding: 0 14px; border-radius: 999px; background: var(--sand); font: 600 15px/1 var(--font-body); color: var(--ink); white-space: nowrap; }
+.who .body { margin-top: 22px; }
+
+.no-block { margin-top: 88px; border-top: 3px solid var(--ink); padding-top: 24px; }
+.no-block .h2 { font-size: 40px; line-height: 44px; letter-spacing: -.035em; }
+.nos { margin-top: 18px; }
+.nos li { font: 700 32px/40px var(--font-head); letter-spacing: -.025em; color: var(--ink); }
+.no-block .after { margin-top: 22px; font: 600 18px/27px var(--font-body); color: var(--ink); text-wrap: pretty; }
+
+.promise3 { margin-top: 88px; }
+
+.zayd { margin-top: 88px; }
+.zayd-photo {
+  height: 300px; border-radius: 24px; background: var(--sand);
+  display: flex; align-items: center; justify-content: center;
+  font: 600 15px/20px var(--font-body); color: var(--ink-soft);
+}
+.zayd .h2 { margin-top: 28px; }
+.zayd .body { margin-top: 14px; }
+.zayd .contact { margin-top: 6px; }
+
+/* Tablet */
+@media (min-width: 600px) and (max-width: 1079px) {
+  .step .phone { width: 267px; }
+}
+
+/* Desktop */
+@media (min-width: 1080px) {
+  .hero { padding-top: 0; min-height: 820px; display: grid; grid-template-columns: minmax(0, 1fr) 380px; column-gap: clamp(64px, 8vw, 120px); align-items: center; }
+  .hero .h1 { font-size: clamp(64px, 6.6vw, 84px); line-height: 1.048; }
+  .hero .lede { margin-top: 24px; max-width: 540px; font-size: 21px; line-height: 32px; text-wrap: pretty; }
+  .hero-actions { margin-top: 36px; display: flex; align-items: center; gap: 28px; }
+  .hero-cta { margin-top: 0; }
+  .hero-more { margin-top: 0; }
+  .hero-small { margin-top: 20px; text-align: left; font-size: 15px; line-height: 20px; }
+  .hero-card { display: none; }
+  .hero-phone { display: flex; flex-direction: column; align-items: center; }
+  .hero-phone .phone { width: 330.1px; }
+
+  .morning { margin-top: 100px; }
+  .steps { margin-top: 56px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 48px; }
+  .step { display: flex; flex-direction: column; min-width: 0; }
+  .step-n { font-size: 96px; line-height: 84px; letter-spacing: -.05em; }
+  .step-t { margin-top: 20px; font-size: 28px; line-height: 34px; }
+  .step-d { margin-top: 8px; font-size: 19px; line-height: 29px; min-height: 58px; }
+  .step .phone { margin: 28px 0 0; width: 267.2px; }
+
+  .who { margin-top: 150px; display: grid; grid-template-columns: 400px minmax(0, 1fr); gap: 96px; align-items: start; }
+  .tags { margin-top: 0; gap: 10px; }
+  .tags li { height: 44px; padding: 0 18px; font-size: 17px; }
+  .who .body { margin-top: 28px; }
+
+  .no-block { margin-top: 150px; border-top-width: 4px; padding-top: 40px; }
+  .no-block .h2 { font-size: 80px; line-height: 84px; letter-spacing: -.045em; }
+  .nos { margin-top: 36px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(4, auto); grid-auto-flow: column; column-gap: 48px; }
+  .nos li { font-size: 52px; line-height: 64px; letter-spacing: -.03em; }
+  .no-block .after { margin-top: 36px; font-size: 22px; line-height: 32px; }
+
+  .promise3 { margin-top: 150px; }
+
+  .zayd { margin-top: 150px; display: grid; grid-template-columns: 440px minmax(0, 1fr); gap: 96px; align-items: center; }
+  .zayd-photo { height: 540px; border-radius: 32px; }
+  .zayd .h2 { margin-top: 0; }
+  .zayd .body { margin-top: 22px; max-width: 600px; font-size: 22px; line-height: 34px; }
+  .zayd .contact { margin-top: 14px; }
+}
+
+/* Welcome: the bar's small pill shows only once the page's own pill has scrolled under the bar,
+   so there's never more than one on screen (47e-4). An instant show/hide, with no motion; the fade
+   above is added only when motion is allowed. Without support, the bar pill simply stays. */
+@supports (animation-timeline: view()) {
+  body:has(#hero-cta) { timeline-scope: --hero-cta; }
+  #hero-cta { view-timeline: --hero-cta block; view-timeline-inset: var(--bar-h) 0px; }
+  body:has(#hero-cta) .bar-pill { animation: bar-pill-show linear both; animation-timeline: --hero-cta; animation-range: exit 0% exit 100%; }
+  @keyframes bar-pill-show { from { visibility: hidden; } to { visibility: visible; } }
+}
+
+/* Effects: only when the visitor allows motion */
+@media (prefers-reduced-motion: no-preference) {
+  /* The lemon highlight sweeps in once behind "right". */
+  .hl { animation: sweep .75s cubic-bezier(.2, .7, .2, 1) .2s both; }
+  @keyframes sweep { from { background-size: 0% 100%; } to { background-size: 100% 100%; } }
+  @supports (animation-timeline: view()) {
+    /* Welcome: the bar pill fades in as the page's own pill scrolls away. */
+    body:has(#hero-cta) .bar-pill { animation-name: bar-pill-fade; }
+    @keyframes bar-pill-fade { from { opacity: 0; visibility: hidden; } to { opacity: 1; visibility: visible; } }
+  }
+}
