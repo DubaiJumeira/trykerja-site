@@ -34,9 +34,6 @@
   .pr-1 { margin-top: 88px; }
   .pr-2, .pr-5, .pr-6, .pr-7 { margin-top: 110px; }
   .pr-3, .pr-4 { margin-top: 190px; }
-  /* Section 2's grid ends with the "Sample profiles" caption (10 + 16 px), which frame 47c-2 doesn't draw;
-     take it off here so the gap from the screen to section 3 is the frame's. */
-  .pr-3 { margin-top: 164px; }
 
   .pr-text { max-width: 720px; }
   .pr-3 .pr-text { max-width: 820px; }
