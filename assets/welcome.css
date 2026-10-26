@@ -163,12 +163,12 @@
    Desktop only (1024 px and up), and only when the visitor allows motion: below 1024 px or with
    reduced motion it isn't shown at all, so the page is exactly as before. Our own flat map of
    Canggu (assets/story/canggu-map.svg, drawn from OpenStreetMap data by tools/draw_map.py) sticks
-   beside four short lines, in normal scrolling. The app's four areas, a session card and a chat are
-   HTML laid over it, sized to the map (cqw: 1cqw is 6.4 px on the full 640 px map). As each line
-   passes 60% of the screen's height, site.js adds s1 to s4 to the section and a part comes in, by
-   opacity and transform only. Without JavaScript (no "live"), every part simply shows.
-   Never a person at a point: initials sit on the area labels only, never on a café or a pin. Lemon
-   only on the card's chosen chips (a highlight), orange only on the button. Flat: no shadow. */
+   beside four short lines, in normal scrolling. Step a's spots (for now the app's four areas, as
+   labels with initials; step a's content is on hold), a session card and a chat are HTML laid over
+   it, sized to the map (cqw: 1cqw is 6.4 px on the full 640 px map). As each line passes 60% of the
+   screen's height, site.js adds s1 to s4 to the section and a part comes in, by opacity and
+   transform only. Without JavaScript (no "live"), every part simply shows. Lemon only on the
+   card's chosen chips (a highlight), orange only on the button. Flat: no shadow. */
 .story { display: none; }
 @media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
   .story {
@@ -193,21 +193,29 @@
   }
   .story-img { width: 100%; height: auto; }
 
-  /* The areas, as the app's labels: a white pill, its name and count, then the faces (initials). */
-  .area {
-    position: absolute; left: var(--x); top: var(--y); translate: -50% -50%;
+  /* Step a's spots (index.html keeps them as a small list: kind, --lon/--lat, name, faces). A label
+     is the app's area label, centred on its point: a white pill, its name and count, then the faces
+     (initials). A pin stands on its point with a small tail (not used yet). */
+  .spot {
+    position: absolute; left: calc((var(--lon) - 115.112) / .048 * 100%); top: calc((-8.626 - var(--lat)) / .046 * 100%);
+    translate: -50% -50%;
     display: flex; align-items: center; gap: 1.1cqw;
     height: 5.3cqw; padding: 0 .55cqw 0 1.9cqw; border-radius: 999px;
     background: var(--white); box-shadow: inset 0 0 0 1.5px var(--ink); white-space: nowrap;
   }
-  .area-name { font: 600 2.1cqw/1 var(--font-body); color: var(--ink); }
-  .area-faces { display: flex; }
-  .area-face {
+  .spot-pin { translate: -50% calc(-100% - 1.1cqw); }
+  .spot-pin::after {
+    content: ""; position: absolute; left: 50%; top: 100%; translate: -50% 0;
+    border: 1.1cqw solid transparent; border-bottom: 0; border-top-color: var(--ink);
+  }
+  .spot-name { font: 600 2.1cqw/1 var(--font-body); color: var(--ink); }
+  .spot-faces { display: flex; }
+  .spot-faces > span {
     display: flex; align-items: center; justify-content: center;
     width: 4.2cqw; height: 4.2cqw; border-radius: 50%; border: 2px solid var(--white); background: var(--sand);
     font: 700 1.6cqw/1 var(--font-title); letter-spacing: .02em; color: var(--ink);
   }
-  .area-face + .area-face { margin-left: -.5cqw; }
+  .spot-faces > span + span { margin-left: -.5cqw; }
 
   /* The session card, in the style of the app's Host a session sheet; not at any café. */
   .story-card {
@@ -255,12 +263,15 @@
 
   /* The steps: hidden until their line comes up (only with JavaScript; "settle" sets the first
      state without a transition). */
-  .area, .story-card, .story-chat { transition: opacity .5s cubic-bezier(.2, .7, .2, 1), transform .5s cubic-bezier(.2, .7, .2, 1); }
-  .area { transition-delay: calc(var(--i) * 90ms); }
-  .story.live:not(.s1) .area { opacity: 0; transform: translateY(1.6cqw) scale(.94); transition-delay: 0s; }
+  .spot, .story-card, .story-chat { transition: opacity .5s cubic-bezier(.2, .7, .2, 1), transform .5s cubic-bezier(.2, .7, .2, 1); }
+  .spot:nth-child(2) { transition-delay: 90ms; }
+  .spot:nth-child(3) { transition-delay: 180ms; }
+  .spot:nth-child(4) { transition-delay: 270ms; }
+  .spot:nth-child(n + 5) { transition-delay: 360ms; }
+  .story.live:not(.s1) .spot { opacity: 0; transform: translateY(1.6cqw) scale(.94); transition-delay: 0s; }
   .story.live:not(.s2) .story-card { opacity: 0; transform: translateY(4cqw); }
   .story.live:not(.s3) .story-chat { opacity: 0; transform: translateX(5cqw); }
-  .story.settle .area, .story.settle .story-card, .story.settle .story-chat { transition: none; }
+  .story.settle .spot, .story.settle .story-card, .story.settle .story-chat { transition: none; }
 
   /* One orange pill on screen (47e-4): the bar pill also steps aside while the story's button is
      on screen, as it does around the morning's. Later in the file, so it replaces the list above. */

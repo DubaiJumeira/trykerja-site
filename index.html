@@ -18,7 +18,7 @@
 <link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="stylesheet" href="assets/site.css?v=f0a99bff">
-<link rel="stylesheet" href="assets/welcome.css?v=0239b78b">
+<link rel="stylesheet" href="assets/welcome.css?v=ac748fce">
 <link rel="preload" href="assets/fonts/bricolage-display.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/jakarta-400.woff2" as="font" type="font/woff2" crossorigin>
 <script src="assets/site.js?v=bb06fb8c" defer></script>
@@ -111,11 +111,16 @@
         <source media="(min-width: 1024px) and (prefers-reduced-motion: no-preference)" srcset="assets/story/canggu-map.svg?v=a2eb6bc7" width="640" height="620">
         <img class="story-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="640" height="620" alt="A flat map of Canggu, from Pererenan to Berawa: the coast, the sea and the roads" loading="lazy" decoding="async">
       </picture>
-      <ul class="areas">
-        <li class="area" style="--x: 23.9%; --y: 36.9%; --i: 0"><span class="area-name">Around Pererenan · 1</span><span class="vh">: Amira Khalil</span><span class="area-faces" aria-hidden="true"><span class="area-face">AK</span></span></li>
-        <li class="area" style="--x: 53.1%; --y: 27.1%; --i: 1"><span class="area-name">Around Canggu · 2</span><span class="vh">: Nico Albers and Adrian Vidal</span><span class="area-faces" aria-hidden="true"><span class="area-face">NA</span><span class="area-face">AV</span></span></li>
-        <li class="area" style="--x: 44.8%; --y: 56.6%; --i: 2"><span class="area-name">Around Batu Bolong · 2</span><span class="vh">: Imani Brooks and Tobias Lund</span><span class="area-faces" aria-hidden="true"><span class="area-face">IB</span><span class="area-face">TL</span></span></li>
-        <li class="area" style="--x: 70.8%; --y: 64.2%; --i: 3"><span class="area-name">Around Berawa · 2</span><span class="vh">: Elena Castell and Daria Novak</span><span class="area-faces" aria-hidden="true"><span class="area-face">EC</span><span class="area-face">DN</span></span></li>
+      <!-- Step a's spots, one line each, easy to swap (provisional: step a's content is on hold).
+           class: "spot spot-label" (an area's label, centred on its point) or "spot spot-pin" (stands
+           on its point); --lon and --lat: where, in degrees, inside the map's box (lon 115.112 to
+           115.160, lat -8.672 to -8.626); then the name, who is there (for screen readers) and the
+           faces (initials). -->
+      <ul class="spots">
+        <li class="spot spot-label" style="--lon: 115.1235; --lat: -8.6430"><span class="spot-name">Around Pererenan · 1</span><span class="vh">: Amira Khalil</span><span class="spot-faces" aria-hidden="true"><span>AK</span></span></li>
+        <li class="spot spot-label" style="--lon: 115.1375; --lat: -8.6385"><span class="spot-name">Around Canggu · 2</span><span class="vh">: Nico Albers and Adrian Vidal</span><span class="spot-faces" aria-hidden="true"><span>NA</span><span>AV</span></span></li>
+        <li class="spot spot-label" style="--lon: 115.1335; --lat: -8.6520"><span class="spot-name">Around Batu Bolong · 2</span><span class="vh">: Imani Brooks and Tobias Lund</span><span class="spot-faces" aria-hidden="true"><span>IB</span><span>TL</span></span></li>
+        <li class="spot spot-label" style="--lon: 115.1460; --lat: -8.6555"><span class="spot-name">Around Berawa · 2</span><span class="vh">: Elena Castell and Daria Novak</span><span class="spot-faces" aria-hidden="true"><span>EC</span><span>DN</span></span></li>
       </ul>
       <div class="story-card">
         <p class="sc-title">Host a session</p>
