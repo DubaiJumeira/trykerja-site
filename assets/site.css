@@ -149,7 +149,41 @@ html:has(.menu[open]) { overflow: hidden; }
 .strip li::before { content: ""; flex: none; width: 10px; height: 10px; margin-top: 8px; border-radius: 50%; background: var(--lagoon); }
 .strip .link { margin-top: 6px; margin-bottom: -10px; }
 
-.phone { display: block; margin-inline: auto; }
+/* ---------- The phone frame (decision 5211) ----------
+   Every app screen sits in this one flat, front-on phone: an ink body whose thin bezel rings the
+   screen, the screen at 9:19.5 (the 1080 × 2340 masters) with matching inner rounding, and a
+   Dynamic Island at the top centre, level with the screens' status bar. No tilt, no shadow, no logo.
+   --screen (the screen's width) sets everything else. It is one size on every page and at every
+   width, so all the phones match; only the tablet hero lets it shrink on short screens (welcome.css).
+   Markup: <div class="device"><img src="…" width="480" height="1040" alt="…"></div>, inside a
+   <figure class="shot"> that centres it and its caption. */
+.device {
+  --screen: 240px;
+  --bezel: calc(var(--screen) * .025);
+  --radius: calc(var(--screen) * .14);
+  position: relative; flex: none;
+  width: calc(var(--screen) + 2 * var(--bezel)); margin-inline: auto; padding: var(--bezel);
+  border-radius: calc(var(--radius) + var(--bezel)); background: var(--ink);
+}
+.device picture { display: block; }
+.device img {
+  display: block; width: var(--screen); max-width: none; height: auto; aspect-ratio: 9 / 19.5;
+  object-fit: cover; object-position: top; border-radius: var(--radius); background: var(--sand);
+}
+.device::after {
+  content: ""; position: absolute; top: calc(var(--bezel) + var(--screen) * .02); left: 0; right: 0; margin-inline: auto;
+  width: calc(var(--screen) * .3); height: calc(var(--screen) * .082); border-radius: 999px; background: var(--ink);
+}
+/* A screen kept from its top down only (the Say hi sheet): the frame stops cleanly with the screen. */
+.device-top { padding-bottom: 0; border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+.device-top img { aspect-ratio: auto; border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+
+/* A framed screen (or two) and its caption, centred. Two phones sit side by side from 600 px,
+   one per row on phones, always with the same gap. */
+.shot { display: flex; flex-direction: column; align-items: center; }
+.shot .caption { margin-top: 12px; }
+.devices { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+@media (min-width: 600px) { .devices { flex-direction: row; justify-content: center; gap: 16px; } }
 
 .cs { margin-top: 88px; }
 .cs-row {

@@ -33,12 +33,11 @@ body[data-beta="full"] span.beta-full { display: inline; }
 }
 .dl-tf:hover { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 2px; }
 .dl-d { margin-top: 8px; font: 400 16px/24px var(--font-body); color: var(--ink-2); text-wrap: pretty; }
-.dl-shot { margin-top: 22px; display: block; }
+.dl-shot { margin-top: 22px; }
 /* Step 2's line (copy v3, decision 4215): "tap the button below" wherever the invite pill shows,
    "scan the code below" where the QR card replaces it (from 1080 px, the QR's own breakpoint).
    Only one is ever displayed, so only one is in the accessibility tree. */
 .dl-d-scan { display: none; }
-.dl-shot .phone { width: 196.5px; }
 
 /* ---------- The invite, the QR, or the waitlist ---------- */
 .dl-act { margin-top: 28px; }
@@ -90,7 +89,6 @@ body[data-beta="full"] span.beta-full { display: inline; }
   .dl-tf { margin: -5px 0; }
   .dl-tf svg { width: 22px; height: 22px; }
   .dl-d { font-size: 18px; line-height: 28px; }
-  .dl-shot .phone { width: 220.1px; }
   .dl-d-tap { display: none; }
   .dl-d-scan { display: block; }
 

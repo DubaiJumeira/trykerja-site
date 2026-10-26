@@ -51,8 +51,7 @@
   /* 720 px of text, the screen at the right edge (frame 47c-2). Below 1200 px of container the
      text column gives way, so the screen keeps its size. */
   .pr-2 { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: clamp(48px, 6vw, 80px); align-items: start; }
-  .pr-shot { display: block; justify-self: end; }
-  .pr-shot .phone { width: 330.1px; }
+  .pr-shot { display: flex; justify-self: end; }
 
   .pr-links { margin: 11px 0 -9px; }
   .pr-pill { margin-top: 32px; }
