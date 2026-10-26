@@ -70,9 +70,9 @@ body:has(#control:target) .chips a[href="#control"] { box-shadow: inset 0 0 0 1.
   .chips { gap: 10px; padding: 0; width: min(100% - 80px, 1200px); margin-inline: auto; overflow: visible; }
   .chips::after { display: none; }
   /* The pictures' column fits two phones side by side (5211), the same for every chapter. */
-  .chapter { margin-top: 150px; scroll-margin-top: 104px; display: grid; grid-template-columns: 520px minmax(0, 1fr); column-gap: clamp(56px, 7vw, 104px); align-items: center; }
+  .chapter { margin-top: 150px; scroll-margin-top: 104px; display: grid; grid-template-columns: 548px minmax(0, 1fr); column-gap: clamp(56px, 7vw, 104px); align-items: center; }
   .chapter:first-of-type { margin-top: 110px; }
-  .chapter.flip { grid-template-columns: minmax(0, 1fr) 520px; }
+  .chapter.flip { grid-template-columns: minmax(0, 1fr) 548px; }
   .chapter.flip .ch-shots { order: 2; }
   .ch-shots { margin-top: 0; }
   .ch-text { display: block; }

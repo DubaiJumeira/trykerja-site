@@ -71,9 +71,9 @@
   .hero .h1 { font-size: clamp(36px, min(6.4vw, 7.2svh), 58px); line-height: 1.06; }
   .hero-card { display: none; }
   .hero-phone { display: flex; }
-  /* The site's phone size, unless the screen is too short for it: then the phone (2.22 times as
+  /* The site's phone size, unless the screen is too short for it: then the phone (2.27 times as
      tall as its screen is wide) shrinks to fit under the bar with its caption. */
-  .hero-phone .device { --screen: clamp(110px, (100svh - var(--bar-h) - 86px) * .45, 240px); }
+  .hero-phone .device { --screen: clamp(110px, (100svh - var(--bar-h) - 86px) * .44, 252px); }
 }
 
 /* Desktop */

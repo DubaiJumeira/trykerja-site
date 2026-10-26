@@ -151,16 +151,17 @@ html:has(.menu[open]) { overflow: hidden; }
 
 /* ---------- The phone outline (decisions 5211 and 5221) ----------
    Every app screen sits in this one generic, flat, front-on phone: an ink body whose thin bezel
-   rings the screen, the screen at 9:19.5 (the 1080 × 2340 masters) with matching inner rounding,
-   and one small round camera hole at the top centre, level with the screens' status bar. Nothing
-   else: no island or notch, no buttons, no logo, nothing of any one maker's phone; no tilt, no
-   shadow, no motion. --screen (the screen's width) sets everything else. It is one size on every
-   page and at every width, so all the phones match; only the tablet hero lets it shrink on short
-   screens (welcome.css).
-   Markup: <div class="device"><img src="…" width="480" height="1040" alt="…"></div>, inside a
-   <figure class="shot"> that centres it and its caption. */
+   rings the screen, the screen inset in it at 9:20 (the 1080 × 2400 masters, whole: status bar to
+   the bottom space) with corners matching the bezel's inner radius, and one small round camera
+   hole at the top centre, in the status bar between its glyphs. Nothing else: no island or notch,
+   no buttons, no logo, nothing of any one maker's phone; no tilt, no shadow, no motion, and never a
+   crop or zoom by CSS (object-fit: contain on a box of the screen's own shape). --screen (the
+   screen's width) sets everything else. It is one size on every page and at every width, so all
+   the phones match; only the tablet hero lets it shrink on short screens (welcome.css).
+   Markup: <div class="device"><img src="…-2x.webp?v=…" srcset="…-1x… 1x, …-2x… 2x, …-3x… 3x"
+   width="252" height="560" alt="…"></div>, inside a <figure class="shot"> that centres it and its caption. */
 .device {
-  --screen: 240px;
+  --screen: 252px;
   --bezel: calc(var(--screen) * .025);
   --radius: calc(var(--screen) * .14);
   position: relative; flex: none;
@@ -169,11 +170,10 @@ html:has(.menu[open]) { overflow: hidden; }
 }
 .device picture { display: block; }
 .device img {
-  display: block; width: var(--screen); max-width: none; height: auto; aspect-ratio: 9 / 19.5;
-  object-fit: cover; object-position: top; border-radius: var(--radius); background: var(--sand);
+  display: block; width: var(--screen); max-width: none; height: auto; aspect-ratio: 9 / 20;
+  object-fit: contain; border-radius: var(--radius); background: var(--sand);
 }
-/* The camera hole: a dot 4.2% of the screen's width across (10 px on the 240 px screen), centred,
-   its middle 6.35% of the screen's width below the screen's top (15 px), level with the status bar. */
+/* The camera hole: a dot 4.2% of the screen's width across, centred, level with the status bar. */
 .device::after {
   content: ""; position: absolute; top: calc(var(--bezel) + var(--screen) * .0425); left: 0; right: 0; margin-inline: auto;
   width: calc(var(--screen) * .042); height: calc(var(--screen) * .042); border-radius: 50%; background: var(--ink);
