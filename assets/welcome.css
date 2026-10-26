@@ -36,6 +36,8 @@
 .step-d { margin-top: 4px; }
 .step .phone { margin: 18px 0 0; width: 235.8px; }
 .step .caption { width: 235.8px; }
+/* The hero's button again, after the morning (5201 item 10). */
+.morning-cta { margin-top: 48px; }
 
 .who { margin-top: 88px; }
 .tags { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 8px; }
@@ -94,6 +96,7 @@
   .step-d { margin-top: 8px; font-size: 19px; line-height: 29px; min-height: 58px; }
   .step .phone { margin: 28px 0 0; width: 267.2px; }
   .step .caption { width: 267.2px; }
+  .morning-cta { margin-top: 64px; }
 
   .who { margin-top: 150px; display: grid; grid-template-columns: 400px minmax(0, 1fr); gap: 96px; align-items: start; }
   .tags { margin-top: 0; gap: 10px; }
@@ -114,12 +117,20 @@
 }
 
 /* Welcome: the bar's small pill shows only once the page's own pill has scrolled under the bar,
-   so there's never more than one on screen (47e-4). An instant show/hide, with no motion; the fade
-   above is added only when motion is allowed. Without support, the bar pill simply stays. */
+   and steps aside again while the morning's pill (5201 item 10) is on screen, so there's never more
+   than one on screen (47e-4). An instant show/hide, with no motion; the fades below are added only
+   when motion is allowed. Without support, the bar pill simply stays. */
 @supports (animation-timeline: view()) {
+  body { timeline-scope: --hero-cta, --morning-cta, --end-cta; }
   #hero-cta { view-timeline: --hero-cta block; view-timeline-inset: var(--bar-h) 0px; }
-  body:has(#hero-cta) .bar-pill { animation: bar-pill-show linear both; animation-timeline: --hero-cta; animation-range: exit 0% exit 100%; }
+  #morning-cta { view-timeline: --morning-cta block; view-timeline-inset: var(--bar-h) 0px; }
+  body:has(#hero-cta) .bar-pill {
+    animation: bar-pill-show linear both, bar-pill-away linear none;
+    animation-timeline: --hero-cta, --morning-cta;
+    animation-range: exit 0% exit 100%, cover 0% cover 100%;
+  }
   @keyframes bar-pill-show { from { visibility: hidden; } to { visibility: visible; } }
+  @keyframes bar-pill-away { from, to { visibility: hidden; } }
 }
 
 /* Effects: only when the visitor allows motion */
@@ -128,13 +139,20 @@
   .hl { animation: sweep .75s cubic-bezier(.2, .7, .2, 1) .2s both; }
   @keyframes sweep { from { background-size: 0% 100%; } to { background-size: 100% 100%; } }
   @supports (animation-timeline: view()) {
-    /* Welcome: the bar pill fades in as the hero pill scrolls away, and out as the Last call pill comes in
-       (one list, so neither animation overrides the other; the later one wins where both apply). */
+    /* Welcome: the bar pill fades in as the hero pill scrolls away, out and back in around the
+       morning's pill, and out as the Last call pill comes in (one list, so no animation overrides
+       another; the later one wins where both apply). */
     body:has(#hero-cta) .bar-pill {
-      animation: bar-pill-fade linear both, bar-pill-out linear forwards;
-      animation-timeline: --hero-cta, --end-cta;
-      animation-range: exit 0% exit 100%, entry 0% entry 100%;
+      animation: bar-pill-fade linear both, bar-pill-mid linear none, bar-pill-out linear forwards;
+      animation-timeline: --hero-cta, --morning-cta, --end-cta;
+      animation-range: exit 0% exit 100%, cover 0% cover 100%, entry 0% entry 100%;
     }
     @keyframes bar-pill-fade { from { opacity: 0; visibility: hidden; } to { opacity: 1; visibility: visible; } }
+    /* Out while the morning's pill comes in, back while it scrolls under the bar. */
+    @keyframes bar-pill-mid {
+      entry 0% { opacity: 1; visibility: visible; }
+      entry 100%, exit 0% { opacity: 0; visibility: hidden; }
+      exit 100% { opacity: 1; visibility: visible; }
+    }
   }
 }
