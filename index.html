@@ -18,10 +18,10 @@
 <link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="stylesheet" href="assets/site.css?v=f0a99bff">
-<link rel="stylesheet" href="assets/welcome.css?v=cbed1123">
+<link rel="stylesheet" href="assets/welcome.css?v=0239b78b">
 <link rel="preload" href="assets/fonts/bricolage-display.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/jakarta-400.woff2" as="font" type="font/woff2" crossorigin>
-<script src="assets/site.js?v=c63821d4" defer></script>
+<script src="assets/site.js?v=bb06fb8c" defer></script>
 <noscript><style>.menu-btn,.copy-btn{display:none!important}</style></noscript>
 </head>
 <body>
@@ -88,6 +88,54 @@
         </picture>
       </div>
       <figcaption class="caption">Sample profiles and sessions</figcaption>
+    </figure>
+  </section>
+
+  <!-- The map story (decisions 5226 to 5234): desktop only (1024 px and up), and only when motion
+       is allowed; otherwise it isn't shown and the page is as before. See welcome.css and site.js. -->
+  <section class="story" aria-labelledby="story-title">
+    <div class="story-text">
+      <h2 class="h2" id="story-title">Canggu at work</h2>
+      <ol class="story-steps">
+        <li class="story-step" data-step="1"><p class="story-line">Each day, people pick an area to work around.</p></li>
+        <li class="story-step" data-step="2"><p class="story-line">Host a session: pick a time and a few seats.</p></li>
+        <li class="story-step" data-step="3"><p class="story-line">After the session, say hi with a short note.</p></li>
+        <li class="story-step" data-step="4">
+          <p class="story-line">Free on iPhone, in Canggu.</p>
+          <a class="pill story-cta" id="story-cta" href="download/">Join the Canggu beta</a>
+        </li>
+      </ol>
+    </div>
+    <figure class="story-map">
+      <picture>
+        <source media="(min-width: 1024px) and (prefers-reduced-motion: no-preference)" srcset="assets/story/canggu-map.svg?v=a2eb6bc7" width="640" height="620">
+        <img class="story-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="640" height="620" alt="A flat map of Canggu, from Pererenan to Berawa: the coast, the sea and the roads" loading="lazy" decoding="async">
+      </picture>
+      <ul class="areas">
+        <li class="area" style="--x: 23.9%; --y: 36.9%; --i: 0"><span class="area-name">Around Pererenan · 1</span><span class="vh">: Amira Khalil</span><span class="area-faces" aria-hidden="true"><span class="area-face">AK</span></span></li>
+        <li class="area" style="--x: 53.1%; --y: 27.1%; --i: 1"><span class="area-name">Around Canggu · 2</span><span class="vh">: Nico Albers and Adrian Vidal</span><span class="area-faces" aria-hidden="true"><span class="area-face">NA</span><span class="area-face">AV</span></span></li>
+        <li class="area" style="--x: 44.8%; --y: 56.6%; --i: 2"><span class="area-name">Around Batu Bolong · 2</span><span class="vh">: Imani Brooks and Tobias Lund</span><span class="area-faces" aria-hidden="true"><span class="area-face">IB</span><span class="area-face">TL</span></span></li>
+        <li class="area" style="--x: 70.8%; --y: 64.2%; --i: 3"><span class="area-name">Around Berawa · 2</span><span class="vh">: Elena Castell and Daria Novak</span><span class="area-faces" aria-hidden="true"><span class="area-face">EC</span><span class="area-face">DN</span></span></li>
+      </ul>
+      <div class="story-card">
+        <p class="sc-title">Host a session</p>
+        <div class="sc-chips">
+          <span class="sc-chip"><svg class="i" width="14" height="14" viewBox="0 0 24 24" stroke-width="2.6" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Tomorrow</span>
+          <span class="sc-chip"><svg class="i" width="14" height="14" viewBox="0 0 24 24" stroke-width="2.4" aria-hidden="true"><path d="M4 16v-4a8 8 0 0 1 16 0v4"/><rect x="3" y="14" width="4.5" height="6.5" rx="1.8"/><rect x="16.5" y="14" width="4.5" height="6.5" rx="1.8"/></svg>Focus</span>
+        </div>
+        <div class="sc-times">
+          <p class="sc-field"><span>Start</span><span class="sc-time">9:00</span></p>
+          <p class="sc-field"><span>End</span><span class="sc-time">12:00</span></p>
+        </div>
+        <p class="sc-meta">Bali time · 4 seats · Open</p>
+      </div>
+      <div class="story-chat">
+        <p class="chat-name">Nico Albers</p>
+        <p class="chat-bubble">Hi Nico, great focus session this morning. Coffee on Thursday?</p>
+        <p class="chat-state">Delivered</p>
+      </div>
+      <p class="map-credit"><a href="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors</a></p>
+      <figcaption class="map-caption">Sample profiles and sessions</figcaption>
     </figure>
   </section>
 
