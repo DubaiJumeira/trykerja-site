@@ -12,6 +12,9 @@ body[data-beta="full"] .beta-open,
 body:not([data-beta="full"]) .beta-full { display: none; }
 body[data-beta="full"] .beta-full { display: block; }
 body[data-beta="full"] span.beta-full { display: inline; }
+/* The waitlist state's QR card (Zayd, decision 5271): on a computer only, under the waitlist,
+   to open this page on an iPhone. After the rule above, so it wins at the same specificity. */
+body[data-beta="full"] .dl-qr-soon { display: none; }
 
 /* ---------- First screen ---------- */
 .dl-top { padding-top: 52px; }
@@ -105,6 +108,7 @@ body[data-beta="full"] span.beta-full { display: inline; }
   /* Soon and full: the waitlist where the invite was. */
   .dl-act > .waitlist { margin-top: 32px; }
   .dl-act > .waitlist .wl-notes { max-width: 600px; }
+  body[data-beta="full"] .dl-qr-soon { display: flex; margin-top: 32px; }
 
   .wl-notes { font-size: 15px; line-height: 22px; }
 
