@@ -9,16 +9,17 @@ Ready for GitHub Pages: deploy from branch `main`, folder `/ (root)`. `.nojekyll
 In `download/index.html`, the `<body>` tag carries the state. It is the only line to change:
 
 ```html
-<body data-beta="soon">
+<body data-beta="open">
 ```
 
-- `soon`: "The Canggu beta opens soon." (shipped now, until Apple approves the first version)
-- `open`: "Join the Canggu beta." with the TestFlight invite button (and the QR code on a computer)
-- `full`: "This round is full."
+- `open` (the default): "The Canggu beta is open. Install in two steps." with the two steps and the TestFlight invite button (and the QR code on a computer)
+- `full`: "This round is full." with the waitlist in the invite's place, once the beta's cap of 60 testers is reached
+
+Only one state is ever shown. The full state's lines also carry the `hidden` attribute, so leave it on them: `data-beta="full"` is what shows them.
 
 ## The invite link
 
-In `download/index.html`, the "Open the Canggu beta invite" button has `href="#REPLACE-WITH-CANGGU-TESTERS-LINK"`, with a comment right above it. Put the "Canggu testers" public TestFlight link there once Apple approves, then switch the state to `open`.
+In `download/index.html`, the "Open the Canggu beta invite" button has `href="#REPLACE-WITH-CANGGU-TESTERS-LINK"`, with a comment right above it. The page opens in the `open` state, so put the "Canggu testers" public TestFlight link there before the page is published.
 
 ## The domain
 

@@ -24,8 +24,8 @@
 <script src="../assets/site.js" defer></script>
 <noscript><style>.menu-btn,.copy-btn{display:none!important}</style></noscript>
 </head>
-<!-- The page's state: "open" (once Apple approves "Canggu testers"), "soon" (until then) or "full" (this round is full). Change only this attribute. -->
-<body data-beta="soon">
+<!-- The page's state: "open" (the default) or "full" (once the beta's cap of 60 testers is reached). Change only this attribute. -->
+<body data-beta="open">
 <a class="skip" href="#main">Skip to content</a>
 <header class="bar">
   <div class="bar-in">
@@ -56,10 +56,9 @@
 <main id="main" tabindex="-1">
   <div class="wrap">
     <div class="dl-top">
-      <h1 class="h1"><span class="beta-open">Join the Canggu beta.</span><span class="beta-soon">The Canggu beta opens soon.</span><span class="beta-full">This round is full.</span></h1>
-      <p class="lede beta-open">Kerja for iPhone is in a small, free beta through Apple’s TestFlight. It changes often, and we want your feedback.</p>
-      <p class="lede beta-soon">Apple is checking the first version. Join the waitlist and we’ll send you the invite.</p>
-      <p class="lede beta-full">We open more spots with each new week of sessions. Join the waitlist for the next round.</p>
+      <h1 class="h1"><span class="beta-open">The Canggu beta is open.</span><span class="beta-full" hidden>This round is full.</span></h1>
+      <p class="lede beta-open">Install in two steps.</p>
+      <p class="lede beta-full" hidden>We open more spots with each new week of sessions. Join the waitlist for the next round.</p>
     </div>
 
     <div class="strip dl-strip">
@@ -103,7 +102,7 @@
         <h2 class="dl-qr-t">Scan this with your iPhone’s camera.</h2>
       </div>
 
-      <div class="beta-wait waitlist">
+      <div class="beta-full waitlist" hidden>
         <a class="pill pill-block" href="mailto:hello@trykerja.com?subject=Kerja%20waitlist&amp;body=Name%3A%0D%0AWhat%20do%20you%20do%3A%0D%0AWhat%20are%20you%20building%2C%20or%20who%20do%20you%20want%20to%20meet%3A%0D%0AWhen%20are%20you%20in%20Canggu%20%28here%20now%20%2F%20arriving%20soon%20%2F%20just%20curious%29%3A%0D%0AInstagram%20%28optional%29%3A%0D%0AiPhone%20or%20Android%3A%0D%0A">Join the waitlist</a>
         <div class="wl-notes">
           <p>Your email app opens with this filled in. Nothing is sent until you tap Send.</p>
