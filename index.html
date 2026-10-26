@@ -17,8 +17,8 @@
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="stylesheet" href="assets/site.css?v=f0a99bff">
-<link rel="stylesheet" href="assets/welcome.css?v=e7aadfec">
+<link rel="stylesheet" href="assets/site.css?v=1fa550f3">
+<link rel="stylesheet" href="assets/welcome.css?v=d5494674">
 <link rel="preload" href="assets/fonts/bricolage-display.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/jakarta-400.woff2" as="font" type="font/woff2" crossorigin>
 <script src="assets/site.js?v=2e1d37ce" defer></script>
@@ -107,40 +107,50 @@
       </ol>
     </div>
     <figure class="story-map">
-      <picture>
-        <source media="(min-width: 1024px) and (prefers-reduced-motion: no-preference)" srcset="assets/story/canggu-map.svg?v=a2eb6bc7" width="640" height="620">
-        <img class="story-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="640" height="620" alt="A flat map of Canggu, from Pererenan to Berawa: the coast, the sea and the roads" loading="lazy" decoding="async">
-      </picture>
-      <!-- Step a (5247): people checked in at real cafés from the app's list (kerja docs/data/canggu-cafes.csv),
-           one line each, easy to swap. class: "spot spot-pin" (the café's mark on its point, its faces and
-           name to the right) or "spot spot-pin spot-left" (to the left, near the map's right edge); --lon and
-           --lat: the café's coordinates, inside the map's box (lon 115.112 to 115.160, lat -8.672 to -8.626);
-           the faces (cast v3 only, 1 to 3, assets/story/face-*.webp); the café's name as the app writes it;
-           who is working there, for screen readers. -->
-      <ul class="spots">
-        <li class="spot spot-pin" style="--lon: 115.1305872; --lat: -8.6402578"><span class="spot-mark" aria-hidden="true"><svg class="i" width="16" height="16" viewBox="0 0 24 24" stroke-width="2.2"><path d="M4 10h13v4a6 6 0 0 1-6 6h-1a6 6 0 0 1-6-6z"/><path d="M17 11.5h1.5a2.5 2.5 0 0 1 0 5H17"/><path d="M8.5 3.5v3M12.5 3.5v3"/></svg></span><span class="spot-faces" aria-hidden="true"><img src="assets/story/face-amira.webp?v=fc4b5fc7" width="64" height="64" alt="" loading="lazy" decoding="async"><img src="assets/story/face-tobias.webp?v=b6104c9b" width="64" height="64" alt="" loading="lazy" decoding="async"></span><span class="spot-name">NOAH cafe</span><span class="vh">, working here: Amira Khalil and Tobias Lund</span></li>
-        <li class="spot spot-pin" style="--lon: 115.1424401; --lat: -8.642813"><span class="spot-mark" aria-hidden="true"><svg class="i" width="16" height="16" viewBox="0 0 24 24" stroke-width="2.2"><path d="M4 10h13v4a6 6 0 0 1-6 6h-1a6 6 0 0 1-6-6z"/><path d="M17 11.5h1.5a2.5 2.5 0 0 1 0 5H17"/><path d="M8.5 3.5v3M12.5 3.5v3"/></svg></span><span class="spot-faces" aria-hidden="true"><img src="assets/story/face-elena.webp?v=8ce98d2d" width="64" height="64" alt="" loading="lazy" decoding="async"></span><span class="spot-name">Miel Specialty Coffee</span><span class="vh">, working here: Elena Castell</span></li>
-        <li class="spot spot-pin spot-left" style="--lon: 115.1524328; --lat: -8.6461307"><span class="spot-mark" aria-hidden="true"><svg class="i" width="16" height="16" viewBox="0 0 24 24" stroke-width="2.2"><path d="M4 10h13v4a6 6 0 0 1-6 6h-1a6 6 0 0 1-6-6z"/><path d="M17 11.5h1.5a2.5 2.5 0 0 1 0 5H17"/><path d="M8.5 3.5v3M12.5 3.5v3"/></svg></span><span class="spot-faces" aria-hidden="true"><img src="assets/story/face-imani.webp?v=97b24e0c" width="64" height="64" alt="" loading="lazy" decoding="async"><img src="assets/story/face-adrian.webp?v=ae87d396" width="64" height="64" alt="" loading="lazy" decoding="async"></span><span class="spot-name">Hopper Coffee</span><span class="vh">, working here: Imani Brooks and Adrian Vidal</span></li>
-        <li class="spot spot-pin" style="--lon: 115.1352466; --lat: -8.6540192"><span class="spot-mark" aria-hidden="true"><svg class="i" width="16" height="16" viewBox="0 0 24 24" stroke-width="2.2"><path d="M4 10h13v4a6 6 0 0 1-6 6h-1a6 6 0 0 1-6-6z"/><path d="M17 11.5h1.5a2.5 2.5 0 0 1 0 5H17"/><path d="M8.5 3.5v3M12.5 3.5v3"/></svg></span><span class="spot-faces" aria-hidden="true"><img src="assets/story/face-daria.webp?v=0a68a7fc" width="64" height="64" alt="" loading="lazy" decoding="async"><img src="assets/story/face-nico.webp?v=b1a8ca92" width="64" height="64" alt="" loading="lazy" decoding="async"></span><span class="spot-name">B Work Bali</span><span class="vh">, working here: Daria Novak and Nico Albers</span></li>
-      </ul>
-      <div class="story-card">
-        <p class="sc-title">Host a session</p>
-        <div class="sc-chips">
-          <span class="sc-chip"><svg class="i" width="14" height="14" viewBox="0 0 24 24" stroke-width="2.6" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Tomorrow</span>
-          <span class="sc-chip"><svg class="i" width="14" height="14" viewBox="0 0 24 24" stroke-width="2.4" aria-hidden="true"><path d="M4 16v-4a8 8 0 0 1 16 0v4"/><rect x="3" y="14" width="4.5" height="6.5" rx="1.8"/><rect x="16.5" y="14" width="4.5" height="6.5" rx="1.8"/></svg>Focus</span>
+      <div class="map-view">
+        <picture>
+          <source media="(min-width: 1024px) and (prefers-reduced-motion: no-preference)" srcset="assets/story/canggu-map.svg?v=06afc546" width="640" height="620">
+          <img class="story-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="640" height="620" alt="Illustration of sample profiles checked in at cafés in Canggu" loading="lazy" decoding="async">
+        </picture>
+        <!-- Step a (5247, 5249, 5250, 5256): sample people checked in at cafés of the app's list, drawn as the
+             app's map draws its café pins when it opens (zoom 15). Written by tools/draw_map.py: the window, who
+             is where, which pins are drawn and which are counted in a "+N". Don't edit between the pins comments
+             by hand. The pins, faces and names (an image) are hidden from screen readers; the map's alt says what
+             it shows. The cup is Phosphor's Coffee (bold), MIT licence, Copyright (c) Phosphor Icons, as the app
+             draws it. -->
+        <svg class="pin-defs" width="0" height="0" aria-hidden="true"><symbol id="pin-cup" viewBox="0 0 256 256"><path fill="currentColor" d="M212 76H32a12 12 0 0 0-12 12v48a100.24 100.24 0 0 0 26.73 68H32a12 12 0 0 0 0 24h176a12 12 0 0 0 0-24h-14.73a100.8 100.8 0 0 0 20-32A44 44 0 0 0 256 128v-8a44.05 44.05 0 0 0-44-44m-16 60a76.27 76.27 0 0 1-42 68H86a76.27 76.27 0 0 1-42-68v-36h152Zm36-8a20 20 0 0 1-12.57 18.55A97 97 0 0 0 220 136v-34.32A20 20 0 0 1 232 120ZM68 48V24a12 12 0 0 1 24 0v24a12 12 0 0 1-24 0m40 0V24a12 12 0 0 1 24 0v24a12 12 0 0 1-24 0m40 0V24a12 12 0 0 1 24 0v24a12 12 0 0 1-24 0"/></symbol></svg>
+        <ul class="pins" aria-hidden="true">
+          <!-- pins: start -->
+          <li class="pin" data-pin="1" style="--x: 224.8; --y: 587.1; --more: '+1'"><span class="pin-mark"><span class="pin-pill" style="width: 125px"><svg class="pin-cup" width="16" height="16" aria-hidden="true"><use href="#pin-cup"/></svg><span class="pin-faces"><img src="assets/story/face-daria-2x.webp?v=00703884" srcset="assets/story/face-daria-2x.webp?v=00703884 2x, assets/story/face-daria-3x.webp?v=8784fc88 3x" width="26" height="26" alt="" aria-hidden="true" loading="lazy" decoding="async"><img src="assets/story/face-elena-2x.webp?v=ca274b21" srcset="assets/story/face-elena-2x.webp?v=ca274b21 2x, assets/story/face-elena-3x.webp?v=c42cd8ee 3x" width="26" height="26" alt="" aria-hidden="true" loading="lazy" decoding="async"><img src="assets/story/face-nico-2x.webp?v=24e6078f" srcset="assets/story/face-nico-2x.webp?v=24e6078f 2x, assets/story/face-nico-3x.webp?v=53a3f6da 3x" width="26" height="26" alt="" aria-hidden="true" loading="lazy" decoding="async"><span class="pin-more">+1</span></span><span class="pin-badge"></span></span><span class="pin-name"><img src="assets/story/pin-names-2x.webp?v=1fcd2094" srcset="assets/story/pin-names-2x.webp?v=1fcd2094 2x, assets/story/pin-names-3x.webp?v=e123eb09 3x" width="148" height="100" alt="" aria-hidden="true" loading="lazy" decoding="async" style="top: -0px"></span></span></li>
+          <li class="pin" data-pin="2" style="--x: 120.0; --y: 239.6"><span class="pin-mark"><span class="pin-pill" style="width: 62px"><svg class="pin-cup" width="16" height="16" aria-hidden="true"><use href="#pin-cup"/></svg><span class="pin-faces"><img src="assets/story/face-imani-2x.webp?v=b043388f" srcset="assets/story/face-imani-2x.webp?v=b043388f 2x, assets/story/face-imani-3x.webp?v=cbc938de 3x" width="26" height="26" alt="" aria-hidden="true" loading="lazy" decoding="async"></span></span><span class="pin-name"><img src="assets/story/pin-names-2x.webp?v=1fcd2094" srcset="assets/story/pin-names-2x.webp?v=1fcd2094 2x, assets/story/pin-names-3x.webp?v=e123eb09 3x" width="148" height="100" alt="" aria-hidden="true" loading="lazy" decoding="async" style="top: -20px"></span></span></li>
+          <li class="pin" data-pin="3" style="--x: 560.0; --y: 58.9"><span class="pin-mark"><span class="pin-pill" style="width: 62px"><svg class="pin-cup" width="16" height="16" aria-hidden="true"><use href="#pin-cup"/></svg><span class="pin-faces"><img src="assets/story/face-amira-2x.webp?v=3eabc782" srcset="assets/story/face-amira-2x.webp?v=3eabc782 2x, assets/story/face-amira-3x.webp?v=5daa4919 3x" width="26" height="26" alt="" aria-hidden="true" loading="lazy" decoding="async"></span></span><span class="pin-name"><img src="assets/story/pin-names-2x.webp?v=1fcd2094" srcset="assets/story/pin-names-2x.webp?v=1fcd2094 2x, assets/story/pin-names-3x.webp?v=e123eb09 3x" width="148" height="100" alt="" aria-hidden="true" loading="lazy" decoding="async" style="top: -40px"></span></span></li>
+          <li class="pin" data-pin="4" style="--x: 84.1; --y: 577.7"><span class="pin-mark"><span class="pin-quiet"><svg class="pin-cup" width="16" height="16" aria-hidden="true"><use href="#pin-cup"/></svg></span><span class="pin-name"><img src="assets/story/pin-names-2x.webp?v=1fcd2094" srcset="assets/story/pin-names-2x.webp?v=1fcd2094 2x, assets/story/pin-names-3x.webp?v=e123eb09 3x" width="148" height="100" alt="" aria-hidden="true" loading="lazy" decoding="async" style="top: -60px"></span></span></li>
+          <li class="pin" data-pin="5" style="--x: 240.3; --y: 551.8"><span class="pin-mark" hidden><span class="pin-quiet"><svg class="pin-cup" width="16" height="16" aria-hidden="true"><use href="#pin-cup"/></svg></span><span class="pin-name"><img src="assets/story/pin-names-2x.webp?v=1fcd2094" srcset="assets/story/pin-names-2x.webp?v=1fcd2094 2x, assets/story/pin-names-3x.webp?v=e123eb09 3x" width="148" height="100" alt="" aria-hidden="true" loading="lazy" decoding="async" style="top: -80px"></span></span></li>
+          <!-- pins: end -->
+        </ul>
+        <div class="story-card">
+          <p class="sc-title">Host a session</p>
+          <div class="sc-chips">
+            <span class="sc-chip"><svg class="i" width="14" height="14" viewBox="0 0 24 24" stroke-width="2.6" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Tomorrow</span>
+            <span class="sc-chip"><svg class="i" width="14" height="14" viewBox="0 0 24 24" stroke-width="2.4" aria-hidden="true"><path d="M4 16v-4a8 8 0 0 1 16 0v4"/><rect x="3" y="14" width="4.5" height="6.5" rx="1.8"/><rect x="16.5" y="14" width="4.5" height="6.5" rx="1.8"/></svg>Focus</span>
+          </div>
+          <div class="sc-times">
+            <p class="sc-field"><span>Start</span><span class="sc-time">9:00</span></p>
+            <p class="sc-field"><span>End</span><span class="sc-time">12:00</span></p>
+          </div>
+          <p class="sc-meta">Bali time · 4 seats · Open</p>
         </div>
-        <div class="sc-times">
-          <p class="sc-field"><span>Start</span><span class="sc-time">9:00</span></p>
-          <p class="sc-field"><span>End</span><span class="sc-time">12:00</span></p>
+        <div class="story-chat">
+          <p class="chat-name">Nico Albers</p>
+          <p class="chat-bubble">Hi Nico, great focus session this morning. Coffee on Thursday?</p>
+          <p class="chat-state">Delivered</p>
         </div>
-        <p class="sc-meta">Bali time · 4 seats · Open</p>
       </div>
-      <div class="story-chat">
-        <p class="chat-name">Nico Albers</p>
-        <p class="chat-bubble">Hi Nico, great focus session this morning. Coffee on Thursday?</p>
-        <p class="chat-state">Delivered</p>
-      </div>
-      <figcaption class="map-note"><span>Sample profiles and sessions.</span> <span>An illustration, not live activity at these cafés.</span> <a href="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors</a></figcaption>
+      <!-- The disclaimer and the OpenStreetMap credit (5247, 5256): on the map's top left, where they ride
+           just above the map while it comes in (so one of each is always fully on screen), and again along
+           its bottom edge, just under the map, for when it leaves. -->
+      <div class="map-rail"><div class="map-note" aria-hidden="true"><p class="map-disclaimer"><span>Sample profiles and sessions.</span> <span>An illustration, not live activity at these cafés.</span></p><a class="map-credit" href="https://www.openstreetmap.org/copyright" tabindex="-1">© OpenStreetMap contributors</a></div></div>
+      <figcaption class="map-foot"><span class="map-disclaimer">Sample profiles and sessions. An illustration, not live activity at these cafés.</span> <a class="map-credit" href="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors</a></figcaption>
     </figure>
   </section>
 

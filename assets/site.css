@@ -17,6 +17,7 @@
   --dot: #E3D3B4;          /* quoteMark: the small sand dot of the lists */
   --handle: #D6CDBB;       /* handle: the menu sheet's handle */
   --white: #FFFFFF;        /* white */
+  --map-land: #F7EFDD;     /* mapLand: the halo of a café pin's name on the map story */
 
   --scrim: color-mix(in srgb, var(--ink) 40%, transparent);
   --font-head: "Bricolage", system-ui, sans-serif;
