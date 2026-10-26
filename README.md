@@ -36,5 +36,5 @@ Pages link to each other with relative paths, so they also work on a preview add
 - `assets/site.css`: colours (once, on `:root`, from the app's tokens), fonts and the shared parts (top bar, menu, footer, pills, links, lists, Coming soon, last call, the 404 block).
 - `assets/welcome.css`, `assets/how.css`, `assets/promise.css`, `assets/download.css`: each page's own layout, loaded after `site.css`.
 - `assets/fonts/`: Latin subsets of Bricolage Grotesque and Plus Jakarta Sans (WOFF2), with their OFL licences.
-- `assets/screens/`: the app screens, each a full 9:19.5 screen (WebP, 480 px wide and a 240 px `-sm`, from 1080 × 2340 masters taken from the app on Android with sample profiles only). The pages show them inside the CSS phone frame (`.device` in `site.css`).
+- `assets/screens/`: the app screens, each a whole 9:20 screen from a 1080 × 2400 master (status bar to bottom space) taken from the app on Android with sample profiles only, as WebP at 1x, 2x and 3x of the 252 px phone screen (`-1x` 252 × 560, `-2x` 504 × 1120, `-3x` 756 × 1680). The pages show them in the CSS phone outline (`.device` in `site.css`), whole, never cropped or zoomed.
 - `assets/og.jpg`: the share preview (1200 × 630). `assets/qr-download.svg`: the QR code to https://trykerja.com/download.

@@ -163,7 +163,7 @@ html:has(.menu[open]) { overflow: hidden; }
 .device {
   --screen: 252px;
   --bezel: calc(var(--screen) * .025);
-  --radius: calc(var(--screen) * .14);
+  --radius: calc(var(--screen) * .12); /* clears the 9:41 and the tab bar's ends (checked at 3x) */
   position: relative; flex: none;
   width: calc(var(--screen) + 2 * var(--bezel)); margin-inline: auto; padding: var(--bezel);
   border-radius: calc(var(--radius) + var(--bezel)); background: var(--ink);
