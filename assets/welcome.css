@@ -9,8 +9,9 @@
 }
 .hero .lede { margin-top: 18px; }
 .hero-cta { margin-top: 28px; }
-.hero-more { display: flex; justify-content: center; margin-top: 6px; }
-.hero-small { text-align: center; font: 500 13px/18px var(--font-body); color: var(--ink-soft); }
+/* The trust line sits right under the hero button (5201 item 9). */
+.hero-small { margin-top: 14px; text-align: center; font: 500 13px/18px var(--font-body); color: var(--ink-soft); }
+.hero-more { display: flex; justify-content: center; margin-top: 4px; }
 .hero-card { margin-top: 26px; }
 .hero-card .caption { text-align: left; }
 .hero-phone { display: none; }
@@ -64,10 +65,11 @@
   .hero { padding-top: 0; min-height: 820px; display: grid; grid-template-columns: minmax(0, 1fr) 380px; column-gap: clamp(64px, 8vw, 120px); align-items: center; }
   .hero .h1 { font-size: clamp(64px, 6.6vw, 84px); line-height: 1.048; }
   .hero .lede { margin-top: 24px; max-width: 540px; font-size: 21px; line-height: 32px; text-wrap: pretty; }
-  .hero-actions { margin-top: 36px; display: flex; align-items: center; gap: 28px; }
-  .hero-cta { margin-top: 0; }
-  .hero-more { margin-top: 0; }
-  .hero-small { margin-top: 20px; text-align: left; font-size: 15px; line-height: 20px; }
+  /* The button and "See how it works" side by side; the trust line under the button. */
+  .hero-actions { margin-top: 36px; display: grid; grid-template-columns: auto auto; justify-content: start; align-items: center; column-gap: 28px; }
+  .hero-cta { grid-area: 1 / 1; margin-top: 0; }
+  .hero-more { grid-area: 1 / 2; margin-top: 0; }
+  .hero-small { grid-area: 2 / 1; margin-top: 16px; font-size: 15px; line-height: 20px; }
   .hero-card { display: none; }
   .hero-phone { display: flex; flex-direction: column; align-items: center; }
   .hero-phone .phone { width: 330.1px; }
