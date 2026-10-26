@@ -78,14 +78,14 @@
         return;
       }
       if (observers.length) return;
-      // The first state is set without a transition, then the parts move only as the lines pass.
+      // The first state is set without a transition (one style flush, while "settle" turns them
+      // off), then the parts move only as the lines pass.
       story.classList.add("settle");
       at = -1;
       update();
       story.classList.add("live");
-      requestAnimationFrame(function () {
-        requestAnimationFrame(function () { story.classList.remove("settle"); });
-      });
+      void story.offsetWidth;
+      story.classList.remove("settle");
       // A thin band at 60% of the screen: a step's line crossing it changes the step. The second
       // observer catches jumps (Home, End, a link) that skip the band, a screen before the story
       // comes back into view, so its parts never visibly undo themselves.
