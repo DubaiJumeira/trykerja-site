@@ -17,14 +17,16 @@
   font: 600 15px/1 var(--font-body); white-space: nowrap; text-decoration: none;
 }
 .chip:hover { background: var(--sand); }
-.chips a[href="#profile"] { background: var(--lemon); font-weight: 700; }
-body:has(.chapter:target) .chips a[href="#profile"] { background: var(--cream); font-weight: 600; }
+/* The chapter in view (the one tapped, else Profile): a heavier ink outline and bold. Never lemon:
+   the chips are links, and lemon is only for highlights nobody taps (5201 item 5). */
+.chips a[href="#profile"] { box-shadow: inset 0 0 0 1.5px var(--ink); font-weight: 700; }
+body:has(.chapter:target) .chips a[href="#profile"] { box-shadow: none; font-weight: 600; }
 body:has(#profile:target) .chips a[href="#profile"],
 body:has(#people:target) .chips a[href="#people"],
 body:has(#cafes:target) .chips a[href="#cafes"],
 body:has(#sessions:target) .chips a[href="#sessions"],
 body:has(#connect:target) .chips a[href="#connect"],
-body:has(#control:target) .chips a[href="#control"] { background: var(--lemon); font-weight: 700; }
+body:has(#control:target) .chips a[href="#control"] { box-shadow: inset 0 0 0 1.5px var(--ink); font-weight: 700; }
 
 .chapter { margin-top: 88px; scroll-margin-top: 152px; display: flex; flex-direction: column; }
 .ch-text { display: contents; }
