@@ -27,7 +27,9 @@ Every picture, stylesheet and script URL in the pages carries `?v=` and the firs
 
 ## The map story (Welcome, desktop only)
 
-On a screen 1024 px wide or more, with motion allowed, Welcome shows a flat map of Canggu between the hero and "A morning on Kerja": the app's four areas, a session card and a chat with Nico come in as four short lines scroll past (`.story` in `index.html` and `welcome.css`, the steps in `site.js`). Below 1024 px, or with reduced motion, it isn't shown and the page is as before.
+On a screen 1024 px wide or more, with motion allowed, Welcome shows a flat map of Canggu between the hero and "A morning on Kerja": sample people checked in at four real cafés, a session card and a chat with Nico come in as four short lines scroll past (`.story` in `index.html` and `welcome.css`, the steps in `site.js`). Below 1024 px, or with reduced motion, it isn't shown and the page is as before.
+
+The café pins (decision 5247) are a short list in `index.html`, one line each: the café's coordinates and name from the app's list (`docs/data/canggu-cafes.csv` in the app repo), and 1 to 3 cast-v3 faces (`assets/story/face-*.webp`, 64 × 64, cropped from the cast portraits). The map always shows "Sample profiles and sessions. An illustration, not live activity at these cafés." with the OpenStreetMap credit.
 
 The map, `assets/story/canggu-map.svg`, is our own drawing of OpenStreetMap data: roads, the coast and the sea, in the app's map colours, with no names, cafés or buildings. `tools/draw_map.py` draws it from one Overpass download for the box lon 115.112 to 115.160, lat -8.672 to -8.626. The raw data is ODbL and stays out of this repo (it's kept with its query and download time in `kerja-artifacts/build-12/scroll-story/osm/`); to redraw, run `python3 -I tools/draw_map.py <that file>`, then `python3 -I tools/stamp.py`. "© OpenStreetMap contributors", linked to https://www.openstreetmap.org/copyright, stays on the map at all times. The page makes no call to any map service.
 
@@ -43,6 +45,6 @@ Pages link to each other with relative paths, so they also work on a preview add
 - `assets/welcome.css`, `assets/how.css`, `assets/promise.css`, `assets/download.css`: each page's own layout, loaded after `site.css`.
 - `assets/fonts/`: Latin subsets of Bricolage Grotesque and Plus Jakarta Sans (WOFF2), with their OFL licences.
 - `assets/screens/`: the app screens, each a whole 9:20 screen from a 1080 × 2400 master (status bar to bottom space) taken from the app on Android with sample profiles only, as WebP at 1x, 2x and 3x of the 252 px phone screen (`-1x` 252 × 560, `-2x` 504 × 1120, `-3x` 756 × 1680). The pages show them in the CSS phone outline (`.device` in `site.css`), whole, never cropped or zoomed.
-- `assets/story/`: the map story's map of Canggu (see above).
+- `assets/story/`: the map story's map of Canggu and the sample faces (see above).
 - `tools/stamp.py`: the cache-busting stamps; `tools/draw_map.py`: draws the map.
 - `assets/og.jpg`: the share preview (1200 × 630). `assets/qr-download.svg`: the QR code to https://trykerja.com/download.

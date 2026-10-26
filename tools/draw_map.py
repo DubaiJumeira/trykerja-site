@@ -13,7 +13,8 @@ linked to https://www.openstreetmap.org/copyright, at all times.
 What is drawn, in the app's own map style (src/components/map/mapStyle.ts in the app): land in sand
 (creamDeep), the sea and the rivers in lagoon at 35%, main roads in cream with a thin ink 12% edge,
 smaller roads in plain cream. Nothing else: no names, no cafés or other places, no buildings, no
-paths or service lanes. The area names are the page's own HTML labels, laid over the map.
+paths or service lanes. The café pins, their names and the sample faces are the page's own HTML,
+laid over the map (index.html); this drawing has none.
 Colours are read from assets/site.css (:root), which takes them from the app's tokens."""
 import json, math, os, re, sys
 
