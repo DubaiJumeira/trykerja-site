@@ -174,9 +174,6 @@ html:has(.menu[open]) { overflow: hidden; }
   content: ""; position: absolute; top: calc(var(--bezel) + var(--screen) * .02); left: 0; right: 0; margin-inline: auto;
   width: calc(var(--screen) * .3); height: calc(var(--screen) * .082); border-radius: 999px; background: var(--ink);
 }
-/* A screen kept from its top down only (the Say hi sheet): the frame stops cleanly with the screen. */
-.device-top { padding-bottom: 0; border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
-.device-top img { aspect-ratio: auto; border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
 
 /* A framed screen (or two) and its caption, centred. Two phones sit side by side from 600 px,
    one per row on phones, always with the same gap. */
