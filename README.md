@@ -21,6 +21,10 @@ Only one state is ever shown. The full state's lines also carry the `hidden` att
 
 In `download/index.html`, the "Open the Canggu beta invite" button has `href="#REPLACE-WITH-CANGGU-TESTERS-LINK"`, with a comment right above it. The page opens in the `open` state, so put the "Canggu testers" public TestFlight link there before the page is published.
 
+## Cache-busting
+
+Every picture, stylesheet and script URL in the pages carries `?v=` and the first 8 characters of the file's SHA-256, so a changed file always gets a new URL. After changing any of them, run `python3 -I tools/stamp.py` (and `python3 -I tools/stamp.py --check` lists every URL and fails if one is stale or missing).
+
 ## The domain
 
 `CNAME` is in: one line, `trykerja.com`, for GitHub Pages' custom domain.
