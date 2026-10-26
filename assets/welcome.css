@@ -40,8 +40,11 @@
 .morning-cta { margin-top: 48px; }
 
 .who { margin-top: 88px; }
-.tags { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 8px; }
-.tags li { display: inline-flex; align-items: center; height: 36px; padding: 0 14px; border-radius: 999px; background: var(--sand); font: 600 15px/1 var(--font-body); color: var(--ink); white-space: nowrap; }
+/* Three groups, each with one need (5201 item 11). Not tappable: sand, never orange or lemon. */
+.groups { margin-top: 20px; display: flex; flex-direction: column; gap: 10px; }
+.groups li { padding: 18px 20px; border-radius: 20px; background: var(--sand); }
+.group-t { font: 700 22px/26px var(--font-title); letter-spacing: -.02em; color: var(--ink); }
+.group-d { margin-top: 4px; font: 400 17px/25px var(--font-body); color: var(--ink-2); text-wrap: pretty; }
 .who .body { margin-top: 22px; }
 
 .no-block { margin-top: 88px; border-top: 3px solid var(--ink); padding-top: 24px; }
@@ -99,8 +102,10 @@
   .morning-cta { margin-top: 64px; }
 
   .who { margin-top: 150px; display: grid; grid-template-columns: 400px minmax(0, 1fr); gap: 96px; align-items: start; }
-  .tags { margin-top: 0; gap: 10px; }
-  .tags li { height: 44px; padding: 0 18px; font-size: 17px; }
+  .groups { margin-top: 0; gap: 12px; }
+  .groups li { padding: 24px 28px; border-radius: 24px; }
+  .group-t { font-size: 28px; line-height: 32px; }
+  .group-d { margin-top: 6px; font-size: 19px; line-height: 28px; }
   .who .body { margin-top: 28px; }
 
   .no-block { margin-top: 150px; border-top-width: 4px; padding-top: 40px; }
