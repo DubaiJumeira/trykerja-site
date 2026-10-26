@@ -17,24 +17,23 @@
   font: 600 15px/1 var(--font-body); white-space: nowrap; text-decoration: none;
 }
 .chip:hover { background: var(--sand); }
-.chips a[href="#profile"] { background: var(--lemon); font-weight: 700; }
-body:has(.chapter:target) .chips a[href="#profile"] { background: var(--cream); font-weight: 600; }
+/* The chapter in view (the one tapped, else Profile): a heavier ink outline and bold. Never lemon:
+   the chips are links, and lemon is only for highlights nobody taps (5201 item 5). */
+.chips a[href="#profile"] { box-shadow: inset 0 0 0 1.5px var(--ink); font-weight: 700; }
+body:has(.chapter:target) .chips a[href="#profile"] { box-shadow: none; font-weight: 600; }
 body:has(#profile:target) .chips a[href="#profile"],
 body:has(#people:target) .chips a[href="#people"],
 body:has(#cafes:target) .chips a[href="#cafes"],
 body:has(#sessions:target) .chips a[href="#sessions"],
 body:has(#connect:target) .chips a[href="#connect"],
-body:has(#control:target) .chips a[href="#control"] { background: var(--lemon); font-weight: 700; }
+body:has(#control:target) .chips a[href="#control"] { box-shadow: inset 0 0 0 1.5px var(--ink); font-weight: 700; }
 
 .chapter { margin-top: 88px; scroll-margin-top: 152px; display: flex; flex-direction: column; }
 .ch-text { display: contents; }
 .ch-label { order: -1; }
 .chapter:first-of-type { margin-top: 44px; }
 .ch-label { font: 700 13px/16px var(--font-body); color: var(--ink-soft); }
-.ch-shots { margin-top: 14px; display: flex; flex-direction: column; align-items: center; }
-.pair { display: flex; gap: 8px; justify-content: center; }
-.pair .phone { width: 171.7px; }
-.single .phone { width: 290.8px; }
+.ch-shots { margin-top: 14px; }
 .ch-title { margin-top: 28px; font: 800 30px/34px var(--font-head); letter-spacing: -.03em; text-wrap: balance; }
 .ch-text .lede { margin-top: 10px; }
 .also { margin-top: 24px; font: 700 14px/20px var(--font-body); color: var(--ink); }
@@ -70,17 +69,15 @@ body:has(#control:target) .chips a[href="#control"] { background: var(--lemon); 
   .chips-bar::after { display: none; }
   .chips { gap: 10px; padding: 0; width: min(100% - 80px, 1200px); margin-inline: auto; overflow: visible; }
   .chips::after { display: none; }
-  .chapter { margin-top: 150px; scroll-margin-top: 104px; display: grid; grid-template-columns: 480px minmax(0, 1fr); column-gap: clamp(56px, 7vw, 104px); align-items: center; }
+  /* The pictures' column fits two phones side by side (5211), the same for every chapter. */
+  .chapter { margin-top: 150px; scroll-margin-top: 104px; display: grid; grid-template-columns: 548px minmax(0, 1fr); column-gap: clamp(56px, 7vw, 104px); align-items: center; }
   .chapter:first-of-type { margin-top: 110px; }
-  .chapter.flip { grid-template-columns: minmax(0, 1fr) 480px; }
+  .chapter.flip { grid-template-columns: minmax(0, 1fr) 548px; }
   .chapter.flip .ch-shots { order: 2; }
   .ch-shots { margin-top: 0; }
   .ch-text { display: block; }
   .ch-label { order: 0; }
   .ch-label { font-size: 15px; line-height: 20px; }
-  .pair { gap: 14px; }
-  .pair .phone { width: 204px; }
-  .single .phone { width: 345.8px; }
   .ch-title { margin-top: 12px; font-size: 52px; line-height: 56px; letter-spacing: -.04em; }
   .ch-text .lede { margin-top: 16px; font-size: 21px; line-height: 32px; text-wrap: pretty; }
   .also { margin-top: 32px; font-size: 15px; }

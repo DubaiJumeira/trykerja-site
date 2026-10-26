@@ -1,15 +1,17 @@
 /* Join the beta (/download/), frames 47d-1 to 47d-5. No effects on this page.
    Colours only from site.css's :root. */
 
-/* ---------- The three states (decision 3978) ----------
-   <body data-beta="open | soon | full"> is the only switch.
-   .beta-open, .beta-soon and .beta-full show in their own state only;
-   .beta-wait (the waitlist in the invite's place) shows in "soon" and "full".
-   The two steps are .beta-open: they show only in "open", at every width (decision 4214). */
-body:not([data-beta="open"]) .beta-open,
-body:not([data-beta="soon"]) .beta-soon,
-body:not([data-beta="full"]) .beta-full,
-body[data-beta="open"] .beta-wait { display: none; }
+/* ---------- The two states (decision 5201; was three, 3978) ----------
+   <body data-beta="open | full"> is the only switch; "open" is the default.
+   .beta-open (the open line, the two steps, the invite and the QR) shows in "open" only.
+   .beta-full (the full line and the waitlist in the invite's place) shows in "full" only. Its
+   elements also carry the hidden attribute, so the page reads as open even where this file isn't
+   applied; "full" shows them here. One state is ever displayed, so only one is in the
+   accessibility tree. The two steps show only in "open", at every width (decision 4214). */
+body[data-beta="full"] .beta-open,
+body:not([data-beta="full"]) .beta-full { display: none; }
+body[data-beta="full"] .beta-full { display: block; }
+body[data-beta="full"] span.beta-full { display: inline; }
 
 /* ---------- First screen ---------- */
 .dl-top { padding-top: 52px; }
@@ -31,12 +33,11 @@ body[data-beta="open"] .beta-wait { display: none; }
 }
 .dl-tf:hover { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 2px; }
 .dl-d { margin-top: 8px; font: 400 16px/24px var(--font-body); color: var(--ink-2); text-wrap: pretty; }
-.dl-shot { margin-top: 22px; display: block; }
+.dl-shot { margin-top: 22px; }
 /* Step 2's line (copy v3, decision 4215): "tap the button below" wherever the invite pill shows,
    "scan the code below" where the QR card replaces it (from 1080 px, the QR's own breakpoint).
    Only one is ever displayed, so only one is in the accessibility tree. */
 .dl-d-scan { display: none; }
-.dl-shot .phone { width: 196.5px; }
 
 /* ---------- The invite, the QR, or the waitlist ---------- */
 .dl-act { margin-top: 28px; }
@@ -88,7 +89,6 @@ body[data-beta="open"] .beta-wait { display: none; }
   .dl-tf { margin: -5px 0; }
   .dl-tf svg { width: 22px; height: 22px; }
   .dl-d { font-size: 18px; line-height: 28px; }
-  .dl-shot .phone { width: 220.1px; }
   .dl-d-tap { display: none; }
   .dl-d-scan { display: block; }
 

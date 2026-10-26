@@ -17,6 +17,7 @@
   --dot: #E3D3B4;          /* quoteMark: the small sand dot of the lists */
   --handle: #D6CDBB;       /* handle: the menu sheet's handle */
   --white: #FFFFFF;        /* white */
+  --map-land: #F7EFDD;     /* mapLand: the halo of a café pin's name on the map story */
 
   --scrim: color-mix(in srgb, var(--ink) 40%, transparent);
   --font-head: "Bricolage", system-ui, sans-serif;
@@ -149,7 +150,42 @@ html:has(.menu[open]) { overflow: hidden; }
 .strip li::before { content: ""; flex: none; width: 10px; height: 10px; margin-top: 8px; border-radius: 50%; background: var(--lagoon); }
 .strip .link { margin-top: 6px; margin-bottom: -10px; }
 
-.phone { display: block; margin-inline: auto; }
+/* ---------- The phone outline (decisions 5211 and 5221) ----------
+   Every app screen sits in this one generic, flat, front-on phone: an ink body whose thin bezel
+   rings the screen, the screen inset in it at 9:20 (the 1080 × 2400 masters, whole: status bar to
+   the bottom space) with corners matching the bezel's inner radius, and one small round camera
+   hole at the top centre, in the status bar between its glyphs. Nothing else: no island or notch,
+   no buttons, no logo, nothing of any one maker's phone; no tilt, no shadow, no motion, and never a
+   crop or zoom by CSS (object-fit: contain on a box of the screen's own shape). --screen (the
+   screen's width) sets everything else. It is one size on every page and at every width, so all
+   the phones match; only the tablet hero lets it shrink on short screens (welcome.css).
+   Markup: <div class="device"><img src="…-2x.webp?v=…" srcset="…-1x… 1x, …-2x… 2x, …-3x… 3x"
+   width="252" height="560" alt="…"></div>, inside a <figure class="shot"> that centres it and its caption. */
+.device {
+  --screen: 252px;
+  --bezel: calc(var(--screen) * .025);
+  --radius: calc(var(--screen) * .12); /* clears the 9:41 and the tab bar's ends (checked at 3x) */
+  position: relative; flex: none;
+  width: calc(var(--screen) + 2 * var(--bezel)); margin-inline: auto; padding: var(--bezel);
+  border-radius: calc(var(--radius) + var(--bezel)); background: var(--ink);
+}
+.device picture { display: block; }
+.device img {
+  display: block; width: var(--screen); max-width: none; height: auto; aspect-ratio: 9 / 20;
+  object-fit: contain; border-radius: var(--radius); background: var(--sand);
+}
+/* The camera hole: a dot 4.2% of the screen's width across, centred, level with the status bar. */
+.device::after {
+  content: ""; position: absolute; top: calc(var(--bezel) + var(--screen) * .0425); left: 0; right: 0; margin-inline: auto;
+  width: calc(var(--screen) * .042); height: calc(var(--screen) * .042); border-radius: 50%; background: var(--ink);
+}
+
+/* A framed screen (or two) and its caption, centred. Two phones sit side by side from 600 px,
+   one per row on phones, always with the same gap. */
+.shot { display: flex; flex-direction: column; align-items: center; }
+.shot .caption { margin-top: 12px; }
+.devices { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+@media (min-width: 600px) { .devices { flex-direction: row; justify-content: center; gap: 16px; } }
 
 .cs { margin-top: 88px; }
 .cs-row {
@@ -158,14 +194,15 @@ html:has(.menu[open]) { overflow: hidden; }
 }
 .cs-row::-webkit-scrollbar { display: none; }
 .cs-row li {
-  flex: none; width: 168px; min-height: 150px; padding: 14px; border-radius: 20px; background: var(--sand);
-  display: flex; flex-direction: column; gap: 12px; scroll-snap-align: start;
+  flex: none; width: 168px; min-height: 118px; padding: 14px; border-radius: 20px; background: var(--sand);
+  display: flex; flex-direction: column; gap: 14px; scroll-snap-align: start;
 }
 .badge {
   align-self: flex-start; display: inline-flex; align-items: center; height: 26px; padding: 0 10px;
   border-radius: 999px; background: var(--lemon); color: var(--ink); font: 800 12px/1 var(--font-body); white-space: nowrap;
 }
-.cs-row p { font: 600 15px/21px var(--font-body); color: var(--ink); text-wrap: pretty; }
+/* Each card is a feature's name (5201): Bricolage, as names are. */
+.cs-row p { font: 700 21px/25px var(--font-title); letter-spacing: -.015em; color: var(--ink); text-wrap: balance; }
 
 .last { margin-top: 88px; padding: 28px 24px 26px; border-radius: 28px; background: var(--lemon); }
 .last .pill { margin-top: 24px; }
@@ -231,8 +268,8 @@ main:has(> .lost) + .foot { margin-top: 0; }
 
   .cs { margin-top: 150px; }
   .cs-row { display: flex; gap: 16px; overflow: visible; margin: 0; padding: 0; }
-  .cs-row li { flex: 1 1 0; min-width: 0; width: auto; min-height: 176px; padding: 20px; border-radius: 24px; }
-  .cs-row p { font-size: 17px; line-height: 25px; }
+  .cs-row li { flex: 1 1 0; min-width: 0; width: auto; min-height: 136px; padding: 20px; border-radius: 24px; gap: 18px; }
+  .cs-row p { font-size: 26px; line-height: 30px; }
 
   .last { margin-top: 150px; padding: 72px 80px; border-radius: 40px; display: flex; align-items: flex-end; justify-content: space-between; gap: 64px; }
   .last .h2 { max-width: 700px; font-size: 60px; line-height: 64px; letter-spacing: -.04em; }
@@ -261,16 +298,16 @@ main:has(> .lost) + .foot { margin-top: 0; }
 }
 
 /* ---------- Effects: only when the visitor allows motion ---------- */
+/* No page-to-page fade (5215 item 6): it would fade the iPhone pictures in on load. */
 @media (prefers-reduced-motion: no-preference) {
-  @view-transition { navigation: auto; }
-
   .menu[open] { animation: sheet-up .22s cubic-bezier(.2, .7, .2, 1); }
   .menu[open]::backdrop { animation: fade-in .22s ease-out; }
   @keyframes sheet-up { from { transform: translateY(40px); opacity: .6; } to { transform: none; opacity: 1; } }
   @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
 
   @supports (animation-timeline: view()) {
-    /* Blocks fade and rise as they scroll in (Welcome and How it works, never the first screen). */
+    /* Blocks fade and rise as they scroll in (Welcome and How it works, never the first screen).
+       Never a block with an iPhone picture in it: those stay still (5215 item 6). */
     .rise { animation: rise linear both; animation-timeline: view(); animation-range: entry 0% entry 160px; }
     @keyframes rise { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
 

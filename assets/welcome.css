@@ -9,8 +9,9 @@
 }
 .hero .lede { margin-top: 18px; }
 .hero-cta { margin-top: 28px; }
-.hero-more { display: flex; justify-content: center; margin-top: 6px; }
-.hero-small { text-align: center; font: 500 13px/18px var(--font-body); color: var(--ink-soft); }
+/* The trust line sits right under the hero button (5201 item 9). */
+.hero-small { margin-top: 14px; text-align: center; font: 500 13px/18px var(--font-body); color: var(--ink-soft); }
+.hero-more { display: flex; justify-content: center; margin-top: 4px; }
 .hero-card { margin-top: 26px; }
 .hero-card .caption { text-align: left; }
 .hero-phone { display: none; }
@@ -33,11 +34,17 @@
 .step-n { font: 800 56px/52px var(--font-head); letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
 .step-t { font: 700 22px/28px var(--font-title); letter-spacing: -.02em; }
 .step-d { margin-top: 4px; }
-.step .phone { margin: 18px 0 0; width: 235.8px; }
+/* Each step's phone gets its own row, centred under the step's words (5211). */
+.step-shot { grid-column: 1 / -1; margin-top: 24px; }
+/* The hero's button again, after the morning (5201 item 10). */
+.morning-cta { margin-top: 48px; }
 
 .who { margin-top: 88px; }
-.tags { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 8px; }
-.tags li { display: inline-flex; align-items: center; height: 36px; padding: 0 14px; border-radius: 999px; background: var(--sand); font: 600 15px/1 var(--font-body); color: var(--ink); white-space: nowrap; }
+/* Three groups, each with one need (5201 item 11). Not tappable: sand, never orange or lemon. */
+.groups { margin-top: 20px; display: flex; flex-direction: column; gap: 10px; }
+.groups li { padding: 18px 20px; border-radius: 20px; background: var(--sand); }
+.group-t { font: 700 22px/26px var(--font-title); letter-spacing: -.02em; color: var(--ink); }
+.group-d { margin-top: 4px; font: 400 17px/25px var(--font-body); color: var(--ink-2); text-wrap: pretty; }
 .who .body { margin-top: 22px; }
 
 .no-block { margin-top: 88px; border-top: 3px solid var(--ink); padding-top: 24px; }
@@ -54,7 +61,19 @@
 
 /* Tablet */
 @media (min-width: 600px) and (max-width: 1079px) {
-  .step .phone { width: 267px; }
+  /* The hero is one screen (5201 item 8): the words and the button beside the map picture, so both
+     show without scrolling, in portrait and landscape. The picture's height follows the screen's;
+     the headline shrinks on short screens. The session card is the phone's stand-in, so it goes. */
+  .hero {
+    min-height: calc(100svh - var(--bar-h)); padding: 24px 0 32px;
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: clamp(24px, 4vw, 40px); align-items: center;
+  }
+  .hero .h1 { font-size: clamp(36px, min(6.4vw, 7.2svh), 58px); line-height: 1.06; }
+  .hero-card { display: none; }
+  .hero-phone { display: flex; }
+  /* The site's phone size, unless the screen is too short for it: then the phone (2.27 times as
+     tall as its screen is wide) shrinks to fit under the bar with its caption. */
+  .hero-phone .device { --screen: clamp(110px, (100svh - var(--bar-h) - 86px) * .44, 252px); }
 }
 
 /* Desktop */
@@ -62,13 +81,13 @@
   .hero { padding-top: 0; min-height: 820px; display: grid; grid-template-columns: minmax(0, 1fr) 380px; column-gap: clamp(64px, 8vw, 120px); align-items: center; }
   .hero .h1 { font-size: clamp(64px, 6.6vw, 84px); line-height: 1.048; }
   .hero .lede { margin-top: 24px; max-width: 540px; font-size: 21px; line-height: 32px; text-wrap: pretty; }
-  .hero-actions { margin-top: 36px; display: flex; align-items: center; gap: 28px; }
-  .hero-cta { margin-top: 0; }
-  .hero-more { margin-top: 0; }
-  .hero-small { margin-top: 20px; text-align: left; font-size: 15px; line-height: 20px; }
+  /* The button and "See how it works" side by side; the trust line under the button. */
+  .hero-actions { margin-top: 36px; display: grid; grid-template-columns: auto auto; justify-content: start; align-items: center; column-gap: 28px; }
+  .hero-cta { grid-area: 1 / 1; margin-top: 0; }
+  .hero-more { grid-area: 1 / 2; margin-top: 0; }
+  .hero-small { grid-area: 2 / 1; margin-top: 16px; font-size: 15px; line-height: 20px; }
   .hero-card { display: none; }
-  .hero-phone { display: flex; flex-direction: column; align-items: center; }
-  .hero-phone .phone { width: 330.1px; }
+  .hero-phone { display: flex; }
 
   .morning { margin-top: 100px; }
   .steps { margin-top: 56px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 48px; }
@@ -76,11 +95,14 @@
   .step-n { font-size: 96px; line-height: 84px; letter-spacing: -.05em; }
   .step-t { margin-top: 20px; font-size: 28px; line-height: 34px; }
   .step-d { margin-top: 8px; font-size: 19px; line-height: 29px; min-height: 58px; }
-  .step .phone { margin: 28px 0 0; width: 267.2px; }
+  .step-shot { align-self: flex-start; margin-top: 28px; }
+  .morning-cta { margin-top: 64px; }
 
   .who { margin-top: 150px; display: grid; grid-template-columns: 400px minmax(0, 1fr); gap: 96px; align-items: start; }
-  .tags { margin-top: 0; gap: 10px; }
-  .tags li { height: 44px; padding: 0 18px; font-size: 17px; }
+  .groups { margin-top: 0; gap: 12px; }
+  .groups li { padding: 24px 28px; border-radius: 24px; }
+  .group-t { font-size: 28px; line-height: 32px; }
+  .group-d { margin-top: 6px; font-size: 19px; line-height: 28px; }
   .who .body { margin-top: 28px; }
 
   .no-block { margin-top: 150px; border-top-width: 4px; padding-top: 40px; }
@@ -97,12 +119,20 @@
 }
 
 /* Welcome: the bar's small pill shows only once the page's own pill has scrolled under the bar,
-   so there's never more than one on screen (47e-4). An instant show/hide, with no motion; the fade
-   above is added only when motion is allowed. Without support, the bar pill simply stays. */
+   and steps aside again while the morning's pill (5201 item 10) is on screen, so there's never more
+   than one on screen (47e-4). An instant show/hide, with no motion; the fades below are added only
+   when motion is allowed. Without support, the bar pill simply stays. */
 @supports (animation-timeline: view()) {
+  body { timeline-scope: --hero-cta, --morning-cta, --end-cta; }
   #hero-cta { view-timeline: --hero-cta block; view-timeline-inset: var(--bar-h) 0px; }
-  body:has(#hero-cta) .bar-pill { animation: bar-pill-show linear both; animation-timeline: --hero-cta; animation-range: exit 0% exit 100%; }
+  #morning-cta { view-timeline: --morning-cta block; view-timeline-inset: var(--bar-h) 0px; }
+  body:has(#hero-cta) .bar-pill {
+    animation: bar-pill-show linear both, bar-pill-away linear none;
+    animation-timeline: --hero-cta, --morning-cta;
+    animation-range: exit 0% exit 100%, cover 0% cover 100%;
+  }
   @keyframes bar-pill-show { from { visibility: hidden; } to { visibility: visible; } }
+  @keyframes bar-pill-away { from, to { visibility: hidden; } }
 }
 
 /* Effects: only when the visitor allows motion */
@@ -111,13 +141,227 @@
   .hl { animation: sweep .75s cubic-bezier(.2, .7, .2, 1) .2s both; }
   @keyframes sweep { from { background-size: 0% 100%; } to { background-size: 100% 100%; } }
   @supports (animation-timeline: view()) {
-    /* Welcome: the bar pill fades in as the hero pill scrolls away, and out as the Last call pill comes in
-       (one list, so neither animation overrides the other; the later one wins where both apply). */
+    /* Welcome: the bar pill fades in as the hero pill scrolls away, out and back in around the
+       morning's pill, and out as the Last call pill comes in (one list, so no animation overrides
+       another; the later one wins where both apply). */
     body:has(#hero-cta) .bar-pill {
-      animation: bar-pill-fade linear both, bar-pill-out linear forwards;
-      animation-timeline: --hero-cta, --end-cta;
-      animation-range: exit 0% exit 100%, entry 0% entry 100%;
+      animation: bar-pill-fade linear both, bar-pill-mid linear none, bar-pill-out linear forwards;
+      animation-timeline: --hero-cta, --morning-cta, --end-cta;
+      animation-range: exit 0% exit 100%, cover 0% cover 100%, entry 0% entry 100%;
     }
     @keyframes bar-pill-fade { from { opacity: 0; visibility: hidden; } to { opacity: 1; visibility: visible; } }
+    /* Out while the morning's pill comes in, back while it scrolls under the bar. */
+    @keyframes bar-pill-mid {
+      entry 0% { opacity: 1; visibility: visible; }
+      entry 100%, exit 0% { opacity: 0; visibility: hidden; }
+      exit 100% { opacity: 1; visibility: visible; }
+    }
+  }
+}
+
+/* ---------- The map story (decisions 5226 to 5234, 5246 to 5256) ----------
+   Desktop only (1024 px and up), and only when the visitor allows motion: below 1024 px or with
+   reduced motion it isn't shown at all, so the page is exactly as before. Our own flat map of
+   Canggu at the app's opening zoom (assets/story/canggu-map.svg, drawn from OpenStreetMap data by
+   tools/draw_map.py) sticks beside four short lines, in normal scrolling. Step a's café pins (people
+   checked in at cafés of the app's list, drawn as the app's map draws them, 1 px = 1 pt), a session
+   card and a chat are laid over it; the cards are sized to the map (cqw: 1cqw is 6.4 px on the full
+   640 px map). As each line passes 60% of the screen's height, site.js adds s1 to s4 to the section
+   and a part comes in, by opacity and transform only. Without JavaScript (no "live"), every part
+   simply shows. Lemon only on the card's chosen chips (a highlight). The map is flat; the pins keep
+   the app's drop shadow (5249). */
+.story { display: none; }
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  .story {
+    /* The map's width: 640 px, or less on a narrow or short screen (it keeps 640:620). */
+    --map-w: min(640px, 54vw, (100svh - var(--bar-h) - 72px) * 1.0323);
+    display: grid; grid-template-columns: minmax(0, 1fr) var(--map-w); column-gap: clamp(48px, 6vw, 96px);
+    margin-top: 140px;
+    /* Between 1024 and 1079 px the page's column is 640 px wide: the story takes the desktop width. */
+    margin-inline: calc(50% - min(50vw - 40px, 600px));
+  }
+  .story-text { padding-top: 8px; }
+  /* The lines come about half a screen apart (5246), the first a little later, so the bare map
+     shows first. */
+  .story-steps { margin-top: 40svh; }
+  .story-step { min-height: 50svh; }
+  .story-step:last-child { min-height: calc(var(--map-w) / 1.0323 - 40px); }
+  .story-line { max-width: 460px; font: 700 34px/41px var(--font-title); letter-spacing: -.02em; color: var(--ink); text-wrap: balance; }
+  .story-cta { margin-top: 32px; }
+
+  .story-map {
+    position: sticky; top: calc(var(--bar-h) + max(24px, (100svh - var(--bar-h) - var(--map-w) / 1.0323) / 2));
+    align-self: start; width: var(--map-w); aspect-ratio: 640 / 620;
+    container-type: inline-size;
+  }
+  .map-view { position: absolute; inset: 0; overflow: hidden; overflow: clip; border-radius: 32px; background: var(--sand); }
+  .story-img { width: 100%; height: auto; }
+
+  /* Step a (5247, 5249, 5250, 5256): the café pins, as the app's map draws them (CafePin.tsx,
+     pinLayout.ts and Avatar.tsx in the app), at 1 px = 1 pt: they keep that size on a narrower map,
+     where only their places scale. tools/draw_map.py writes them in index.html, each at its café's
+     point (--x, --y on the 640 x 620 map: the pointer's tip), and runs the app's rule for which are
+     drawn and which are counted in another's "+N" badge (--more), here for the full map and below
+     (the container queries between the pins comments) for narrower ones. All hidden from screen
+     readers; the names are an image (pin-names-2x/3x.webp, one 148 x 20 row each). */
+  .pin-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+  .pins { position: absolute; inset: 0; }
+  .pin { position: absolute; left: calc(var(--x) * 100% / 640); top: calc(var(--y) * 100% / 620); width: 0; height: 0; }
+  .pin-mark { display: block; }
+  .pin-mark[hidden] { display: none; }
+  .pin-cup { display: block; flex: none; width: 16px; height: 16px; }
+  /* A busy café: the orange pill, 36 high, 9 before the cup and 5 after the faces, its width from
+     the count (pinLayout's pillWidth, written on it), with the app's drop shadow (shadows.floating);
+     the 12 x 7 pointer reaches 1 pt into it and its tip is the café's point. */
+  .pin-pill {
+    position: absolute; left: 0; top: -42px; translate: -50% 0;
+    display: flex; align-items: center; gap: 6px; height: 36px; padding: 0 5px 0 9px;
+    border-radius: 999px; background: var(--orange); color: var(--white);
+    box-shadow: 0 6px 14px color-mix(in srgb, var(--ink) 20%, transparent);
+  }
+  .pin-pill::after {
+    content: ""; position: absolute; left: 50%; top: 35px; margin-left: -6px;
+    border-style: solid; border-width: 7px 6px 0; border-color: var(--orange) transparent transparent;
+  }
+  /* The faces: 26, each covering 6 of the one before, ringed 1.5 in the pill's orange; up to three,
+     then "+N" for the rest (AvatarStack: a white pill with 8 sides, initialsSm). */
+  .pin-faces { display: flex; align-items: center; }
+  .pin-faces > * + * { margin-left: -6px; }
+  .pin-faces img {
+    flex: none; width: 26px; height: 26px; max-width: none; border-radius: 50%;
+    background: var(--white); box-shadow: 0 0 0 1.5px var(--orange);
+  }
+  .pin-more {
+    flex: none; display: flex; align-items: center; justify-content: center; height: 26px; min-width: 26px; padding: 0 8px;
+    border-radius: 999px; background: var(--white); box-shadow: 0 0 0 1.5px var(--orange);
+    font: 800 10px/13px var(--font-body); color: var(--ink);
+  }
+  /* A quiet café (nobody here): the 34 white circle with a 1 pt ink edge and an ink cup, the small
+     shadow (shadows.small), and the 10 x 6 ink pointer under it. */
+  .pin-quiet {
+    position: absolute; left: -17px; top: -40px;
+    display: flex; align-items: center; justify-content: center; width: 34px; height: 34px;
+    border: 1px solid var(--ink); border-radius: 50%; background: var(--white); color: var(--ink);
+    box-shadow: 0 2px 6px color-mix(in srgb, var(--ink) 12%, transparent);
+  }
+  .pin-quiet::after {
+    content: ""; position: absolute; left: 50%; top: 33px; margin-left: -5px;
+    border-style: solid; border-width: 6px 5px 0; border-color: var(--ink) transparent transparent;
+  }
+  /* The "+N" for the cafés this pin hides: a 20 ink circle with a 1.5 cream ring, over the body's
+     top right corner by 6. */
+  .pin-badge {
+    position: absolute; left: calc(100% - 6px); top: -14px;
+    display: flex; align-items: center; justify-content: center; width: 20px; height: 20px;
+    border-radius: 50%; background: var(--ink); box-shadow: 0 0 0 1.5px var(--cream);
+    font: 800 10px/13px var(--font-body); color: var(--cream);
+  }
+  .pin-quiet .pin-badge { left: calc(100% - 5px); top: -15px; }
+  .pin-badge[hidden] { display: none; }
+  .pin-badge::before { content: var(--more); }
+  /* The name (an image): captionStrong, ink, one line of at most 140 under the pointer by 2, with
+     its halo; the image holds every name, one 148 x 20 row each, and is moved up to this pin's row. */
+  .pin-name { position: absolute; left: -74px; top: -1px; width: 148px; height: 20px; overflow: hidden; }
+  .pin-name img { position: absolute; left: 0; width: 148px; max-width: none; }
+  /* pins: start */
+  @container (width < 541.07px) {
+    .pin[data-pin="1"] { --more: '+2'; }
+  }
+  @container (width < 425.31px) {
+    .pin[data-pin="1"] { --more: '+3'; }
+    .pin[data-pin="4"] .pin-mark { display: none; }
+  }
+  @container (width < 291.88px) {
+    .pin[data-pin="1"] { --more: '+4'; }
+    .pin[data-pin="4"] .pin-mark { display: none; }
+  }
+  @container (width < 255.69px) {
+    .pin[data-pin="1"] { --more: '+5'; }
+    .pin[data-pin="4"] .pin-mark { display: none; }
+  }
+  /* pins: end */
+
+  /* The session card, in the style of the app's Host a session sheet; not at any café. On the
+     map's right, clear of the cafés with people (5256). */
+  .story-card {
+    position: absolute; right: 2.5cqw; top: 41.5cqw; width: 41cqw; padding: 2.5cqw;
+    border-radius: 3.75cqw; background: var(--white); box-shadow: inset 0 0 0 1px var(--hairline);
+  }
+  .sc-title { font: 800 3.1cqw/1.1 var(--font-head); letter-spacing: -.03em; color: var(--ink); }
+  .sc-chips { display: flex; gap: 1.1cqw; margin-top: 1.9cqw; }
+  .sc-chip {
+    display: inline-flex; align-items: center; gap: .6cqw; height: 4.7cqw; padding: 0 1.8cqw 0 1.4cqw;
+    border-radius: 999px; background: var(--lemon); box-shadow: inset 0 0 0 1.5px var(--ink);
+    font: 700 1.95cqw/1 var(--font-body); color: var(--ink);
+  }
+  .sc-chip .i { width: 2.3cqw; height: 2.3cqw; }
+  .sc-times { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1cqw; margin-top: 1.6cqw; }
+  .sc-field {
+    display: flex; align-items: baseline; justify-content: space-between; padding: 1.3cqw 1.8cqw;
+    border-radius: 2.2cqw; background: var(--sand); font: 500 1.8cqw/1 var(--font-body); color: var(--ink-soft);
+  }
+  .sc-time { font: 700 2.5cqw/1 var(--font-title); color: var(--ink); font-variant-numeric: tabular-nums; }
+  .sc-meta { margin-top: 1.5cqw; font: 500 1.85cqw/1.3 var(--font-body); color: var(--ink-2); }
+
+  /* A chat with Nico: your short note, "Delivered" under it, never with a time. */
+  .story-chat {
+    position: absolute; right: 2.5cqw; bottom: 3.2cqw; width: 39cqw; padding: 2cqw 2.2cqw 1.8cqw;
+    border-radius: 3.75cqw; background: var(--cream); box-shadow: inset 0 0 0 1px var(--hairline);
+  }
+  .chat-name { padding-bottom: 1.5cqw; border-bottom: 1px solid var(--hairline); font: 700 2.5cqw/1.1 var(--font-title); letter-spacing: -.01em; color: var(--ink); }
+  .chat-bubble {
+    margin: 1.9cqw 0 0 4cqw; padding: 1.5cqw 2.1cqw;
+    border-radius: 3.4cqw 3.4cqw .95cqw 3.4cqw; background: var(--white); box-shadow: inset 0 0 0 1px var(--hairline);
+    font: 400 2.05cqw/1.4 var(--font-body); color: var(--ink);
+  }
+  .chat-state { margin-top: .8cqw; text-align: right; font: 500 1.75cqw/1 var(--font-body); color: var(--ink-soft); }
+
+  /* The disclaimer and the OpenStreetMap credit (5247, 5256): one of each is fully on screen whenever
+     any of the map is. On the map's top left, above everything on it; its rail reaches 100 px above
+     the map, so while the map comes in from below, the note rides the screen's bottom edge, just
+     above the map (sticky). Again along the map's bottom edge, just under it, for when it leaves at
+     the top. */
+  .map-rail { position: absolute; left: 0; right: 0; top: -100px; bottom: 0; z-index: 3; pointer-events: none; }
+  /* The note's place in the rail: a spacer, not a margin, so the sticky note can move up over it. */
+  .map-rail::before { content: ""; display: block; height: calc(100px + 2.5cqw); }
+  .map-note {
+    position: sticky; bottom: 0;
+    width: max-content; margin-left: 2.5cqw;
+    display: flex; flex-direction: column; align-items: flex-start;
+    padding: 8px 12px 4px; border-radius: 14px; background: var(--cream);
+    font: 500 13px/17px var(--font-body); color: var(--ink-2); pointer-events: auto;
+  }
+  .map-note .map-disclaimer { display: flex; flex-direction: column; }
+  .map-credit { display: inline-flex; align-items: center; min-height: 24px; font: 500 12px/16px var(--font-body); color: var(--ink-2); text-decoration: underline; text-underline-offset: 2px; }
+  .map-credit:hover { color: var(--ink); }
+  .map-foot {
+    position: absolute; left: 0; right: 0; top: 100%;
+    display: flex; flex-direction: column; align-items: flex-start; padding: 6px 2.5cqw 0;
+    font: 500 12px/16px var(--font-body); color: var(--ink-soft);
+  }
+  .map-foot .map-credit { color: var(--ink-soft); }
+
+  /* The steps: hidden until their line comes up (only with JavaScript; "settle" sets the first
+     state without a transition). A pin grows from its tip. */
+  .pin, .story-card, .story-chat { transition: opacity .5s cubic-bezier(.2, .7, .2, 1), transform .5s cubic-bezier(.2, .7, .2, 1); }
+  .pin:nth-child(2) { transition-delay: 90ms; }
+  .pin:nth-child(3) { transition-delay: 180ms; }
+  .pin:nth-child(4) { transition-delay: 270ms; }
+  .pin:nth-child(n + 5) { transition-delay: 360ms; }
+  .story.live:not(.s1) .pin { opacity: 0; transform: translateY(10px) scale(.94); transition-delay: 0s; }
+  .story.live:not(.s2) .story-card { opacity: 0; transform: translateY(4cqw); }
+  .story.live:not(.s3) .story-chat { opacity: 0; transform: translateX(5cqw); }
+  .story.settle .pin, .story.settle .story-card, .story.settle .story-chat { transition: none; }
+
+  /* One orange pill on screen (47e-4): the bar pill also steps aside while the story's button is
+     on screen, as it does around the morning's. Later in the file, so it replaces the list above. */
+  @supports (animation-timeline: view()) {
+    body { timeline-scope: --hero-cta, --story-cta, --morning-cta, --end-cta; }
+    #story-cta { view-timeline: --story-cta block; view-timeline-inset: var(--bar-h) 0px; }
+    body:has(#story-cta) .bar-pill {
+      animation: bar-pill-fade linear both, bar-pill-mid linear none, bar-pill-mid linear none, bar-pill-out linear forwards;
+      animation-timeline: --hero-cta, --story-cta, --morning-cta, --end-cta;
+      animation-range: exit 0% exit 100%, cover 0% cover 100%, cover 0% cover 100%, entry 0% entry 100%;
+    }
   }
 }

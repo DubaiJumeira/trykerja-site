@@ -17,18 +17,18 @@
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="stylesheet" href="assets/site.css">
-<link rel="stylesheet" href="assets/welcome.css">
+<link rel="stylesheet" href="assets/site.css?v=1fa550f3">
+<link rel="stylesheet" href="assets/welcome.css?v=d5494674">
 <link rel="preload" href="assets/fonts/bricolage-display.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/jakarta-400.woff2" as="font" type="font/woff2" crossorigin>
-<script src="assets/site.js" defer></script>
+<script src="assets/site.js?v=2e1d37ce" defer></script>
 <noscript><style>.menu-btn,.copy-btn{display:none!important}</style></noscript>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="bar">
   <div class="bar-in">
-    <a class="logo" href="./" aria-label="Kerja home"><img src="assets/logo.svg" alt="Kerja" width="102" height="40"></a>
+    <a class="logo" href="./" aria-label="Kerja home"><img src="assets/logo.svg?v=ccc4da28" alt="Kerja" width="102" height="40"></a>
     <div class="bar-end">
       <nav class="nav">
         <a href="how-it-works/">How it works</a>
@@ -43,7 +43,7 @@
   <div class="menu-in">
     <div class="handle"></div>
     <div class="menu-head">
-      <a class="logo" href="./" aria-label="Kerja home"><img src="assets/logo.svg" alt="Kerja" width="102" height="40" loading="lazy" decoding="async"></a>
+      <a class="logo" href="./" aria-label="Kerja home"><img src="assets/logo.svg?v=ccc4da28" alt="Kerja" width="102" height="40" loading="lazy" decoding="async"></a>
       <button class="round menu-close" type="button" aria-label="Close menu" autofocus><svg class="i" width="20" height="20" viewBox="0 0 24 24" stroke-width="2.4" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
     </div>
     <div class="menu-links">
@@ -62,32 +62,95 @@
       <p class="lede">Host or join a work session at a café in Canggu. Work side by side, then say hi to the people you sat with.</p>
       <div class="hero-actions">
         <a class="pill pill-block hero-cta" id="hero-cta" href="download/">Join the Canggu beta</a>
+        <p class="hero-small">Free beta · iPhone · Canggu</p>
         <div class="hero-more"><a class="link" href="how-it-works/">See how it works →</a></div>
       </div>
-      <p class="hero-small">Free beta · iPhone · Canggu · 18+</p>
     </div>
     <figure class="hero-card">
       <div class="card">
         <div class="card-top">
           <span class="icon-tile"><svg class="i" width="22" height="22" viewBox="0 0 24 24" stroke-width="2.2" aria-hidden="true"><path d="M4 16v-4a8 8 0 0 1 16 0v4"/><rect x="3" y="14" width="4.5" height="6.5" rx="1.8"/><rect x="16.5" y="14" width="4.5" height="6.5" rx="1.8"/></svg></span>
           <div>
-            <p class="card-title">Deep work at Pagi Room</p>
+            <p class="card-title">Focus in Batu Bolong</p>
             <p class="card-meta">9:00–12:00 · break 10:30</p>
           </div>
         </div>
         <div class="card-bottom">
-          <img class="faces" src="assets/screens/session-faces.webp" width="240" height="104" alt="Sample faces: Dewi Putri, Lena Fischer and Rafael Costa" fetchpriority="high">
-          <span class="seats">2 seats left</span>
+          <span class="seats">1 seat left</span>
         </div>
       </div>
-      <figcaption class="caption">Sample profiles</figcaption>
     </figure>
-    <figure class="hero-phone">
-      <picture>
-        <source media="(min-width: 1080px)" srcset="assets/screens/welcome-map.webp" width="660" height="1432">
-        <img class="phone" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="660" height="1432" alt="Sample screen: the Kerja map of Canggu, with Deep work at Pagi Room in Today near you" fetchpriority="high">
-      </picture>
-      <figcaption class="caption">Sample profiles</figcaption>
+    <figure class="hero-phone shot">
+      <div class="device">
+        <picture>
+          <source media="(min-width: 600px)" srcset="assets/screens/welcome-map-1x.webp?v=39e66ee0 1x, assets/screens/welcome-map-2x.webp?v=8208fc59 2x, assets/screens/welcome-map-3x.webp?v=812a98e9 3x" width="252" height="560">
+          <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="252" height="560" alt="Sample screen: the Kerja map of Canggu, with café pins, people around Batu Bolong and Canggu today, and Nico Albers in the Around Canggu today sheet" fetchpriority="high">
+        </picture>
+      </div>
+      <figcaption class="caption">Sample profiles and sessions</figcaption>
+    </figure>
+  </section>
+
+  <!-- The map story (decisions 5226 to 5234): desktop only (1024 px and up), and only when motion
+       is allowed; otherwise it isn't shown and the page is as before. See welcome.css and site.js. -->
+  <section class="story" aria-labelledby="story-title">
+    <div class="story-text">
+      <h2 class="h2" id="story-title">Canggu at work</h2>
+      <ol class="story-steps">
+        <li class="story-step" data-step="1"><p class="story-line">Each morning, people check in at a café to work.</p></li>
+        <li class="story-step" data-step="2"><p class="story-line">Host a session: pick a time and a few seats.</p></li>
+        <li class="story-step" data-step="3"><p class="story-line">After the session, say hi with a short note.</p></li>
+        <li class="story-step" data-step="4">
+          <p class="story-line">Free on iPhone, in Canggu.</p>
+          <a class="pill story-cta" id="story-cta" href="download/">Join the Canggu beta</a>
+        </li>
+      </ol>
+    </div>
+    <figure class="story-map">
+      <div class="map-view">
+        <picture>
+          <source media="(min-width: 1024px) and (prefers-reduced-motion: no-preference)" srcset="assets/story/canggu-map.svg?v=06afc546" width="640" height="620">
+          <img class="story-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="640" height="620" alt="Illustration of sample profiles checked in at cafés in Canggu" loading="lazy" decoding="async">
+        </picture>
+        <!-- Step a (5247, 5249, 5250, 5256): sample people checked in at cafés of the app's list, drawn as the
+             app's map draws its café pins when it opens (zoom 15). Written by tools/draw_map.py: the window, who
+             is where, which pins are drawn and which are counted in a "+N". Don't edit between the pins comments
+             by hand. The pins, faces and names (an image) are hidden from screen readers; the map's alt says what
+             it shows. The cup is Phosphor's Coffee (bold), MIT licence, Copyright (c) Phosphor Icons, as the app
+             draws it. -->
+        <svg class="pin-defs" width="0" height="0" aria-hidden="true"><symbol id="pin-cup" viewBox="0 0 256 256"><path fill="currentColor" d="M212 76H32a12 12 0 0 0-12 12v48a100.24 100.24 0 0 0 26.73 68H32a12 12 0 0 0 0 24h176a12 12 0 0 0 0-24h-14.73a100.8 100.8 0 0 0 20-32A44 44 0 0 0 256 128v-8a44.05 44.05 0 0 0-44-44m-16 60a76.27 76.27 0 0 1-42 68H86a76.27 76.27 0 0 1-42-68v-36h152Zm36-8a20 20 0 0 1-12.57 18.55A97 97 0 0 0 220 136v-34.32A20 20 0 0 1 232 120ZM68 48V24a12 12 0 0 1 24 0v24a12 12 0 0 1-24 0m40 0V24a12 12 0 0 1 24 0v24a12 12 0 0 1-24 0m40 0V24a12 12 0 0 1 24 0v24a12 12 0 0 1-24 0"/></symbol></svg>
+        <ul class="pins" aria-hidden="true">
+          <!-- pins: start -->
+          <li class="pin" data-pin="1" style="--x: 224.8; --y: 587.1; --more: '+1'"><span class="pin-mark"><span class="pin-pill" style="width: 125px"><svg class="pin-cup" width="16" height="16" aria-hidden="true"><use href="#pin-cup"/></svg><span class="pin-faces"><img src="assets/story/face-daria-2x.webp?v=00703884" srcset="assets/story/face-daria-2x.webp?v=00703884 2x, assets/story/face-daria-3x.webp?v=8784fc88 3x" width="26" height="26" alt="" aria-hidden="true" loading="lazy" decoding="async"><img src="assets/story/face-elena-2x.webp?v=ca274b21" srcset="assets/story/face-elena-2x.webp?v=ca274b21 2x, assets/story/face-elena-3x.webp?v=c42cd8ee 3x" width="26" height="26" alt="" aria-hidden="true" loading="lazy" decoding="async"><img src="assets/story/face-nico-2x.webp?v=24e6078f" srcset="assets/story/face-nico-2x.webp?v=24e6078f 2x, assets/story/face-nico-3x.webp?v=53a3f6da 3x" width="26" height="26" alt="" aria-hidden="true" loading="lazy" decoding="async"><span class="pin-more">+1</span></span><span class="pin-badge"></span></span><span class="pin-name"><img src="assets/story/pin-names-2x.webp?v=1fcd2094" srcset="assets/story/pin-names-2x.webp?v=1fcd2094 2x, assets/story/pin-names-3x.webp?v=e123eb09 3x" width="148" height="100" alt="" aria-hidden="true" loading="lazy" decoding="async" style="top: -0px"></span></span></li>
+          <li class="pin" data-pin="2" style="--x: 120.0; --y: 239.6"><span class="pin-mark"><span class="pin-pill" style="width: 62px"><svg class="pin-cup" width="16" height="16" aria-hidden="true"><use href="#pin-cup"/></svg><span class="pin-faces"><img src="assets/story/face-imani-2x.webp?v=b043388f" srcset="assets/story/face-imani-2x.webp?v=b043388f 2x, assets/story/face-imani-3x.webp?v=cbc938de 3x" width="26" height="26" alt="" aria-hidden="true" loading="lazy" decoding="async"></span></span><span class="pin-name"><img src="assets/story/pin-names-2x.webp?v=1fcd2094" srcset="assets/story/pin-names-2x.webp?v=1fcd2094 2x, assets/story/pin-names-3x.webp?v=e123eb09 3x" width="148" height="100" alt="" aria-hidden="true" loading="lazy" decoding="async" style="top: -20px"></span></span></li>
+          <li class="pin" data-pin="3" style="--x: 560.0; --y: 58.9"><span class="pin-mark"><span class="pin-pill" style="width: 62px"><svg class="pin-cup" width="16" height="16" aria-hidden="true"><use href="#pin-cup"/></svg><span class="pin-faces"><img src="assets/story/face-amira-2x.webp?v=3eabc782" srcset="assets/story/face-amira-2x.webp?v=3eabc782 2x, assets/story/face-amira-3x.webp?v=5daa4919 3x" width="26" height="26" alt="" aria-hidden="true" loading="lazy" decoding="async"></span></span><span class="pin-name"><img src="assets/story/pin-names-2x.webp?v=1fcd2094" srcset="assets/story/pin-names-2x.webp?v=1fcd2094 2x, assets/story/pin-names-3x.webp?v=e123eb09 3x" width="148" height="100" alt="" aria-hidden="true" loading="lazy" decoding="async" style="top: -40px"></span></span></li>
+          <li class="pin" data-pin="4" style="--x: 84.1; --y: 577.7"><span class="pin-mark"><span class="pin-quiet"><svg class="pin-cup" width="16" height="16" aria-hidden="true"><use href="#pin-cup"/></svg></span><span class="pin-name"><img src="assets/story/pin-names-2x.webp?v=1fcd2094" srcset="assets/story/pin-names-2x.webp?v=1fcd2094 2x, assets/story/pin-names-3x.webp?v=e123eb09 3x" width="148" height="100" alt="" aria-hidden="true" loading="lazy" decoding="async" style="top: -60px"></span></span></li>
+          <li class="pin" data-pin="5" style="--x: 240.3; --y: 551.8"><span class="pin-mark" hidden><span class="pin-quiet"><svg class="pin-cup" width="16" height="16" aria-hidden="true"><use href="#pin-cup"/></svg></span><span class="pin-name"><img src="assets/story/pin-names-2x.webp?v=1fcd2094" srcset="assets/story/pin-names-2x.webp?v=1fcd2094 2x, assets/story/pin-names-3x.webp?v=e123eb09 3x" width="148" height="100" alt="" aria-hidden="true" loading="lazy" decoding="async" style="top: -80px"></span></span></li>
+          <!-- pins: end -->
+        </ul>
+        <div class="story-card">
+          <p class="sc-title">Host a session</p>
+          <div class="sc-chips">
+            <span class="sc-chip"><svg class="i" width="14" height="14" viewBox="0 0 24 24" stroke-width="2.6" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Tomorrow</span>
+            <span class="sc-chip"><svg class="i" width="14" height="14" viewBox="0 0 24 24" stroke-width="2.4" aria-hidden="true"><path d="M4 16v-4a8 8 0 0 1 16 0v4"/><rect x="3" y="14" width="4.5" height="6.5" rx="1.8"/><rect x="16.5" y="14" width="4.5" height="6.5" rx="1.8"/></svg>Focus</span>
+          </div>
+          <div class="sc-times">
+            <p class="sc-field"><span>Start</span><span class="sc-time">9:00</span></p>
+            <p class="sc-field"><span>End</span><span class="sc-time">12:00</span></p>
+          </div>
+          <p class="sc-meta">Bali time · 4 seats · Open</p>
+        </div>
+        <div class="story-chat">
+          <p class="chat-name">Nico Albers</p>
+          <p class="chat-bubble">Hi Nico, great focus session this morning. Coffee on Thursday?</p>
+          <p class="chat-state">Delivered</p>
+        </div>
+      </div>
+      <!-- The disclaimer and the OpenStreetMap credit (5247, 5256): on the map's top left, where they ride
+           just above the map while it comes in (so one of each is always fully on screen), and again along
+           its bottom edge, just under the map, for when it leaves. -->
+      <div class="map-rail"><div class="map-note" aria-hidden="true"><p class="map-disclaimer"><span>Sample profiles and sessions.</span> <span>An illustration, not live activity at these cafés.</span></p><a class="map-credit" href="https://www.openstreetmap.org/copyright" tabindex="-1">© OpenStreetMap contributors</a></div></div>
+      <figcaption class="map-foot"><span class="map-disclaimer">Sample profiles and sessions. An illustration, not live activity at these cafés.</span> <a class="map-credit" href="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors</a></figcaption>
     </figure>
   </section>
 
@@ -99,41 +162,41 @@
         <div>
           <h3 class="step-t">Pick a session.</h3>
           <p class="body step-d">Find a table at a café, or start working and open yours to others.</p>
-          <img class="phone rise" src="assets/screens/morning-map.webp" srcset="assets/screens/morning-map-sm.webp 472w, assets/screens/morning-map.webp 534w" sizes="(min-width: 600px) 267px, 236px" width="534" height="870" alt="Sample screen: the Kerja map, with sessions at Pagi Room and Lontar Coffee" loading="lazy" decoding="async">
         </div>
+        <figure class="step-shot shot">
+          <div class="device"><img src="assets/screens/morning-map-2x.webp?v=0bd0bc47" srcset="assets/screens/morning-map-1x.webp?v=4b1b3182 1x, assets/screens/morning-map-2x.webp?v=0bd0bc47 2x, assets/screens/morning-map-3x.webp?v=c806c4bb 3x" width="252" height="560" alt="Sample screen: the Kerja map, with café pins, people around Berawa today, and Elena Castell in the Around Berawa today sheet" loading="lazy" decoding="async"></div>
+          <figcaption class="caption">Sample profiles and sessions</figcaption>
+        </figure>
       </li>
-      <li class="step rise">
+      <li class="step">
         <span class="step-n" aria-hidden="true">2</span>
         <div>
           <h3 class="step-t">Work.</h3>
           <p class="body step-d">Quiet time first, then a coffee break at 10:30.</p>
-          <img class="phone" src="assets/screens/morning-session.webp" srcset="assets/screens/morning-session-sm.webp 472w, assets/screens/morning-session.webp 534w" sizes="(min-width: 600px) 267px, 236px" width="534" height="884" alt="Sample screen: the session page at Lontar Coffee, Deep work hosted by Bea" loading="lazy" decoding="async">
         </div>
       </li>
-      <li class="step rise">
+      <li class="step">
         <span class="step-n" aria-hidden="true">3</span>
         <div>
           <h3 class="step-t">Say hi.</h3>
           <p class="body step-d">After you check out, send a short note to the people you sat with.</p>
-          <img class="phone" src="assets/screens/morning-sayhi.webp" srcset="assets/screens/morning-sayhi-sm.webp 472w, assets/screens/morning-sayhi.webp 534w" sizes="(min-width: 600px) 267px, 236px" width="534" height="616" alt="Sample screen: the Say hi to Sofia sheet, with a first line ready to send" loading="lazy" decoding="async">
         </div>
+        <figure class="step-shot shot">
+          <div class="device"><img src="assets/screens/say-hi-nico-2x.webp?v=3daad0da" srcset="assets/screens/say-hi-nico-1x.webp?v=eb11d57d 1x, assets/screens/say-hi-nico-2x.webp?v=3daad0da 2x, assets/screens/say-hi-nico-3x.webp?v=1653afc5 3x" width="252" height="560" alt="Sample screen: a chat with Nico Albers, connected via Coffee, with a first message and Nico’s reply" loading="lazy" decoding="async"></div>
+          <figcaption class="caption">Sample profiles</figcaption>
+        </figure>
       </li>
     </ol>
+    <div class="morning-cta"><a class="pill pill-block" id="morning-cta" href="download/">Join the Canggu beta</a></div>
   </section>
 
   <section class="who rise">
     <h2 class="h2">For people who build things</h2>
     <div>
-      <ul class="tags">
-        <li>Content creators</li>
-        <li>Models</li>
-        <li>Photographers</li>
-        <li>Founders</li>
-        <li>Freelancers</li>
-        <li>Developers</li>
-        <li>Designers</li>
-        <li>Writers</li>
-        <li>Anyone who works from cafés</li>
+      <ul class="groups">
+        <li><h3 class="group-t">Founders</h3><p class="group-d">Find a co-founder over coffee.</p></li>
+        <li><h3 class="group-t">Creators</h3><p class="group-d">Plan shoots and create content together.</p></li>
+        <li><h3 class="group-t">Freelancers</h3><p class="group-d">Focus buddies and skill swaps.</p></li>
       </ul>
       <p class="body">Making a video, a brand or a product? The person who can help might be at the next table.</p>
     </div>
@@ -173,11 +236,11 @@
 
   <div class="cs rise">
     <ul class="cs-row" tabindex="0">
-      <li><span class="badge">Coming soon</span><p>Invite a friend to your table with a link.</p></li>
-      <li><span class="badge">Coming soon</span><p>Every Monday: the week’s sessions in Canggu.</p></li>
-      <li><span class="badge">Coming soon</span><p>Asks: ask for help, and the right people answer.</p></li>
-      <li><span class="badge">Coming soon</span><p>Verified work: LinkedIn and work email.</p></li>
-      <li><span class="badge">Coming soon</span><p>Your network travels with you.</p></li>
+      <li><span class="badge">Coming soon</span><p>Invite links</p></li>
+      <li><span class="badge">Coming soon</span><p>This week in Canggu</p></li>
+      <li><span class="badge">Coming soon</span><p>Asks</p></li>
+      <li><span class="badge">Coming soon</span><p>Verified profiles</p></li>
+      <li><span class="badge">Coming soon</span><p>Next cities</p></li>
     </ul>
   </div>
 
@@ -190,7 +253,7 @@
 </main>
 <footer class="foot">
   <div class="wrap foot-in">
-    <a class="logo" href="./" aria-label="Kerja home"><img src="assets/logo.svg" alt="Kerja" width="102" height="40" loading="lazy" decoding="async"></a>
+    <a class="logo" href="./" aria-label="Kerja home"><img src="assets/logo.svg?v=ccc4da28" alt="Kerja" width="102" height="40" loading="lazy" decoding="async"></a>
     <p class="foot-tag">Kerja: work next to the right people. Canggu, Bali.</p>
     <ul class="foot-links">
       <li><a class="link" href="how-it-works/">How it works</a></li>
