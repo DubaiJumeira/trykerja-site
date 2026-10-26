@@ -56,6 +56,18 @@
 
 /* Tablet */
 @media (min-width: 600px) and (max-width: 1079px) {
+  /* The hero is one screen (5201 item 8): the words and the button beside the map picture, so both
+     show without scrolling, in portrait and landscape. The picture's height follows the screen's;
+     the headline shrinks on short screens. The session card is the phone's stand-in, so it goes. */
+  .hero {
+    min-height: calc(100svh - var(--bar-h)); padding: 24px 0 32px;
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: clamp(24px, 4vw, 40px); align-items: center;
+  }
+  .hero .h1 { font-size: clamp(36px, min(6.4vw, 7.2svh), 58px); line-height: 1.06; }
+  .hero-card { display: none; }
+  .hero-phone { display: flex; flex-direction: column; align-items: center; }
+  .hero-phone .phone { width: auto; height: clamp(260px, min(100svh - var(--bar-h) - 104px, 86vw), 600px); }
+
   .step .phone { width: 267px; }
   .step .caption { width: 267px; }
 }
