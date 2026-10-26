@@ -180,8 +180,10 @@
     margin-inline: calc(50% - min(50vw - 40px, 600px));
   }
   .story-text { padding-top: 8px; }
-  .story-steps { margin-top: 48svh; }
-  .story-step { min-height: 64svh; }
+  /* The lines come about half a screen apart (5246), the first a little later, so the bare map
+     shows first. */
+  .story-steps { margin-top: 40svh; }
+  .story-step { min-height: 50svh; }
   .story-step:last-child { min-height: calc(var(--map-w) / 1.0323 - 40px); }
   .story-line { max-width: 460px; font: 700 34px/41px var(--font-title); letter-spacing: -.02em; color: var(--ink); text-wrap: balance; }
   .story-cta { margin-top: 32px; }
