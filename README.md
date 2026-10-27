@@ -1,6 +1,6 @@
 # trykerja.com
 
-The Kerja website: four static pages (Welcome, How it works, Our promise, Join the beta), the same four in Indonesian under `/id/`, and a 404 page. Plain HTML and CSS, one small script (`assets/site.js`) for the mobile menu, the Copy button and the steps of Welcome's map story. No build step, no packages, no analytics, no cookies, no requests to other sites.
+The Kerja website: four static pages (Welcome, How it works, Our promise, Join the beta), the same four in Indonesian under `/id/`, and a 404 page. Plain HTML and CSS, and two small scripts: `assets/site.js` for the mobile menu and the steps of Welcome's map story, and `assets/apply.js` for Join the beta's application form. No build step, no packages, no analytics, no cookies, no storage. The one request to another site is the beta application, sent to Kerja's Supabase function when someone taps Send (see below).
 
 Ready for GitHub Pages: deploy from branch `main`, folder `/ (root)`. `.nojekyll` makes Pages serve the files as they are.
 
@@ -13,9 +13,19 @@ In `download/index.html` and `id/download/index.html` (change both), the `<body>
 ```
 
 - `open` (the default): "The Canggu beta is open. Install in two steps." with the two steps and the TestFlight invite button (and the QR code on a computer)
-- `full`: "This round is full." with the waitlist in the invite's place, once the beta's cap of 60 testers is reached
+- `full` (the state today): "The Canggu beta opens soon." with the beta application form in the invite's place (and the QR code to this page on a computer)
 
 Only one state is ever shown. The full state's lines also carry the `hidden` attribute, so leave it on them: `data-beta="full"` is what shows them.
+
+## The beta application form (decisions 5289, 5290)
+
+In the `full` (opens soon) state, `/download/` and `/id/download/` carry one form, `#apply`, where the invite is in the `open` state; On Android's "Go to the form" links to it. The fields, and nothing more: first name, email, which fits you best (Founder, Content creator, Freelancer, Other), how long you're in Canggu (Just arrived, 1–3 months, I live here), one optional Instagram or LinkedIn link, one optional line ("What would you work on next to someone?"), the "I'm 18 or older" and privacy policy ticks, and a hidden honeypot, `website`, which must stay empty. No age, no photo, no phone number.
+
+`assets/apply.js` checks the fields as the function does and sends them as JSON (`lang` from `<html lang>`) to the form's `data-endpoint`, per the contract in `kerja-artifacts/beta-apply/contract.md`. Each field the page or the server (a 400's `fields`) refuses gets its line under it, `aria-invalid`, and a link in the box above the fields, which takes focus. A 429 shows "Too many tries for now", a 500 or no answer "Your application didn't go through", both with hello@trykerja.com. A 200 replaces the form with "You're on the list." by first name. Without JavaScript, the form is hidden and a line says to email hello@trykerja.com; the Send button stays disabled until the script is ready, so the form is never sent any other way. Every word is in the page, in its language; the script holds none. No cookies, no storage, no analytics.
+
+**The endpoint.** On this branch, both pages' `data-endpoint` is **kerja-dev's** function, `https://oiyjmnsaqefrpfrbopjy.supabase.co/functions/v1/submit-application`. **It must become kerja-prod's URL (project ref `eppqufcgcwhoprwzfhxy`), in both pages, after G2 and before anything is published.** kerja-dev's CORS also allows https://trykerja.com, so a page published with kerja-dev's URL would send real applications to kerja-dev.
+
+**The local mock.** `python3 -I tools/apply_mock.py --port 8091` serves the site on http://127.0.0.1:8091/ and answers the contract at `/functions/v1/submit-application` (standard library only). In the pages it serves, and only there, `data-endpoint` becomes `http://localhost:8091/functions/v1/submit-application` (another origin, so the browser's CORS preflight runs as it will against Supabase). A valid application gets 200; a filled honeypot 200 (dropped); a refused field 400 with `fields`. The email's local part shows the other answers: `toomany@…` 429, `broken@…` 500, `offline@…` no answer at all. It logs statuses and field names only. Use a plain static server (`python3 -I -m http.server`) to see the pages as they are.
 
 ## The invite link
 
@@ -43,7 +53,7 @@ The four pages are also in Indonesian, with the same structure: `/id/`, `/id/how
 - **Head tags:** `<html lang="en">` or `<html lang="id">`; a self canonical; `hreflang` links `en`, `id` and `x-default` (English) to the absolute `https://trykerja.com/…` URLs, the same three on both versions of a page; `og:locale` (`en_US` / `id_ID`) with the other as `og:locale:alternate`, and `og:url`. `sitemap.xml` lists all eight pages with the same alternates. The 404 has no Indonesian twin, so no `hreflang`.
 - **The words:** every Indonesian string, beside its English one, is in `kerja-artifacts/site-id-strings.md` (outside this repo), grouped by page and kind. Change an English line, change its Indonesian line and that file too. Informal "kamu", sentence case, and the word rules of 5273 (no dating, whereabouts, status, hiring or money words; names, never "dia", in lines about a member).
 - **What stays English:** "Kerja", "Say hi", the app's screenshots, Welcome's hero session card, and the map story's session card and chat (copies of app screens, marked `lang="en"`); the app's own buttons, labels, options and statuses, exactly as the app shows them ("Work here", "I'm here", "Who's here", the five session types, How it works' reason line…); "© OpenStreetMap contributors" (the licensor's required credit); the legal pages, whose links on `/id/` read "… (dalam bahasa Inggris)". Alts describe the English screenshots in Indonesian, quoting their labels.
-- **Join the beta:** the waitlist email's subject is "Kerja waitlist (ID)", so the inbox can tell the two apart; the body's field labels and the copy panel are in Indonesian. The WhatsApp text links `https://trykerja.com/id/download`. The Copy button reads its "copied" word from `data-copied` (`site.js`; "Copied" when absent).
+- **Join the beta:** the application form's labels, choices, hints, error lines, 429 and 500 lines and "You're on the list." are in Indonesian in the page (`apply.js` holds no words), and the form sends `lang: "id"`, so the reply comes in Indonesian. Every form string, English beside Indonesian, is in `kerja-artifacts/beta-apply/site-apply-strings.md`. The WhatsApp text links `https://trykerja.com/id/download`.
 - **The second QR code:** `assets/qr-download-id.svg`, to https://trykerja.com/id/download, made with `node tools/qr.mjs https://trykerja.com/id/download assets/qr-download-id.svg`. The script needs `toqr` 0.1.1 (MIT, "Tiny QR code encoder", a dependency of Expo's CLI), which it imports in place, read only, from the app repo's `~/dev/kerja/node_modules/toqr` (or the path in `TOQR`); nothing is installed for the site. It draws as `assets/qr-download.svg` is drawn (EC level M, 4-module quiet zone, white and ink). After making one, run `stamp.py` and decode it in a browser.
 - **The 404** stays English (GitHub Pages serves one `/404.html` for every missing path, `/id/…` included), with one Indonesian line and a link to `/id/`.
 
@@ -60,6 +70,7 @@ Pages link to each other with relative paths, so they also work on a preview add
 - `assets/fonts/`: Latin subsets of Bricolage Grotesque and Plus Jakarta Sans (WOFF2), with their OFL licences.
 - `assets/screens/`: the app screens, each a whole 9:20 screen from a 1080 × 2400 master (status bar to bottom space) taken from the app on Android with sample profiles only, as WebP at 1x, 2x and 3x of the 252 px phone screen (`-1x` 252 × 560, `-2x` 504 × 1120, `-3x` 756 × 1680). The pages show them in the CSS phone outline (`.device` in `site.css`), whole, never cropped or zoomed.
 - `assets/story/`: the map story's map of Canggu, the sample faces and the cafés' names (see above).
-- `tools/stamp.py`: the cache-busting stamps; `tools/draw_map.py`: draws the map story's map and pins; `tools/qr.mjs`: draws a QR code (needs `toqr`, see above).
+- `assets/apply.js`: Join the beta's application form (see above), loaded by the two download pages only.
+- `tools/stamp.py`: the cache-busting stamps; `tools/draw_map.py`: draws the map story's map and pins; `tools/qr.mjs`: draws a QR code (needs `toqr`, see above); `tools/apply_mock.py`: the local preview with the form's mock function.
 - `id/`: the four pages in Indonesian (see above).
 - `assets/og.jpg`: the share preview (1200 × 630), used by both languages. `assets/qr-download.svg`: the QR code to https://trykerja.com/download; `assets/qr-download-id.svg`: the one to https://trykerja.com/id/download.
