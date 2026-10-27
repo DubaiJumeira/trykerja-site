@@ -25,7 +25,7 @@ sea when the window reaches it), main roads 12 pt of cream between two 1 pt ink 
 width at zoom 15), and the residential and unclassified roads over about 200 m thin and plain, for
 the shape. No names, no cafés or other places, no buildings, no paths, lanes or service roads.
 
-The pins (index.html, between the "pins" comments; welcome.css draws them): every café of the app's
+The pins (index.html and id/index.html, between the "pins" comments; welcome.css draws them): every café of the app's
 list whose point is inside the window, with the people the site places there (PEOPLE, cast v3
 only). Which pins are drawn, and which are counted into another's "+N" badge, is the app's own rule,
 ported below from pinLayout.ts (layoutPins, pinFootprint, faceSlots, pillWidth, labelWidth) and run,
@@ -41,7 +41,9 @@ import csv, html, json, math, os, re, sys, unicodedata
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, "assets", "story", "canggu-map.svg")
-PAGE = os.path.join(ROOT, "index.html")
+# Welcome in English and in Indonesian (/id/, decision 5275): the same pins in both, the Indonesian
+# page one folder down, so its pictures' paths start with "../".
+PAGES = [("index.html", ""), ("id/index.html", "../")]
 CSS = os.path.join(ROOT, "assets", "welcome.css")
 
 # The box of the OSM download (west, south, east, north); the window stays inside it.
@@ -521,9 +523,13 @@ def write_pins(csv_path):
 
     render_names(names)
     items = "".join("          " + pin_html(ids[p["name"]], ids[p["name"]] - 1, len(names), p, full, badged) + "\n" for p in pins)
-    page = open(PAGE, encoding="utf-8").read()
-    page = replace_between(page, "<!-- pins: start -->\n", "          <!-- pins: end -->", items, "index.html")
-    open(PAGE, "w", encoding="utf-8").write(page)
+    for rel, up in PAGES:
+        path = os.path.join(ROOT, rel)
+        body = items.replace('src="assets/', f'src="{up}assets/').replace('srcset="assets/', f'srcset="{up}assets/')
+        body = body.replace(", assets/", f", {up}assets/")
+        page = open(path, encoding="utf-8").read()
+        page = replace_between(page, "<!-- pins: start -->\n", "          <!-- pins: end -->", body, rel)
+        open(path, "w", encoding="utf-8").write(page)
 
     # Narrower maps: the pins whose state differs from the full map's, per band of widths (a band
     # is written only where what the window shows changes).
