@@ -24,10 +24,11 @@
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 <link rel="preload" href="../assets/fonts/bricolage-display.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../assets/fonts/jakarta-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../assets/site.css?v=20d73d44">
-<link rel="stylesheet" href="../assets/download.css?v=1820f685">
-<script src="../assets/site.js?v=2e843a2f" defer></script>
-<noscript><style>.menu-btn,.copy-btn{display:none!important}</style></noscript>
+<link rel="stylesheet" href="../assets/site.css?v=9ec48e72">
+<link rel="stylesheet" href="../assets/download.css?v=64562eaf">
+<script src="../assets/site.js?v=64ddca5c" defer></script>
+<script src="../assets/apply.js?v=d53e2f1b" defer></script>
+<noscript><style>.menu-btn,.apply-form{display:none!important}</style></noscript>
 </head>
 <!-- The page's state: "open" (the default) or "full" (once the beta's cap of 60 testers is reached). Change only this attribute. -->
 <body data-beta="full">
@@ -65,7 +66,7 @@
     <div class="dl-top">
       <h1 class="h1"><span class="beta-open">The Canggu beta is open.</span><span class="beta-full" hidden>The Canggu beta opens soon.</span></h1>
       <p class="lede beta-open">Install in two steps.</p>
-      <p class="lede beta-full" hidden>To join the waitlist, email hello@trykerja.com.</p>
+      <p class="lede beta-full" hidden>Apply below, and we’ll write to you when it opens.</p>
     </div>
 
     <div class="strip dl-strip">
@@ -104,27 +105,101 @@
         <h2 class="dl-qr-t">Scan this with your iPhone’s camera.</h2>
       </div>
 
-      <div class="beta-full waitlist" hidden>
-        <a class="pill pill-block" href="mailto:hello@trykerja.com?subject=Kerja%20waitlist&amp;body=Name%3A%0D%0AWhat%20do%20you%20do%3A%0D%0AWhat%20are%20you%20building%2C%20or%20who%20do%20you%20want%20to%20meet%3A%0D%0AWhen%20are%20you%20in%20Canggu%20%28here%20now%20%2F%20arriving%20soon%20%2F%20just%20curious%29%3A%0D%0AInstagram%20%28optional%29%3A%0D%0AiPhone%20or%20Android%3A%0D%0A">Join the waitlist</a>
-        <div class="wl-notes">
-          <p>Your email app opens with this filled in. Nothing is sent until you tap Send.</p>
-          <details class="noemail">
-            <summary><b>No email app?</b> Copy this and send it to hello@trykerja.com.</summary>
-            <div class="panel">
-              <div class="panel-text" id="waitlist-text-1">
-                <p class="panel-subj">Subject: Kerja waitlist</p>
-                <div>Name:</div>
-                <div>What do you do:</div>
-                <div>What are you building, or who do you want to meet:</div>
-                <div>When are you in Canggu (here now / arriving soon / just curious):</div>
-                <div>Instagram (optional):</div>
-                <div>iPhone or Android:</div>
-              </div>
-              <button class="copy-btn" type="button" data-copy="#waitlist-text-1" aria-live="polite">Copy</button>
-            </div>
-          </details>
+      <!-- The beta application (decisions 5289, 5290; contract: kerja-artifacts/beta-apply/contract.md), in the
+           opens-soon state only. assets/apply.js sends it as JSON to the form's data-endpoint; without JavaScript
+           the form is hidden (the <noscript> style in the head) and the line under the heading shows instead. -->
+      <section class="beta-full apply" id="apply" aria-labelledby="apply-title" hidden>
+        <div class="ap-head">
+          <h2 class="ap-title" id="apply-title">Apply for the Canggu beta</h2>
+          <p class="ap-note">Every field is needed unless it says optional.</p>
+          <noscript><p class="ap-nojs">This form needs JavaScript. To apply, email <a class="ap-a" href="mailto:hello@trykerja.com">hello@trykerja.com</a>.</p></noscript>
         </div>
-      </div>
+        <!-- The endpoint: kerja-dev's submit-application function, for this branch only.
+             It MUST become kerja-prod's URL (project ref eppqufcgcwhoprwzfhxy), after G2 and before anything is published. -->
+        <form class="apply-form" id="apply-form" method="post" data-endpoint="https://oiyjmnsaqefrpfrbopjy.supabase.co/functions/v1/submit-application">
+          <div class="ap-alert" id="apply-alert" tabindex="-1" hidden>
+            <div id="apply-alert-fields" hidden>
+              <p class="ap-alert-t">A few things to check:</p>
+              <ul class="ap-alert-list"></ul>
+            </div>
+            <p id="apply-alert-busy" hidden>Too many tries for now. Please try again later, or email <a class="ap-a" href="mailto:hello@trykerja.com">hello@trykerja.com</a>.</p>
+            <p id="apply-alert-fail" hidden>Your application didn’t go through. Please try again in a moment, or email <a class="ap-a" href="mailto:hello@trykerja.com">hello@trykerja.com</a>.</p>
+          </div>
+
+          <div class="ap-field" data-field="first_name">
+            <label class="ap-label" for="apply-first-name">First name</label>
+            <input class="ap-input" id="apply-first-name" name="first_name" type="text" autocomplete="given-name" inputmode="text" autocapitalize="words" spellcheck="false" maxlength="40" required>
+            <p class="ap-err" id="apply-first-name-err" hidden>Add your first name, up to 40 characters, without a link.</p>
+          </div>
+
+          <div class="ap-field" data-field="email">
+            <label class="ap-label" for="apply-email">Email</label>
+            <input class="ap-input" id="apply-email" name="email" type="email" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" maxlength="254" required>
+            <p class="ap-err" id="apply-email-err" hidden>Add an email address we can write to, like name@example.com.</p>
+          </div>
+
+          <fieldset class="ap-field" data-field="fits">
+            <legend class="ap-label">Which fits you best?</legend>
+            <div class="ap-chips">
+              <label class="ap-chip"><input type="radio" name="fits" value="founder" required><span>Founder</span></label>
+              <label class="ap-chip"><input type="radio" name="fits" value="content_creator" required><span>Content creator</span></label>
+              <label class="ap-chip"><input type="radio" name="fits" value="freelancer" required><span>Freelancer</span></label>
+              <label class="ap-chip"><input type="radio" name="fits" value="other" required><span>Other</span></label>
+            </div>
+            <p class="ap-err" id="apply-fits-err" hidden>Choose the one that fits you best.</p>
+          </fieldset>
+
+          <fieldset class="ap-field" data-field="stay">
+            <legend class="ap-label">How long are you in Canggu?</legend>
+            <div class="ap-chips">
+              <label class="ap-chip"><input type="radio" name="stay" value="just_arrived" required><span>Just arrived</span></label>
+              <label class="ap-chip"><input type="radio" name="stay" value="one_to_three_months" required><span>1–3 months</span></label>
+              <label class="ap-chip"><input type="radio" name="stay" value="live_here" required><span>I live here</span></label>
+            </div>
+            <p class="ap-err" id="apply-stay-err" hidden>Choose how long you’re in Canggu.</p>
+          </fieldset>
+
+          <div class="ap-field" data-field="link">
+            <label class="ap-label" for="apply-link">Instagram or LinkedIn <span class="ap-opt">(optional)</span></label>
+            <p class="ap-hint" id="apply-link-hint">A link to your profile, or your Instagram @handle.</p>
+            <input class="ap-input" id="apply-link" name="link" type="text" autocomplete="url" inputmode="url" autocapitalize="none" spellcheck="false" maxlength="200" aria-describedby="apply-link-hint">
+            <p class="ap-err" id="apply-link-err" hidden>Use a link to an Instagram or LinkedIn profile, or an Instagram @handle.</p>
+          </div>
+
+          <div class="ap-field" data-field="work_on">
+            <label class="ap-label" for="apply-work-on">What would you work on next to someone? <span class="ap-opt">(optional)</span></label>
+            <p class="ap-hint" id="apply-work-on-hint">One line, up to 140 characters.</p>
+            <input class="ap-input" id="apply-work-on" name="work_on" type="text" autocomplete="off" maxlength="140" aria-describedby="apply-work-on-hint">
+            <p class="ap-err" id="apply-work-on-err" hidden>Keep it to one line, up to 140 characters.</p>
+          </div>
+
+          <div class="ap-field" data-field="adult">
+            <label class="ap-tick"><input id="apply-adult" name="adult" type="checkbox" required><span class="ap-box" aria-hidden="true"><svg class="i" width="16" height="16" viewBox="0 0 24 24" stroke-width="3.2"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="ap-tick-t">I’m 18 or older.</span></label>
+            <p class="ap-err" id="apply-adult-err" hidden>Tick this to confirm you’re 18 or older.</p>
+          </div>
+
+          <div class="ap-field" data-field="privacy">
+            <label class="ap-tick"><input id="apply-privacy" name="privacy" type="checkbox" required><span class="ap-box" aria-hidden="true"><svg class="i" width="16" height="16" viewBox="0 0 24 24" stroke-width="3.2"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="ap-tick-t">I’ve read the <a class="ap-a" href="https://legal.trykerja.com/privacy/">privacy policy</a>.</span></label>
+            <p class="ap-err" id="apply-privacy-err" hidden>Tick this to confirm you’ve read the privacy policy.</p>
+          </div>
+
+          <!-- The honeypot (contract): hidden from people, not from the DOM. It must stay empty. -->
+          <div class="ap-hp" aria-hidden="true">
+            <label for="apply-website">Website</label>
+            <input id="apply-website" name="website" type="text" tabindex="-1" autocomplete="off">
+          </div>
+
+          <div class="ap-send">
+            <!-- Disabled until assets/apply.js is ready, so the form can never be sent any other way. -->
+            <button class="pill pill-block" type="submit" data-sending="Sending…" disabled>Send application</button>
+          </div>
+        </form>
+        <div class="ap-done" id="apply-done" tabindex="-1" hidden>
+          <span class="ap-done-i" aria-hidden="true"><svg class="i" width="22" height="22" viewBox="0 0 24 24" stroke-width="3"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+          <h2 class="ap-done-t" id="apply-done-t">You’re on the list.</h2>
+          <p class="ap-done-p">Thanks, <span class="ap-name"></span>. We read every application, and we’ll write to you when the beta opens.</p>
+        </div>
+      </section>
 
       <div class="beta-full dl-qr dl-qr-soon" hidden>
         <img class="dl-qr-img" src="../assets/qr-download.svg?v=fe11e814" width="200" height="200" alt="QR code to https://trykerja.com/download" loading="lazy" decoding="async">
@@ -150,28 +225,11 @@
 
       <section class="dl-col" aria-labelledby="dl-android">
         <h2 class="dl-h" id="dl-android">On Android</h2>
-        <p class="dl-p">Kerja is iPhone-only for now. Join the waitlist and we’ll tell you when Android is ready.</p>
-        <div class="waitlist">
-          <a class="pill pill-block" href="mailto:hello@trykerja.com?subject=Kerja%20waitlist&amp;body=Name%3A%0D%0AWhat%20do%20you%20do%3A%0D%0AWhat%20are%20you%20building%2C%20or%20who%20do%20you%20want%20to%20meet%3A%0D%0AWhen%20are%20you%20in%20Canggu%20%28here%20now%20%2F%20arriving%20soon%20%2F%20just%20curious%29%3A%0D%0AInstagram%20%28optional%29%3A%0D%0AiPhone%20or%20Android%3A%0D%0A">Join the waitlist</a>
-          <div class="wl-notes">
-            <p>Your email app opens with this filled in. Nothing is sent until you tap Send.</p>
-            <details class="noemail">
-              <summary><b>No email app?</b> Copy this and send it to hello@trykerja.com.</summary>
-              <div class="panel">
-                <div class="panel-text" id="waitlist-text-2">
-                  <p class="panel-subj">Subject: Kerja waitlist</p>
-                  <div>Name:</div>
-                  <div>What do you do:</div>
-                  <div>What are you building, or who do you want to meet:</div>
-                  <div>When are you in Canggu (here now / arriving soon / just curious):</div>
-                  <div>Instagram (optional):</div>
-                  <div>iPhone or Android:</div>
-                </div>
-                <button class="copy-btn" type="button" data-copy="#waitlist-text-2" aria-live="polite">Copy</button>
-              </div>
-            </details>
-          </div>
+        <div class="beta-full" hidden>
+          <p class="dl-p">Kerja is iPhone-only for now. Apply above, and we’ll tell you when Android is ready.</p>
+          <a class="link dl-to" href="#apply">Go to the form</a>
         </div>
+        <p class="dl-p beta-open">Kerja is iPhone-only for now. Email hello@trykerja.com, and we’ll tell you when Android is ready.</p>
       </section>
     </div>
   </div>

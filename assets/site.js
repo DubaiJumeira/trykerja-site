@@ -1,5 +1,5 @@
-/* Kerja website: the mobile menu, the Copy button and the steps of Welcome's map story.
-   Nothing else uses JavaScript. */
+/* Kerja website: the mobile menu and the steps of Welcome's map story.
+   Join the beta's form has its own script, apply.js. Nothing else uses JavaScript. */
 (function () {
   "use strict";
 
@@ -20,37 +20,6 @@
     // A tap on the scrim (outside the sheet) closes it too.
     menu.addEventListener("click", function (e) { if (e.target === menu) menu.close(); });
   }
-
-  // Copy: <button class="copy-btn" data-copy="#some-id">Copy</button> copies the text of #some-id.
-  // data-copied="…" is the word it shows once copied, in the page's language (Copied by default).
-  var buttons = document.querySelectorAll("[data-copy]");
-  Array.prototype.forEach.call(buttons, function (b) {
-    var label = b.textContent;
-    var copied = b.getAttribute("data-copied") || "Copied";
-    var timer = 0;
-    b.addEventListener("click", function () {
-      var target = document.querySelector(b.getAttribute("data-copy"));
-      if (!target) return;
-      var text = target.innerText.trim();
-      function select() {
-        var range = document.createRange();
-        range.selectNodeContents(target);
-        var sel = window.getSelection();
-        sel.removeAllRanges();
-        sel.addRange(range);
-      }
-      function done() {
-        b.textContent = copied;
-        clearTimeout(timer);
-        timer = setTimeout(function () { b.textContent = label; }, 2000);
-      }
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(done, select);
-      } else {
-        select();
-      }
-    });
-  });
 
   // The map story on Welcome (welcome.css): desktop only, with motion allowed. As each step's line
   // passes 60% of the screen's height, the section gets s1 to s4 and that step's part of the map

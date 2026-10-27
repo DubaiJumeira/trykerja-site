@@ -18,6 +18,7 @@
   --handle: #D6CDBB;       /* handle: the menu sheet's handle */
   --white: #FFFFFF;        /* white */
   --map-land: #F7EFDD;     /* mapLand: the halo of a café pin's name on the map story */
+  --error: #B3261E;        /* error: a refused field's outline and its line only (Join the beta's form) */
 
   --scrim: color-mix(in srgb, var(--ink) 40%, transparent);
   --font-head: "Bricolage", system-ui, sans-serif;
@@ -58,7 +59,7 @@ svg.i { display: block; flex: none; fill: none; stroke: currentColor; stroke-lin
 
 :focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
 a:focus-visible, button:focus-visible, summary:focus-visible { border-radius: 6px; }
-.pill:focus-visible, .chip:focus-visible, .round:focus-visible, .copy-btn:focus-visible { border-radius: 999px; }
+.pill:focus-visible, .chip:focus-visible, .round:focus-visible { border-radius: 999px; }
 
 .skip {
   position: absolute; left: 12px; top: -200px; z-index: 100;
