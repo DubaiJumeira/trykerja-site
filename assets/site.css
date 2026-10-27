@@ -139,6 +139,22 @@ html:has(.menu[open]) { overflow: hidden; }
 .menu-links a[aria-current="page"] { color: var(--ink); }
 .menu .pill { margin-top: 28px; }
 
+/* ---------- The language switch, EN / ID (decisions 5273 to 5275) ----------
+   In the bar (from 1080 px, where the nav shows), in the phone menu and in the footer of every page.
+   Each language links to the same page in the other one; the current one is ink, isn't a link and
+   carries aria-current="page". Nothing redirects and nothing is remembered: English is always the
+   first page anyone sees. The link is a text link (orangeShadow, as the nav's), with a 44 px target
+   whose sides overlap the gaps so the two codes sit evenly around the slash. */
+.lang { display: flex; align-items: center; gap: 8px; font: 700 15px/1 var(--font-body); color: var(--ink); white-space: nowrap; }
+.lang-sep { font-weight: 500; color: var(--ink-soft); }
+.lang-to {
+  display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; margin: 0 -12px;
+  color: var(--orange-shadow); text-decoration: none;
+}
+.lang-to:hover { text-decoration: underline; text-underline-offset: 3px; }
+.bar-lang { display: none; }
+.menu-lang { margin-top: 14px; font-size: 17px; }
+
 /* ---------- Shared blocks ---------- */
 .dots { display: flex; flex-direction: column; gap: 10px; }
 .dots li { display: flex; gap: 12px; align-items: flex-start; font: 400 16px/24px var(--font-body); color: var(--ink-2); text-wrap: pretty; }
@@ -211,7 +227,7 @@ html:has(.menu[open]) { overflow: hidden; }
 .foot { margin-top: 88px; border-top: 1px solid var(--hairline); }
 .foot-in {
   padding: 36px 0 44px; display: grid; grid-template-columns: minmax(0, 1fr); row-gap: 18px;
-  grid-template-areas: "logo" "tag" "links" "contact" "meaning" "small";
+  grid-template-areas: "logo" "tag" "links" "contact" "lang" "meaning" "small";
 }
 .foot .logo { grid-area: logo; justify-self: start; }
 .foot .logo img { height: 32px; }
@@ -219,6 +235,7 @@ html:has(.menu[open]) { overflow: hidden; }
 .foot-links { grid-area: links; display: flex; flex-wrap: wrap; column-gap: 22px; margin: -11px 0; }
 .foot-links .link, .foot .contact .link, .foot .contact .plain { font-size: 15px; line-height: 22px; }
 .foot .contact { grid-area: contact; margin: -11px 0; }
+.foot-lang { grid-area: lang; justify-self: start; margin: -11px 0; }
 .foot-meaning { grid-area: meaning; font: 400 14px/20px var(--font-body); color: var(--ink-2); }
 .foot-small { grid-area: small; display: flex; flex-direction: column; gap: 4px; font: 400 12px/18px var(--font-body); color: var(--ink-soft); }
 
@@ -233,6 +250,8 @@ html:has(.menu[open]) { overflow: hidden; }
 .lost-icon { width: 88px; height: 88px; border-radius: 50%; background: var(--sand); display: flex; align-items: center; justify-content: center; color: var(--ink); }
 .lost .h1 { margin-top: 0; text-wrap: balance; }
 .lost .link { align-self: flex-start; margin-top: 11px; font-size: 18px; line-height: 26px; }
+.lost-id { margin-top: 18px; font: 500 16px/24px var(--font-body); color: var(--ink-2); }
+.lost .lost-id + .link { margin-top: 0; }
 main:has(> .lost) + .foot { margin-top: 0; }
 
 /* ---------- Desktop ---------- */
@@ -246,6 +265,7 @@ main:has(> .lost) + .foot { margin-top: 0; }
   .nav a { display: inline-flex; align-items: center; height: 44px; font: 700 16px/1 var(--font-body); color: var(--orange-shadow); text-decoration: none; }
   .nav a:hover { text-decoration: underline; text-underline-offset: 3px; }
   .nav a[aria-current="page"] { color: var(--ink); }
+  .bar-lang { display: flex; }
   .bar-pill { padding: 0 20px; }
   .menu-btn, .menu { display: none !important; }
 
@@ -280,12 +300,13 @@ main:has(> .lost) + .foot { margin-top: 0; }
   .foot { margin-top: 150px; }
   .foot-in {
     padding: 56px 0; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 80px; row-gap: 14px;
-    grid-template-areas: "logo links" "tag contact" "meaning ." "small small";
+    grid-template-areas: "logo links" "tag contact" "meaning lang" "small small";
   }
   .foot .logo img { height: 40px; }
   .foot-tag { font-size: 18px; line-height: 27px; }
   .foot-meaning { font-size: 15px; line-height: 22px; }
   .foot-links, .foot .contact { margin: 0; align-self: center; }
+  .foot-lang { align-self: center; font-size: 16px; }
   .foot-links .link, .foot .contact .link, .foot .contact .plain { font-size: 16px; line-height: 23px; }
   .foot-small { margin-top: 26px; padding-top: 24px; border-top: 1px solid var(--hairline); flex-direction: row; justify-content: space-between; font-size: 13px; line-height: 18px; }
 }
