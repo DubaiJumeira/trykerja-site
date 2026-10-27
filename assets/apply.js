@@ -4,7 +4,9 @@
      200: the form is replaced by "You're on the list" (also for a filled honeypot or an email
           already on the list: the server never tells them apart);
      400: each field the server names gets its error line, as the checks here do;
-     429: the "too many tries" line; 500, or no answer at all: the "didn't go through" line.
+     429: the "too many tries" line;
+     403 (an Origin the server doesn't allow), 500, anything else, or no answer at all: the
+          "didn't go through" line, with hello@trykerja.com.
    Every word the visitor sees is in the page, in its language; this file holds none.
    No cookies, no storage, no analytics, nothing sent anywhere else. */
 (function () {
@@ -30,8 +32,7 @@
   var KEYS = ["first_name", "email", "fits", "stay", "link", "work_on", "adult", "privacy"];
   var URLISH = /(:\/\/|www\.|\b[a-z0-9-]+\.(com|net|org|io|co|id|me|app|ly|xyz|info|link)\b)/i;
   var EMAIL = /^[^\s@]+@[^\s@.]+(\.[^\s@.]+)+$/;
-  var HANDLE = /^@[A-Za-z0-9._]{1,30}$/;
-  var PROFILE = /^(https?:\/\/)?([a-z0-9-]+\.)*(instagram\.com|linkedin\.com)\/\S+$/i;
+  var SCHEME = /^[a-z][a-z0-9+.-]*:\/\//i;
 
   function field(key) { return form.querySelector('[data-field="' + key + '"]'); }
   function controls(key) { return Array.prototype.slice.call(field(key).querySelectorAll("input")); }
@@ -41,13 +42,16 @@
     return c ? c.value : "";
   }
 
-  // A link as sent: an @handle as typed, a profile URL with https:// added when it was left off.
+  // The link as sent (the contract's "link field", decision 5301): what was typed, normalized only so:
+  // starting with "@", unchanged (an Instagram handle); with a "." or a "/", https:// added when there is
+  // no scheme; otherwise (a bare word), "@" added (an Instagram handle). Whether it is an Instagram or
+  // LinkedIn profile is the server's rule: its 400 brings the field's line. Never "https://@...".
   function link() {
     var v = text("link");
     if (!v) return "";
-    if (HANDLE.test(v)) return v;
-    if (PROFILE.test(v)) return /^https?:\/\//i.test(v) ? v : "https://" + v;
-    return null;
+    if (v.charAt(0) === "@") return v;
+    if (/[.\/]/.test(v)) return SCHEME.test(v) ? v : "https://" + v;
+    return "@" + v;
   }
 
   // The contract's rules, per field: true when the field is fine.
@@ -56,7 +60,7 @@
     email: function () { var v = text("email"); return v.length <= 254 && EMAIL.test(v); },
     fits: function () { return !!chosen("fits"); },
     stay: function () { return !!chosen("stay"); },
-    link: function () { var v = link(); return v !== null && v.length <= 200; },
+    link: function () { var v = link(); return v.length <= 200 && !/^[a-z][a-z0-9+.-]*:\/\/@/i.test(v); },
     work_on: function () { var v = text("work_on"); return v.length <= 140 && !/[\r\n]/.test(v); },
     adult: function () { return form.elements.namedItem("adult").checked; },
     privacy: function () { return form.elements.namedItem("privacy").checked; }

@@ -11,14 +11,17 @@ http://localhost:<port>/functions/v1/submit-application. localhost is another or
 so the browser sends the CORS preflight, as it will to Supabase.
 
 The answers, as the contract's:
-  OPTIONS            204, with the CORS headers for https://trykerja.com, http://127.0.0.1:<any port>
-                     and http://localhost:<any port> (as kerja-dev and the local stack allow)
+  OPTIONS            204, with the CORS headers for http://127.0.0.1:<any port> and http://localhost:<any port>
+                     only (as kerja-dev and the local stack allow; never https://trykerja.com, decision 5300)
+  an Origin header that isn't one of those, on a POST or OPTIONS
+                     403 {"ok": false, "error": "origin"}, before anything else (no Origin: not refused; 5301)
   not POST/OPTIONS   405 {"ok": false, "error": "method"}
   honeypot filled    200 {"ok": true} (dropped, as the function drops it)
   a field wrong      400 {"ok": false, "error": "invalid", "fields": [...]}
   valid              200 {"ok": true}, the same for an email already sent (nothing is stored on disk)
 And, to show the other states, by the email's local part (a valid email otherwise):
   toomany@...        429 {"ok": false, "error": "too_many"}
+  origin@...         403 {"ok": false, "error": "origin"} (with CORS headers, so the page can read it)
   broken@...         500 {"ok": false, "error": "server"}
   offline@...        the connection closes with no answer (as if the network dropped)
 
@@ -35,7 +38,7 @@ from urllib.parse import urlsplit
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PATH = "/functions/v1/submit-application"
-ORIGIN_OK = re.compile(r"^(https://trykerja\.com|http://(127\.0\.0\.1|localhost)(:\d{1,5})?)$")
+ORIGIN_OK = re.compile(r"^http://(127\.0\.0\.1|localhost)(:\d{1,5})?$")
 ENDPOINT_ATTR = re.compile(r'data-endpoint="[^"]*"')
 
 URLISH = re.compile(r"(://|www\.|\b[a-z0-9-]+\.(com|net|org|io|co|id|me|app|ly|xyz|info|link)\b)", re.I)
@@ -113,10 +116,16 @@ class Handler(http.server.SimpleHTTPRequestHandler):
     def is_fn(self):
         return urlsplit(self.path).path.rstrip("/") == PATH
 
+    def bad_origin(self):
+        o = self.headers.get("Origin")
+        return o is not None and not ORIGIN_OK.match(o)
+
     # The function.
     def do_OPTIONS(self):
         if not self.is_fn():
             return self.answer(405, {"ok": False, "error": "method"})
+        if self.bad_origin():
+            return self.answer(403, {"ok": False, "error": "origin"}, " (origin not allowed)")
         self.send_response(204)
         self.cors()
         self.send_header("Access-Control-Max-Age", "600")
@@ -128,6 +137,8 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             return self.answer(405, {"ok": False, "error": "method"})
         n = int(self.headers.get("Content-Length") or 0)
         raw = self.rfile.read(n) if n else b""
+        if self.bad_origin():
+            return self.answer(403, {"ok": False, "error": "origin"}, " (origin not allowed)")
         time.sleep(self.delay)
         try:
             b = json.loads(raw or b"null")
@@ -144,6 +155,8 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         local = email.split("@", 1)[0]
         if local == "toomany":
             return self.answer(429, {"ok": False, "error": "too_many"})
+        if local == "origin":
+            return self.answer(403, {"ok": False, "error": "origin"})
         if local == "broken":
             return self.answer(500, {"ok": False, "error": "server"})
         if local == "offline":
