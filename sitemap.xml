@@ -1,7 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://trykerja.com/</loc></url>
-  <url><loc>https://trykerja.com/how-it-works/</loc></url>
-  <url><loc>https://trykerja.com/promise/</loc></url>
-  <url><loc>https://trykerja.com/download/</loc></url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://trykerja.com/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://trykerja.com/"/>
+    <xhtml:link rel="alternate" hreflang="id" href="https://trykerja.com/id/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://trykerja.com/"/>
+  </url>
+  <url>
+    <loc>https://trykerja.com/how-it-works/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://trykerja.com/how-it-works/"/>
+    <xhtml:link rel="alternate" hreflang="id" href="https://trykerja.com/id/how-it-works/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://trykerja.com/how-it-works/"/>
+  </url>
+  <url>
+    <loc>https://trykerja.com/promise/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://trykerja.com/promise/"/>
+    <xhtml:link rel="alternate" hreflang="id" href="https://trykerja.com/id/promise/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://trykerja.com/promise/"/>
+  </url>
+  <url>
+    <loc>https://trykerja.com/download/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://trykerja.com/download/"/>
+    <xhtml:link rel="alternate" hreflang="id" href="https://trykerja.com/id/download/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://trykerja.com/download/"/>
+  </url>
+  <url>
+    <loc>https://trykerja.com/id/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://trykerja.com/"/>
+    <xhtml:link rel="alternate" hreflang="id" href="https://trykerja.com/id/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://trykerja.com/"/>
+  </url>
+  <url>
+    <loc>https://trykerja.com/id/how-it-works/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://trykerja.com/how-it-works/"/>
+    <xhtml:link rel="alternate" hreflang="id" href="https://trykerja.com/id/how-it-works/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://trykerja.com/how-it-works/"/>
+  </url>
+  <url>
+    <loc>https://trykerja.com/id/promise/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://trykerja.com/promise/"/>
+    <xhtml:link rel="alternate" hreflang="id" href="https://trykerja.com/id/promise/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://trykerja.com/promise/"/>
+  </url>
+  <url>
+    <loc>https://trykerja.com/id/download/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://trykerja.com/download/"/>
+    <xhtml:link rel="alternate" hreflang="id" href="https://trykerja.com/id/download/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://trykerja.com/download/"/>
+  </url>
 </urlset>

@@ -22,9 +22,11 @@
   }
 
   // Copy: <button class="copy-btn" data-copy="#some-id">Copy</button> copies the text of #some-id.
+  // data-copied="…" is the word it shows once copied, in the page's language (Copied by default).
   var buttons = document.querySelectorAll("[data-copy]");
   Array.prototype.forEach.call(buttons, function (b) {
     var label = b.textContent;
+    var copied = b.getAttribute("data-copied") || "Copied";
     var timer = 0;
     b.addEventListener("click", function () {
       var target = document.querySelector(b.getAttribute("data-copy"));
@@ -38,7 +40,7 @@
         sel.addRange(range);
       }
       function done() {
-        b.textContent = "Copied";
+        b.textContent = copied;
         clearTimeout(timer);
         timer = setTimeout(function () { b.textContent = label; }, 2000);
       }
