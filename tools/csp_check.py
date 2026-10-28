@@ -37,13 +37,20 @@ Fails (exit 1) when a page:
 And when assets/umami.js isn't byte for byte the pinned Umami release (its SHA-256, UMAMI_SHA256: the
 copy may not be edited; README.md, "Website statistics", says how to update it). And when assets/site.js,
 which alone loads the tracker:
-- hasn't exactly one TRACKER config whose src is "umami.js?v=<the file's stamp>" and whose attributes
-  are exactly, in order, data-website-id (Kerja's, UMAMI_WEBSITE_ID; the old placeholder passes only
-  without --publish), data-host-url (the collector), data-do-not-track="true",
-  data-domains="trykerja.com", data-exclude-search="true" and data-exclude-hash="true";
+- hasn't exactly one TRACKER config whose entries are exactly src and attrs and, in order,
+  data-website-id (Kerja's, UMAMI_WEBSITE_ID; the old placeholder passes only without --publish),
+  data-host-url (the collector), data-do-not-track="true", data-domains="trykerja.com",
+  data-exclude-search="true" and data-exclude-hash="true", each a double-quoted string, with src
+  "umami.js?v=<the file's stamp>"; and that is byte for byte the pinned one, stamp aside (TRACKER_SHA256);
 - hasn't exactly one "[tracker-loader]" block, byte for byte the reviewed one (LOADER_SHA256: the storage
-  test, the opt-out check, then the tag), or creates a <script> anywhere outside it. No other published
-  script may create a <script>.
+  test, the opt-out check, then the tag).
+And when any published script but umami.js, or site.js outside those two blocks, contains (as written,
+comments included; FORBIDDEN_JS, decision 5438): TRACKER; createElement( with anything but a written-out
+element name other than script, any case or spacing; createElementNS(; createElement inside a string;
+document.write/writeln, innerHTML, outerHTML, insertAdjacentHTML, createContextualFragment, srcdoc; eval,
+Function(, import(, a worker, setTimeout/setInterval with a string; .src =, setAttribute (NS, Node) with
+anything but a written-out aria-* name, toggleAttribute, .dataset, Object.assign/defineProperty. Names
+built from pieces at run time get past it: new code is still read.
 And when any published text file (HTML, JS, CSS, SVG, XML, JSON, TXT) names kerja-dev's project ref,
 in any case, or a published stylesheet loads from another site (url()) or uses @import.
 """
@@ -79,7 +86,46 @@ TRACKER_ATTRS = {"data-host-url": COLLECTOR, "data-do-not-track": "true", "data-
 SITE_JS = "assets/site.js"  # the one file that adds the tracker, after its storage test (decision 5431)
 LOADER_SHA256 = "6d3e1f33d55c0ff7832e1a7bdbdd334e6f5b2e1d03125d03c7dfd6a07f4d63aa"  # site.js's [tracker-loader] block
 LOADER_BLOCK = re.compile(r"[ \t]*// \[tracker-loader\].*?// \[/tracker-loader\]\n", re.S)
-CREATES_SCRIPT = re.compile(r"""createElement\(\s*["']script["']\s*\)""", re.I)
+# site.js's TRACKER config, byte for byte, with its ?v= stamp written as STAMP (so tools/stamp.py can keep
+# the stamp current; the stamp itself is checked against assets/umami.js, which UMAMI_SHA256 pins) (5438).
+TRACKER_SHA256 = "580272da35ead5486a0a74ac926e1bbb369ba4d17b19cbabd8e918ce7796db1f"
+TRACKER_BLOCK = re.compile(r"^  var TRACKER = \{\n.*?^  \};\n", re.S | re.M)
+STAMPED = re.compile(r"umami\.js\?v=[0-9a-f]{8}")
+# In every published script but umami.js, and in site.js outside its two pinned blocks (the TRACKER config
+# and the [tracker-loader]), none of these may appear: each could add or run a script, or change the
+# tracker's config or tag after the loader (decision 5438). The text is scanned as it is, comments included.
+FORBIDDEN_JS = [
+    (re.compile(r"\bTRACKER\b"), "TRACKER used outside its config and the loader"),
+    (re.compile(r"create\s*element\s*ns\s*\(", re.I), "createElementNS("),
+    (re.compile(r"""["'`][^"'`\n]*create\s*element[^"'`\n]*["'`]""", re.I), "createElement named in a string"),
+    (re.compile(r"\bdocument\s*\.\s*write(ln)?\b", re.I), "document.write / writeln"),
+    (re.compile(r"\b(inner|outer)html\b", re.I), "innerHTML / outerHTML"),
+    (re.compile(r"\binsertadjacenthtml\b", re.I), "insertAdjacentHTML"),
+    (re.compile(r"\bcreatecontextualfragment\b", re.I), "createContextualFragment"),
+    (re.compile(r"\bsrcdoc\b", re.I), "srcdoc"),
+    (re.compile(r"\bFunction\s*\("), "Function( / new Function("),
+    (re.compile(r"\beval\b"), "eval"),
+    (re.compile(r"\bimport\s*\("), "import("),
+    (re.compile(r"\bimportScripts\b|\b(Shared)?Worker\s*\(|\bserviceWorker\b"), "a worker"),
+    (re.compile(r"\bset(Timeout|Interval)\s*\(\s*[\"'`]"), "setTimeout / setInterval with a string"),
+    (re.compile(r"\.\s*src\s*=(?!=)"), "src set"),
+    (re.compile(r"\bset\s*attribute(ns|node|nodens)?\s*\(\s*(?![\"']aria-)", re.I), "setAttribute other than an aria-* name written out"),
+    (re.compile(r"\btoggleattribute\b", re.I), "toggleAttribute"),
+    (re.compile(r"\.\s*dataset\b"), "dataset"),
+    (re.compile(r"\bObject\s*\.\s*(assign|defineProperty|defineProperties)\b"), "Object.assign / defineProperty"),
+]
+CREATE_ELEMENT = re.compile(r"create\s*element\s*\(\s*([^)]*?)\s*\)", re.I)
+ELEMENT_NAME = re.compile(r"""^(["'])([A-Za-z][A-Za-z0-9-]*)\1$""")
+
+
+def forbidden(text):
+    """What text may not do (FORBIDDEN_JS), and createElement( with anything but a written-out name other than script."""
+    found = [label for rx, label in FORBIDDEN_JS if rx.search(text)]
+    for arg in CREATE_ELEMENT.findall(text):
+        m = ELEMENT_NAME.match(arg)
+        if not m or m.group(2).lower() == "script":
+            found.append(f"createElement({arg})")
+    return found
 BUTTON_EVENTS = {"menu-open"}  # data-umami-event: Umami counts a button without holding it (index.ts:370)
 LINK_EVENTS = {"apply-open", "lang-switch", "testflight", "testflight-app", "instagram"}  # data-count, counted by site.js
 COUNT_DATA = {"data-count-at", "data-count-lang"}
@@ -326,19 +372,25 @@ if not os.path.isfile(site_path):
     fail(SITE_JS, "missing")
 else:
     js = open(site_path, encoding="utf-8").read()
-    configs = re.findall(r"var TRACKER = \{(.*?)\n  \};", js, re.S)
-    if len(configs) != 1:
-        fail(SITE_JS, f"{len(configs)} TRACKER configs (one expected)")
+    stamp = hashlib.sha256(open(umami_path, "rb").read()).hexdigest()[:8] if os.path.isfile(umami_path) else "?"
+    configs = TRACKER_BLOCK.findall(js)
+    if len(configs) != 1 or js.count("var TRACKER") != 1:
+        fail(SITE_JS, f"{len(configs)} TRACKER configs (exactly one expected, starting '  var TRACKER = {{')")
     else:
-        stamp = hashlib.sha256(open(umami_path, "rb").read()).hexdigest()[:8] if os.path.isfile(umami_path) else "?"
-        srcs = re.findall(r'src: "([^"]*)"', configs[0])
-        if srcs != [f"umami.js?v={stamp}"]:
-            fail(SITE_JS, f"TRACKER.src is {srcs}, not umami.js?v={stamp} (run tools/stamp.py)")
-        pairs = re.findall(r'"(data-[a-z-]+)": "([^"]*)"', configs[0])
-        wid = dict(pairs).get("data-website-id", "")
-        want = [("data-website-id", wid)] + list(TRACKER_ATTRS.items())
-        if pairs != want:
-            fail(SITE_JS, f"TRACKER's attributes aren't exactly the pinned six: {pairs}")
+        block = configs[0]
+        # Readable checks first, so a failure says which part changed.
+        props = re.findall(r"""^\s*(["']?)([^"'\s:]+)\1\s*:\s*(.*?),?\s*$""", block, re.M)
+        keys = [k for _, k, _ in props]
+        want_keys = ["src", "attrs", "data-website-id"] + list(TRACKER_ATTRS)
+        if keys != want_keys:
+            fail(SITE_JS, f"TRACKER's entries are {keys}, not exactly {want_keys}")
+        values = {k: v for _, k, v in props}
+        if values.get("src") != f'"umami.js?v={stamp}"':
+            fail(SITE_JS, f"TRACKER.src is {values.get('src')}, not \"umami.js?v={stamp}\" (run tools/stamp.py)")
+        for k, v in TRACKER_ATTRS.items():
+            if k in values and values[k] != f'"{v}"':
+                fail(SITE_JS, f"TRACKER's {k} is {values[k]}, not \"{v}\"")
+        wid = (values.get("data-website-id") or "").strip('"')
         if wid == PLACEHOLDER_ID:
             if PUBLISH:
                 fail(SITE_JS, "the Umami website ID is still the placeholder (README.md, \"Website statistics\")")
@@ -346,6 +398,10 @@ else:
                 notes.add("the Umami website ID is the placeholder: replace it before publishing (README.md, \"Website statistics\")")
         elif wid != UMAMI_WEBSITE_ID:
             fail(SITE_JS, f"TRACKER's data-website-id isn't Kerja's Umami website ID ({UMAMI_WEBSITE_ID})")
+        # Then every byte, the stamp aside.
+        got = hashlib.sha256(STAMPED.sub("umami.js?v=STAMP", block).encode("utf-8")).hexdigest()
+        if got != TRACKER_SHA256:
+            fail(SITE_JS, f"the TRACKER config changed (SHA-256 {got}, stamp aside): re-test it, then update TRACKER_SHA256")
     loaders = LOADER_BLOCK.findall(js)
     if len(loaders) != 1:
         fail(SITE_JS, f"{len(loaders)} [tracker-loader] blocks (one expected)")
@@ -353,15 +409,17 @@ else:
         got = hashlib.sha256(loaders[0].encode("utf-8")).hexdigest()
         if got != LOADER_SHA256:
             fail(SITE_JS, f"the [tracker-loader] block changed (SHA-256 {got}): re-test it, then update LOADER_SHA256")
-        outside = js.replace(loaders[0], "")
-        if CREATES_SCRIPT.search(outside) or len(CREATES_SCRIPT.findall(loaders[0])) != 1:
-            fail(SITE_JS, "a <script> is created outside the [tracker-loader] block")
+    rest = js
+    for b in configs[:1] + loaders[:1]:
+        rest = rest.replace(b, "")
+    for what in forbidden(rest):
+        fail(SITE_JS, f"outside its pinned TRACKER config and [tracker-loader]: {what}")
     if not any(m.startswith(f"FAIL  {SITE_JS}:") for m in problems):
         print(f"ok    {SITE_JS}: adds the tracker (umami.js?v={stamp}, Kerja's website ID, the six attributes) only from the pinned storage-tested loader")
 for f in FILES:
     if f.endswith((".js", ".mjs")) and f not in (SITE_JS, UMAMI_FILE):
-        if CREATES_SCRIPT.search(open(os.path.join(ROOT, f), encoding="utf-8", errors="replace").read()):
-            fail(f, "creates a <script>: only site.js's loader may")
+        for what in forbidden(open(os.path.join(ROOT, f), encoding="utf-8", errors="replace").read()):
+            fail(f, f"{what}: only site.js's pinned loader may add a script")
 
 for line in problems:
     print(line)
