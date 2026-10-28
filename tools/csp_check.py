@@ -25,11 +25,8 @@ Fails (exit 1) when a page:
 - has a form whose data-endpoint isn't kerja-prod's function;
 - loads anything from another site (src, srcset, a stylesheet, preload, icon or manifest href);
 - has a target="_blank" link without rel="noopener";
-- hasn't exactly one Umami tracker tag: <script src="…assets/umami.js?v=…" defer> with exactly
-  data-website-id (a UUID), data-host-url (the collector), data-do-not-track="true",
-  data-domains="trykerja.com", data-exclude-search="true" and data-exclude-hash="true", and no other
-  attribute (so no data-performance, data-before-send, data-tag, data-distinct-id…), after site.js
-  (whose #kerja-me opt-out must run first);
+- has a static Umami tracker tag (a <script> loading umami.js): only assets/site.js adds it, after its
+  storage check (decision 5431, fail closed);
 - has data-umami-event on a link (Umami would hold the tap until its collector answers; links count
   with data-count, through site.js, Q535) or with any name but menu-open, or data-umami-event-* data;
 - has a data-count other than the link events, or data-count-* data other than "at" and "lang", or a
@@ -38,9 +35,15 @@ Fails (exit 1) when a page:
   hidden <button type="button">s, or has data-count or data-umami-event on that line, on any element
   around it or in it (the opt-out must send nothing, decision 5412); or has one on another page.
 And when assets/umami.js isn't byte for byte the pinned Umami release (its SHA-256, UMAMI_SHA256: the
-copy may not be edited; README.md, "Website statistics", says how to update it), or when a page's
-data-website-id is neither Kerja's Umami website ID (UMAMI_WEBSITE_ID) nor, without --publish, the old
-placeholder.
+copy may not be edited; README.md, "Website statistics", says how to update it). And when assets/site.js,
+which alone loads the tracker:
+- hasn't exactly one TRACKER config whose src is "umami.js?v=<the file's stamp>" and whose attributes
+  are exactly, in order, data-website-id (Kerja's, UMAMI_WEBSITE_ID; the old placeholder passes only
+  without --publish), data-host-url (the collector), data-do-not-track="true",
+  data-domains="trykerja.com", data-exclude-search="true" and data-exclude-hash="true";
+- hasn't exactly one "[tracker-loader]" block, byte for byte the reviewed one (LOADER_SHA256: the storage
+  test, the opt-out check, then the tag), or creates a <script> anywhere outside it. No other published
+  script may create a <script>.
 And when any published text file (HTML, JS, CSS, SVG, XML, JSON, TXT) names kerja-dev's project ref,
 in any case, or a published stylesheet loads from another site (url()) or uses @import.
 """
@@ -73,6 +76,10 @@ PLACEHOLDER_ID = "00000000-0000-0000-0000-000000000000"  # the branch's stand-in
 UUID = re.compile(r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$")
 TRACKER_ATTRS = {"data-host-url": COLLECTOR, "data-do-not-track": "true", "data-domains": "trykerja.com",
                  "data-exclude-search": "true", "data-exclude-hash": "true"}
+SITE_JS = "assets/site.js"  # the one file that adds the tracker, after its storage test (decision 5431)
+LOADER_SHA256 = "6d3e1f33d55c0ff7832e1a7bdbdd334e6f5b2e1d03125d03c7dfd6a07f4d63aa"  # site.js's [tracker-loader] block
+LOADER_BLOCK = re.compile(r"[ \t]*// \[tracker-loader\].*?// \[/tracker-loader\]\n", re.S)
+CREATES_SCRIPT = re.compile(r"""createElement\(\s*["']script["']\s*\)""", re.I)
 BUTTON_EVENTS = {"menu-open"}  # data-umami-event: Umami counts a button without holding it (index.ts:370)
 LINK_EVENTS = {"apply-open", "lang-switch", "testflight", "testflight-app", "instagram"}  # data-count, counted by site.js
 COUNT_DATA = {"data-count-at", "data-count-lang"}
@@ -247,35 +254,11 @@ for page in [f for f in FILES if f.endswith((".html", ".htm"))]:
         for u in urls:
             if re.match(r"^\s*(https?:)?//", u, re.I):
                 fail(page, f"<{t}> loads from another site: {u.split('?')[0]}")
-    # The Umami tracker: one tag, exactly these attributes, after site.js.
+    # No static tracker tag: only site.js adds it, after its storage test (decision 5431).
     scripts = [(i, a) for i, (t, a) in enumerate(p.tags) if t == "script" and a.get("src")]
-    trackers = [(i, a) for i, a in scripts if a["src"].split("?")[0].endswith(UMAMI_FILE)]
+    if any("umami" in a["src"].split("?")[0].lower() for _, a in scripts):
+        fail(page, "a static Umami tracker tag: only assets/site.js may add it, after its storage test")
     events = 0
-    if len(trackers) != 1:
-        fail(page, f"{len(trackers)} Umami tracker tags (one expected)")
-    else:
-        i, a = trackers[0]
-        if not re.search(r"\?v=[0-9a-f]{8}$", a["src"]) or "defer" not in a:
-            fail(page, "the tracker tag isn't a stamped, deferred script")
-        site = [j for j, b in scripts if b["src"].split("?")[0].endswith("assets/site.js")]
-        if not site or site[0] > i:
-            fail(page, "the tracker comes before site.js, whose opt-out must run first")
-        extra = sorted(set(a) - set(TRACKER_ATTRS) - {"src", "defer", "data-website-id"})
-        if extra:
-            fail(page, f"the tracker has other attributes: {extra}")
-        for k, v in TRACKER_ATTRS.items():
-            if a.get(k) != v:
-                fail(page, f"the tracker's {k} is {a.get(k)!r}, not {v!r}")
-        wid = a.get("data-website-id") or ""
-        if not UUID.match(wid):
-            fail(page, "the tracker's data-website-id isn't a UUID")
-        elif wid == PLACEHOLDER_ID:
-            if PUBLISH:
-                fail(page, "the Umami website ID is still the placeholder (README.md, \"Website statistics\")")
-            else:
-                notes.add("the Umami website ID is the placeholder: replace it before publishing (README.md, \"Website statistics\")")
-        elif wid != UMAMI_WEBSITE_ID:
-            fail(page, f"the tracker's data-website-id isn't Kerja's Umami website ID ({UMAMI_WEBSITE_ID})")
     # The click events: Umami's attribute on buttons only (it holds links), data-count on links; known
     # names, and only short lowercase words as their data.
     for t, a in p.tags:
@@ -310,7 +293,7 @@ for page in [f for f in FILES if f.endswith((".html", ".htm"))]:
             if {"data-count", "data-umami-event"} & set(p.tags[j][1]):
                 fail(page, f"the opt-out would send: <{p.tags[j][0]}> on, around or in it carries data-count or data-umami-event")
     if not any(m.startswith(f"FAIL  {page}:") for m in problems):
-        print(f"ok    {page}: CSP exactly as allowed, referrer {REFERRER}, {len(blocks)} inline style block(s) hashed, {attrs} style attribute(s), tracker tag as pinned, {events} click event(s)")
+        print(f"ok    {page}: CSP exactly as allowed, referrer {REFERRER}, {len(blocks)} inline style block(s) hashed, {attrs} style attribute(s), no static tracker tag, {events} click event(s)")
 
 # kerja-dev in any published text file; stylesheets load nothing from elsewhere.
 for f in FILES:
@@ -336,6 +319,49 @@ else:
         fail(UMAMI_FILE, f"SHA-256 {got} isn't Umami {UMAMI_VERSION}'s {UMAMI_SHA256}: the copy may not be edited")
     else:
         print(f"ok    {UMAMI_FILE}: Umami {UMAMI_VERSION}, SHA-256 {UMAMI_SHA256}")
+
+# The loader: site.js alone adds the tracker, with the pinned config, after the reviewed storage test.
+site_path = os.path.join(ROOT, SITE_JS)
+if not os.path.isfile(site_path):
+    fail(SITE_JS, "missing")
+else:
+    js = open(site_path, encoding="utf-8").read()
+    configs = re.findall(r"var TRACKER = \{(.*?)\n  \};", js, re.S)
+    if len(configs) != 1:
+        fail(SITE_JS, f"{len(configs)} TRACKER configs (one expected)")
+    else:
+        stamp = hashlib.sha256(open(umami_path, "rb").read()).hexdigest()[:8] if os.path.isfile(umami_path) else "?"
+        srcs = re.findall(r'src: "([^"]*)"', configs[0])
+        if srcs != [f"umami.js?v={stamp}"]:
+            fail(SITE_JS, f"TRACKER.src is {srcs}, not umami.js?v={stamp} (run tools/stamp.py)")
+        pairs = re.findall(r'"(data-[a-z-]+)": "([^"]*)"', configs[0])
+        wid = dict(pairs).get("data-website-id", "")
+        want = [("data-website-id", wid)] + list(TRACKER_ATTRS.items())
+        if pairs != want:
+            fail(SITE_JS, f"TRACKER's attributes aren't exactly the pinned six: {pairs}")
+        if wid == PLACEHOLDER_ID:
+            if PUBLISH:
+                fail(SITE_JS, "the Umami website ID is still the placeholder (README.md, \"Website statistics\")")
+            else:
+                notes.add("the Umami website ID is the placeholder: replace it before publishing (README.md, \"Website statistics\")")
+        elif wid != UMAMI_WEBSITE_ID:
+            fail(SITE_JS, f"TRACKER's data-website-id isn't Kerja's Umami website ID ({UMAMI_WEBSITE_ID})")
+    loaders = LOADER_BLOCK.findall(js)
+    if len(loaders) != 1:
+        fail(SITE_JS, f"{len(loaders)} [tracker-loader] blocks (one expected)")
+    else:
+        got = hashlib.sha256(loaders[0].encode("utf-8")).hexdigest()
+        if got != LOADER_SHA256:
+            fail(SITE_JS, f"the [tracker-loader] block changed (SHA-256 {got}): re-test it, then update LOADER_SHA256")
+        outside = js.replace(loaders[0], "")
+        if CREATES_SCRIPT.search(outside) or len(CREATES_SCRIPT.findall(loaders[0])) != 1:
+            fail(SITE_JS, "a <script> is created outside the [tracker-loader] block")
+    if not any(m.startswith(f"FAIL  {SITE_JS}:") for m in problems):
+        print(f"ok    {SITE_JS}: adds the tracker (umami.js?v={stamp}, Kerja's website ID, the six attributes) only from the pinned storage-tested loader")
+for f in FILES:
+    if f.endswith((".js", ".mjs")) and f not in (SITE_JS, UMAMI_FILE):
+        if CREATES_SCRIPT.search(open(os.path.join(ROOT, f), encoding="utf-8", errors="replace").read()):
+            fail(f, "creates a <script>: only site.js's loader may")
 
 for line in problems:
     print(line)

@@ -1,14 +1,16 @@
-/* Kerja website: the statistics opt-out marker, link counter and Our promise's visitor opt-out, the
-   mobile menu and the steps of Welcome's map story.
-   Join the beta's form has its own script, apply.js; the statistics tracker is umami.js. */
+/* Kerja website: the statistics opt-out marker, the statistics tracker's loader, the link counter and
+   Our promise's visitor opt-out, the mobile menu and the steps of Welcome's map story.
+   Join the beta's form has its own script, apply.js; the statistics tracker is umami.js, which only
+   this file adds to a page. */
 (function () {
   "use strict";
+  var self = document.currentScript; // this file's own tag: the tracker sits beside it in assets/
 
   // Website statistics (README.md, "Website statistics"; decision 5404): a page opened with #kerja-me
   // tells this browser's Umami tracker never to send anything from this site, by the localStorage flag
   // the tracker itself reads before every send ("umami.disabled"); #kerja-me-off takes the flag away.
-  // This file comes before assets/umami.js in every page and both are deferred, so it always runs
-  // first: even the visit that carries the marker sends nothing. The marker then leaves the address bar.
+  // It runs before the loader below, so the visit that carries the marker doesn't even load the
+  // tracker. The marker then leaves the address bar.
   var optOut = function () {
     var mark = location.hash;
     if (mark !== "#kerja-me" && mark !== "#kerja-me-off") return;
@@ -20,6 +22,52 @@
   };
   optOut();
   window.addEventListener("hashchange", optOut);
+
+  // The tracker's tag, in this one place (decisions 5402, 5405, 5421, 5431): no page carries it; the
+  // loader below adds it. tools/stamp.py keeps the ?v= stamp current; tools/csp_check.py checks the
+  // path, the website ID and the six attributes against its pins.
+  var TRACKER = {
+    src: "umami.js?v=654f12c7",
+    attrs: {
+      "data-website-id": "b33e8625-5183-4fd3-973d-9e1feb90f868",
+      "data-host-url": "https://gateway.umami.is",
+      "data-do-not-track": "true",
+      "data-domains": "trykerja.com",
+      "data-exclude-search": "true",
+      "data-exclude-hash": "true"
+    }
+  };
+
+  // [tracker-loader] Fail closed (decision 5431, the auditor's fix B): Umami is loaded only where the
+  // visitor's choice can be kept. The tracker is added only if this browser's localStorage can be
+  // written, read back and cleared (a test key, removed at once), and the visitor hasn't opted out
+  // (umami.disabled not set; the #kerja-me marker is handled above, first). If any step throws or
+  // reads back wrong, nothing is loaded and nothing is counted; without JavaScript, or if this file
+  // fails, nothing is loaded either. tools/csp_check.py pins this block's SHA-256: change it on
+  // purpose only, test it, then update LOADER_SHA256 there.
+  var FLAG = "umami.disabled";
+  var writableStorage = function () {
+    try {
+      var s = window.localStorage, probe = "kerja.storage-check";
+      s.setItem(probe, "1");
+      var back = s.getItem(probe);
+      s.removeItem(probe);
+      return back === "1" && s.getItem(probe) === null ? s : null;
+    } catch (e) { return null; }
+  };
+  (function () {
+    var s = writableStorage(), counted = false;
+    try { counted = !!s && s.getItem(FLAG) === null; } catch (e) { counted = false; }
+    if (!counted || !self || !self.src) return;
+    try {
+      var tag = document.createElement("script");
+      tag.src = new URL(TRACKER.src, self.src).href;
+      tag.defer = true;
+      for (var k in TRACKER.attrs) tag.setAttribute(k, TRACKER.attrs[k]);
+      document.head.appendChild(tag);
+    } catch (e) { /* not loaded: nothing is counted */ }
+  })();
+  // [/tracker-loader]
 
   // Counting a tap on a link (decisions 5403, 5409): a link with data-count="<event>" (and data-count-at,
   // data-count-lang) is counted with umami.track(), which starts its request at once, with fetch's
@@ -47,31 +95,28 @@
   // kerja-artifacts/promise-text.md). "Don’t count my visits" sets the same flag as #kerja-me
   // (localStorage "umami.disabled", read by the tracker before every send); "Count them again" removes
   // it, as #kerja-me-off does. The line swaps only once the flag has been saved and read back, and the
-  // page opens on the line that matches the flag. Where storage can't be read, the buttons stay hidden
-  // and the first sentence shows alone, as without JavaScript: a tap couldn't stop the counting. The
+  // page opens on the line that matches the flag. Where storage can't be written and read (the same
+  // test as the loader's, so nothing is counted there either), the buttons stay hidden and the first
+  // sentence shows alone, as without JavaScript: a tap couldn't keep the choice. The
   // buttons, and every element around them, carry no data-count or data-umami-event (csp_check.py
-  // fails if one does), so a tap sends nothing; nothing else is ever written.
+  // fails if one does), so a tap sends nothing; it writes nothing but the flag.
   var line = document.querySelector("[data-optout-line]");
   var stopBtn = line && line.querySelector('[data-optout="stop"]');
   var countBtn = line && line.querySelector('[data-optout="count"]');
   if (stopBtn && countBtn) {
     var onText = document.getElementById(stopBtn.getAttribute("aria-describedby"));
     var offText = document.getElementById(countBtn.getAttribute("aria-describedby"));
-    var FLAG = "umami.disabled";
-    var storage = function () {
-      try { var s = window.localStorage; s.getItem(FLAG); return s; } catch (e) { return null; }
-    };
     var show = function (off, focus) {
       onText.hidden = stopBtn.hidden = off;
       offText.hidden = countBtn.hidden = !off;
       if (focus) (off ? countBtn : stopBtn).focus();
     };
     var render = function () {
-      var s = storage();
+      var s = writableStorage();
       if (s) show(!!s.getItem(FLAG), false);
     };
     var choose = function (off) {
-      var s = storage(), saved = false;
+      var s = writableStorage(), saved = false;
       try {
         if (s) {
           if (off) s.setItem(FLAG, "1");
