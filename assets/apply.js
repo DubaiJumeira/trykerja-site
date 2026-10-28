@@ -191,6 +191,13 @@
     var ctrl = window.AbortController ? new AbortController() : null;
     var timer = ctrl ? setTimeout(function () { ctrl.abort(); }, 20000) : 0;
     var body = payload();
+    // Runs whatever happened (the sites audit's A4), so Send never stays on "Sending…".
+    var cleanUp = function () {
+      clearTimeout(timer);
+      busy = false;
+      send.textContent = sendLabel;
+      form.removeAttribute("aria-busy");
+    };
 
     fetch(endpoint, {
       method: "POST",
@@ -208,7 +215,7 @@
           success(body.first_name);
           return;
         }
-        if (r.status === 400 && r.json.fields && r.json.fields.length) {
+        if (r.status === 400 && Array.isArray(r.json.fields) && r.json.fields.length) {
           var named = KEYS.filter(function (key) { return r.json.fields.indexOf(key) !== -1; });
           if (named.length) {
             KEYS.forEach(function (key) { mark(key, named.indexOf(key) !== -1); });
@@ -220,12 +227,7 @@
       }, function () {
         showAlert("fail");
       })
-      .then(function () {
-        clearTimeout(timer);
-        busy = false;
-        send.textContent = sendLabel;
-        form.removeAttribute("aria-busy");
-      });
+      .then(cleanUp, cleanUp);
   });
 
   // "You're on the list": the heading, the form and its note make way for the thanks, by first name.
