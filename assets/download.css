@@ -4,7 +4,7 @@
 /* ---------- The two states (decision 5201; was three, 3978) ----------
    <body data-beta="open | full"> is the only switch; "open" is the default.
    .beta-open (the open line, the two steps, the invite and the QR) shows in "open" only.
-   .beta-full (the full line and the waitlist in the invite's place) shows in "full" only. Its
+   .beta-full (the full line and the beta application in the invite's place) shows in "full" only. Its
    elements also carry the hidden attribute, so the page reads as open even where this file isn't
    applied; "full" shows them here. One state is ever displayed, so only one is in the
    accessibility tree. The two steps show only in "open", at every width (decision 4214). */
@@ -12,7 +12,7 @@ body[data-beta="full"] .beta-open,
 body:not([data-beta="full"]) .beta-full { display: none; }
 body[data-beta="full"] .beta-full { display: block; }
 body[data-beta="full"] span.beta-full { display: inline; }
-/* The waitlist state's QR card (Zayd, decision 5271): on a computer only, under the waitlist,
+/* The waitlist state's QR card (Zayd, decision 5271): on a computer only, under the form,
    to open this page on an iPhone. After the rule above, so it wins at the same specificity. */
 body[data-beta="full"] .dl-qr-soon { display: none; }
 
@@ -42,32 +42,95 @@ body[data-beta="full"] .dl-qr-soon { display: none; }
    Only one is ever displayed, so only one is in the accessibility tree. */
 .dl-d-scan { display: none; }
 
-/* ---------- The invite, the QR, or the waitlist ---------- */
+/* ---------- The invite, the QR, or the beta application ---------- */
 .dl-act { margin-top: 28px; }
 .dl-qr { display: none; }
 
-.wl-notes { margin-top: 14px; display: flex; flex-direction: column; gap: 6px; font: 400 14px/21px var(--font-body); color: var(--ink-soft); }
-
-/* "No email app?": a <details>; its summary is the frame's second line. */
-.noemail summary {
-  display: block; list-style: none; cursor: pointer; padding: 2px 0;
-  min-height: 44px; border-radius: 6px;
+/* ---------- The beta application (decisions 5289, 5290) ----------
+   In the opens-soon state, where the waitlist was. A white card, as the steps are, with the app's
+   fields (design system v4: sand, 56 tall, radius 20, no border; labels 16/22 600), choice chips for
+   the two radio groups (sand; the chosen one lemon with an ink outline, as the app's chips), ticks
+   in an ink box, and the orange Send pill. --error only for a refused field's outline and its line.
+   Inline links are underlined, so they never rely on colour alone. */
+.apply {
+  padding: 22px 20px 24px; border-radius: 24px;
+  background: var(--white); box-shadow: inset 0 0 0 1px var(--hairline);
 }
-.noemail summary::-webkit-details-marker { display: none; }
-.noemail summary b { font-weight: 700; color: var(--orange-shadow); }
-.noemail summary:hover b { text-decoration: underline; text-underline-offset: 3px; }
-
-/* Frame 47d-5: the filled-in text on sand, with an ink-outlined Copy pill. */
-.panel { margin-top: 12px; padding: 18px; border-radius: 20px; background: var(--sand); color: var(--ink); }
-.panel-text { display: flex; flex-direction: column; gap: 6px; font: 400 15px/22px var(--font-body); color: var(--ink); }
-.panel-text .panel-subj { margin-bottom: 4px; font-weight: 700; }
-.copy-btn {
-  margin-top: 16px; display: inline-flex; align-items: center; justify-content: center;
-  height: 44px; min-width: 44px; padding: 0 24px; border-radius: 999px;
-  box-shadow: inset 0 0 0 1.5px var(--ink); color: var(--ink);
-  font: 700 15px/1 var(--font-body); white-space: nowrap;
+.apply, .ap-field, .ap-alert, .ap-done { scroll-margin-top: calc(var(--bar-h) + 16px); }
+/* What the script hides stays hidden, whatever display its class gives it. */
+.apply [hidden] { display: none !important; }
+.ap-title { font: 800 24px/30px var(--font-head); letter-spacing: -.02em; color: var(--ink); text-wrap: balance; }
+.ap-note { margin-top: 8px; font: 400 15px/22px var(--font-body); color: var(--ink-soft); text-wrap: pretty; }
+.ap-nojs { margin-top: 16px; font: 400 16px/24px var(--font-body); color: var(--ink); text-wrap: pretty; }
+.ap-a {
+  color: var(--orange-shadow); font-weight: 700;
+  text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 3px;
 }
-.copy-btn:hover { background: color-mix(in srgb, var(--ink) 6%, transparent); }
+.ap-a:hover { text-decoration-thickness: 2.5px; }
+
+.apply-form { margin-top: 24px; display: flex; flex-direction: column; gap: 24px; }
+.ap-field { min-width: 0; margin: 0; padding: 0; border: 0; }
+.ap-label { display: block; padding: 0; font: 600 16px/22px var(--font-body); color: var(--ink); }
+.ap-opt { font-weight: 400; color: var(--ink-soft); }
+.ap-hint { margin-top: 2px; font: 400 14px/20px var(--font-body); color: var(--ink-soft); }
+.ap-input {
+  display: block; width: 100%; height: 56px; margin: 8px 0 0; padding: 0 18px;
+  border: 0; border-radius: 20px; background: var(--sand); color: var(--ink);
+  font: 400 16px/22px var(--font-body); -webkit-appearance: none; appearance: none;
+}
+.ap-input:focus-visible { outline-offset: 2px; }
+.ap-err { margin-top: 8px; font: 600 14px/20px var(--font-body); color: var(--error); }
+.is-invalid .ap-input { box-shadow: inset 0 0 0 1.5px var(--error); }
+
+/* The radio groups as chips: the radio itself covers its chip, invisible, so a tap, the keyboard and a
+   screen reader all reach the real control; the chip shows its state and its focus. */
+.ap-chips { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 8px; }
+.ap-chip { position: relative; display: inline-flex; }
+.ap-chip input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+.ap-chip span {
+  display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px;
+  background: var(--sand); color: var(--ink); font: 600 15px/20px var(--font-body); white-space: nowrap;
+}
+.ap-chip:hover span { background: color-mix(in srgb, var(--ink) 6%, var(--sand)); }
+.ap-chip input:checked + span { background: var(--lemon); box-shadow: inset 0 0 0 1.5px var(--ink); }
+.ap-chip input:focus-visible + span { outline: 3px solid var(--ink); outline-offset: 3px; }
+.is-invalid .ap-chip span { box-shadow: inset 0 0 0 1.5px var(--error); }
+
+/* The two ticks: the checkbox covers its box, as the radios do; the whole line is the label (44 px). */
+.ap-tick { position: relative; display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; cursor: pointer; font: 400 16px/24px var(--font-body); color: var(--ink); }
+.ap-tick input { position: absolute; left: 0; top: 10px; width: 24px; height: 24px; margin: 0; opacity: 0; cursor: pointer; }
+.ap-box {
+  flex: none; width: 24px; height: 24px; border-radius: 7px; display: flex; align-items: center; justify-content: center;
+  background: var(--white); box-shadow: inset 0 0 0 1.5px var(--ink); color: transparent;
+}
+.ap-tick input:checked + .ap-box { background: var(--ink); color: var(--cream); }
+.ap-tick input:focus-visible + .ap-box { outline: 3px solid var(--ink); outline-offset: 3px; }
+.is-invalid .ap-box { box-shadow: inset 0 0 0 1.5px var(--error); }
+.ap-tick-t { text-wrap: pretty; }
+.ap-tick + .ap-err { margin-top: 0; }
+[data-field="adult"] { margin-top: -10px; }
+[data-field="privacy"] { margin-top: -24px; }
+
+/* The honeypot: off screen, out of the tab order and hidden from screen readers; still in the DOM. */
+.ap-hp { position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+
+/* The box above the fields: what to check (links to each field), or the 429 or 500 line. */
+.ap-alert {
+  padding: 16px 18px; border-radius: 20px; background: var(--cream); box-shadow: inset 0 0 0 1.5px var(--ink);
+  font: 400 16px/24px var(--font-body); color: var(--ink); text-wrap: pretty;
+}
+.ap-alert-t { font-weight: 700; }
+.ap-alert-list { margin-top: 6px; display: flex; flex-direction: column; gap: 6px; }
+.ap-alert-list li { display: flex; gap: 10px; align-items: flex-start; }
+.ap-alert-list li::before { content: ""; flex: none; width: 6px; height: 6px; margin-top: 9px; border-radius: 50%; background: var(--ink); }
+
+.ap-send { margin-top: 4px; }
+
+/* "You're on the list." in the form's place (lagoon: success). */
+.ap-done:focus { outline: none; }
+.ap-done-i { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--lagoon); color: var(--white); }
+.ap-done-t { margin-top: 16px; font: 800 32px/36px var(--font-head); letter-spacing: -.03em; color: var(--ink); text-wrap: balance; }
+.ap-done-p { margin-top: 10px; font: 400 17px/26px var(--font-body); color: var(--ink-2); text-wrap: pretty; }
 
 /* ---------- What to expect · Better with a friend · On Android ---------- */
 .dl-more { margin-top: 120px; }
@@ -75,9 +138,9 @@ body[data-beta="full"] .dl-qr-soon { display: none; }
 .dl-h { font: 800 26px/30px var(--font-head); letter-spacing: -.025em; color: var(--ink); }
 .dl-dots { margin-top: 16px; gap: 12px; }
 .dl-p { margin-top: 12px; font: 400 17px/26px var(--font-body); color: var(--ink-2); text-wrap: pretty; }
-/* A 44 px target; the margins put the words 12 px under the paragraph, as drawn. */
-.dl-wa { margin: 1px 0 -10px; }
-.dl-col .waitlist { margin-top: 20px; }
+/* A 44 px target; the margins put the words 12 px under the paragraph, as drawn.
+   .dl-to: On Android's in-page link to the form, set as the WhatsApp link is. */
+.dl-wa, .dl-to { margin: 1px 0 -10px; }
 
 /* ---------- Desktop ---------- */
 @media (min-width: 1080px) {
@@ -105,18 +168,24 @@ body[data-beta="full"] .dl-qr-soon { display: none; }
   .dl-qr-img { flex: none; width: 200px; height: 200px; border: 1.5px solid var(--ink); border-radius: 18px; background: var(--white); }
   .dl-qr-t { font: 800 40px/46px var(--font-head); letter-spacing: -.03em; color: var(--ink); text-wrap: balance; }
 
-  /* Soon and full: the waitlist where the invite was. */
-  .dl-act > .waitlist { margin-top: 32px; }
-  .dl-act > .waitlist .wl-notes { max-width: 600px; }
+  /* Soon: the beta application where the invite was. Its heading and note on the left, the fields
+     on the right; "You're on the list." across both. */
+  body[data-beta="full"] .apply {
+    display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); column-gap: 64px; align-items: start;
+    padding: 48px; border-radius: 32px;
+  }
+  .ap-title { font-size: 40px; line-height: 46px; letter-spacing: -.03em; }
+  .ap-note { margin-top: 14px; font-size: 17px; line-height: 26px; }
+  .ap-nojs { font-size: 17px; line-height: 26px; }
+  .apply-form { margin-top: 0; gap: 28px; }
+  .ap-done { grid-column: 1 / -1; }
+  .ap-done-t { margin-top: 20px; font-size: 56px; line-height: 60px; letter-spacing: -.035em; }
+  .ap-done-p { margin-top: 14px; max-width: 760px; font-size: 21px; line-height: 32px; }
   body[data-beta="full"] .dl-qr-soon { display: flex; margin-top: 32px; }
-
-  .wl-notes { font-size: 15px; line-height: 22px; }
 
   .dl-more { margin-top: 130px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 56px; align-items: start; }
   .dl-col + .dl-col { margin-top: 0; }
   .dl-dots { margin-top: 18px; }
   .dl-p { margin-top: 14px; font-size: 18px; line-height: 28px; }
-  .dl-wa { margin: 5px 0 -9px; font-size: 17px; line-height: 25px; }
-  .dl-col .waitlist { margin-top: 22px; }
-  .dl-col .waitlist .pill { height: 56px; padding: 0 28px; }
+  .dl-wa, .dl-to { margin: 5px 0 -9px; font-size: 17px; line-height: 25px; }
 }

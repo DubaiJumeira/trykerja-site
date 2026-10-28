@@ -1,5 +1,5 @@
-/* Kerja website: the mobile menu, the Copy button, the waitlist's "No email app?" panel and the steps
-   of Welcome's map story. Nothing else uses JavaScript. */
+/* Kerja website: the mobile menu and the steps of Welcome's map story.
+   Join the beta's form has its own script, apply.js. Nothing else uses JavaScript. */
 (function () {
   "use strict";
 
@@ -20,48 +20,6 @@
     // A tap on the scrim (outside the sheet) closes it too.
     menu.addEventListener("click", function (e) { if (e.target === menu) menu.close(); });
   }
-
-  // Copy: <button class="copy-btn" data-copy="#some-id">Copy</button> copies the text of #some-id.
-  // data-copied="…" is the word it shows once copied, in the page's language (Copied by default).
-  var buttons = document.querySelectorAll("[data-copy]");
-  Array.prototype.forEach.call(buttons, function (b) {
-    var label = b.textContent;
-    var copied = b.getAttribute("data-copied") || "Copied";
-    var timer = 0;
-    b.addEventListener("click", function () {
-      var target = document.querySelector(b.getAttribute("data-copy"));
-      if (!target) return;
-      var text = target.innerText.trim();
-      function select() {
-        var range = document.createRange();
-        range.selectNodeContents(target);
-        var sel = window.getSelection();
-        sel.removeAllRanges();
-        sel.addRange(range);
-      }
-      function done() {
-        b.textContent = copied;
-        clearTimeout(timer);
-        timer = setTimeout(function () { b.textContent = label; }, 2000);
-      }
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(done, select);
-      } else {
-        select();
-      }
-    });
-  });
-
-  // Join the waitlist (decision 5348): its buttons are mailto: links, and where no mail app answers
-  // (a computer without one, an in-app browser) a tap shows nothing. So a click on a mailto: link in a
-  // .waitlist block (a tap, or Enter on the focused link) also opens that block's "No email app?"
-  // panel. The mailto goes as before: nothing is prevented, nothing scrolls or takes focus, no timer.
-  document.addEventListener("click", function (e) {
-    var link = e.target && e.target.closest ? e.target.closest('.waitlist a[href^="mailto:"]') : null;
-    var block = link && link.closest(".waitlist");
-    var panel = block && block.querySelector("details.noemail");
-    if (panel) panel.open = true;
-  });
 
   // The map story on Welcome (welcome.css): desktop only, with motion allowed. As each step's line
   // passes 60% of the screen's height, the section gets s1 to s4 and that step's part of the map
