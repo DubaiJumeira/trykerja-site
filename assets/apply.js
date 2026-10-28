@@ -8,9 +8,12 @@
      403 (an Origin the server doesn't allow), 500, anything else, or no answer at all: the
           "didn't go through" line, with hello@trykerja.com.
    Every word the visitor sees is in the page, in its language; this file holds none.
-   No cookies, no storage, no analytics, nothing sent anywhere else. */
+   No cookies, no storage, no analytics, nothing sent anywhere else.
+   Shown in a frame by another page, it does nothing, so Send stays disabled (the sites audit's A6:
+   Pages can't send frame-ancestors). */
 (function () {
   "use strict";
+  if (window.top !== window.self) return;
 
   var form = document.getElementById("apply-form");
   if (!form || !window.fetch || !window.JSON) return;
