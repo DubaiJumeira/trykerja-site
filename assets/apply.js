@@ -8,7 +8,10 @@
      403 (an Origin the server doesn't allow), 500, anything else, or no answer at all: the
           "didn't go through" line, with hello@trykerja.com.
    Every word the visitor sees is in the page, in its language; this file holds none.
-   No cookies, no storage, no analytics, nothing sent anywhere else.
+   No cookies, and nothing kept in the browser. Umami counts visits and a few taps (README.md,
+   "Website statistics"); from this form, only apply-sent or apply-error with the answer's kind, never a
+   field (count(), below). The only storage on the site is umami.disabled, written only when someone opts
+   out (site.js). Nothing else is sent anywhere.
    Shown in a frame by another page, it does nothing, so Send stays disabled (the sites audit's A6:
    Pages can't send frame-ancestors). */
 (function () {
