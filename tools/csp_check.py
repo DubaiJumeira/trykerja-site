@@ -51,6 +51,11 @@ document.write/writeln, innerHTML, outerHTML, insertAdjacentHTML, createContextu
 Function(, import(, a worker, setTimeout/setInterval with a string; .src =, setAttribute (NS, Node) with
 anything but a written-out aria-* name, toggleAttribute, .dataset, Object.assign/defineProperty. These
 readable checks say why something changed; what makes the check exact is the next rule.
+And when a published file is a .htm, .xhtml, .xht or .shtml document (pages are .html only, PAGE_TYPES), or
+when any published file that is neither a page nor a script (SVG, XML, JSON, TXT, CSS, pictures, fonts,
+anything else, read as bytes) contains <script (any case, with or without a namespace prefix), an on…=
+attribute in a tag, javascript:, <foreignObject, <iframe, <embed, <object or <?xml-stylesheet (NO_SCRIPT,
+decision 5442).
 And when a published script (site.js, apply.js, umami.js) isn't byte for byte its pin in JS_PINS (any change
 updates its pin in the same reviewed commit; stamp.py never touches the pins), when Pages would publish any
 other .js, .mjs or .cjs file, or when a page loads a script other than site.js and apply.js (decision 5440).
@@ -89,6 +94,19 @@ JS_PINS = {
     "assets/umami.js": UMAMI_SHA256,
 }
 SCRIPT_TYPES = (".js", ".mjs", ".cjs")
+# What each published file is (decision 5442). Pages: .html only, with every page check. Scripts: SCRIPT_TYPES,
+# pinned in JS_PINS. Other document types a browser would render with scripts may not be published at all.
+# Every other published file (SVG, XML, JSON, TXT, CSS, pictures, fonts, anything else) may contain no script
+# or script attribute: NO_SCRIPT, read as bytes (latin-1), so binary files are covered too.
+PAGE_TYPES = (".html",)
+NO_DOCUMENT_TYPES = (".htm", ".xhtml", ".xht", ".shtml")
+NO_SCRIPT = [
+    (re.compile(r"<\s*(?:[\w.-]+:)?script\b", re.I), "<script (any case, with or without a namespace prefix)"),
+    (re.compile(r"<[^<>]*?\son[a-z]+\s*=", re.I), "an on…= attribute"),
+    (re.compile(r"javascript\s*:", re.I), "javascript:"),
+    (re.compile(r"<\s*(?:[\w.-]+:)?(foreignobject|iframe|embed|object)\b", re.I), "<foreignObject, <iframe, <embed or <object"),
+    (re.compile(r"<\?\s*xml-stylesheet", re.I), "an <?xml-stylesheet instruction (XSLT could add a script)"),
+]
 PAGE_SCRIPTS = {"assets/site.js", "assets/apply.js"}  # the only scripts a page may load; site.js adds umami.js
 COLLECTOR = "https://gateway.umami.is"  # Umami Cloud's collector origin: the tracker's data-host-url
 COLLECTOR_URL = COLLECTOR + "/api/send"  # the one address it posts to: connect-src allows exactly this (Q534, 5409)
@@ -255,7 +273,7 @@ def fail(path, msg):
 
 
 FILES = walk()
-for page in [f for f in FILES if f.endswith((".html", ".htm"))]:
+for page in [f for f in FILES if f.lower().endswith(PAGE_TYPES)]:
     src = open(os.path.join(ROOT, page), encoding="utf-8").read()
     p = Page()
     p.feed(src)
@@ -436,6 +454,20 @@ else:
         fail(SITE_JS, f"outside its pinned TRACKER config and [tracker-loader]: {what}")
     if not any(m.startswith(f"FAIL  {SITE_JS}:") for m in problems):
         print(f"ok    {SITE_JS}: adds the tracker (umami.js?v={stamp}, Kerja's website ID, the six attributes) only from the pinned storage-tested loader")
+# Every published file that is neither a page nor a script: no document type that could run a script, and no
+# script or script attribute inside (decision 5442).
+for f in FILES:
+    low = f.lower()
+    if low.endswith(NO_DOCUMENT_TYPES):
+        fail(f, f"a published {os.path.splitext(f)[1]} document: pages are .html only (PAGE_TYPES)")
+        continue
+    if low.endswith(PAGE_TYPES) or low.endswith(SCRIPT_TYPES):
+        continue
+    data = open(os.path.join(ROOT, f), "rb").read().decode("latin-1")
+    for rx, what in NO_SCRIPT:
+        if rx.search(data):
+            fail(f, f"{what} in a published file that isn't a page: only .html pages and the pinned scripts may hold script")
+
 # Every published script by its full SHA-256 (JS_PINS), and no other script published (decision 5440).
 for f in FILES:
     if f.lower().endswith(SCRIPT_TYPES) and f not in JS_PINS:
