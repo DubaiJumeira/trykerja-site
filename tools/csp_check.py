@@ -16,7 +16,7 @@ Fails (exit 1) when a page:
   <style> blocks in style-src (none listed when it has none); plus style-src-attr 'unsafe-inline'
   on Welcome (index.html, id/index.html) only; and on Join the beta (download/index.html,
   id/download/index.html) only, kerja-prod's function after connect-src 'self'; then, on every page,
-  Umami's collector origin last in connect-src (decision 5402). So any other source, keyword or
+  Umami's collector URL, https://gateway.umami.is/api/send, last in connect-src (5402, Q534). So any other source, keyword or
   directive fails (https:, data: or * in script-src, script-src-attr, style-src-elem, 'unsafe-eval',
   form-action *, a missing directive…);
 - has an inline script, an on…= attribute or a javascript: URL;
@@ -60,7 +60,8 @@ TEXT_TYPES = (".html", ".htm", ".js", ".mjs", ".css", ".svg", ".xml", ".json", "
 UMAMI_FILE = "assets/umami.js"
 UMAMI_VERSION = "3.4.1"
 UMAMI_SHA256 = "654f12c7548be726eba5b71d5ef8bffc2a41a39a0053e2a49a847869ccd7ac3f"
-COLLECTOR = "https://gateway.umami.is"  # Umami Cloud's collector origin; the tracker posts to /api/send
+COLLECTOR = "https://gateway.umami.is"  # Umami Cloud's collector origin: the tracker's data-host-url
+COLLECTOR_URL = COLLECTOR + "/api/send"  # the one address it posts to: connect-src allows exactly this (Q534, 5409)
 PLACEHOLDER_ID = "00000000-0000-0000-0000-000000000000"  # until Zayd's Umami Cloud website exists
 UUID = re.compile(r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$")
 TRACKER_ATTRS = {"data-host-url": COLLECTOR, "data-do-not-track": "true", "data-domains": "trykerja.com",
@@ -71,7 +72,7 @@ WORD = re.compile(r"^[a-z][a-z0-9_-]{0,23}$")
 
 
 def expected_csp(page, style_hashes):
-    connect = "'self'" + (" " + PROD_FUNCTION if page in JOIN else "") + " " + COLLECTOR
+    connect = "'self'" + (" " + PROD_FUNCTION if page in JOIN else "") + " " + COLLECTOR_URL
     directives = [
         "default-src 'self'",
         "script-src 'self'",
