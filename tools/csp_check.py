@@ -49,8 +49,11 @@ comments included; FORBIDDEN_JS, decision 5438): TRACKER; createElement( with an
 element name other than script, any case or spacing; createElementNS(; createElement inside a string;
 document.write/writeln, innerHTML, outerHTML, insertAdjacentHTML, createContextualFragment, srcdoc; eval,
 Function(, import(, a worker, setTimeout/setInterval with a string; .src =, setAttribute (NS, Node) with
-anything but a written-out aria-* name, toggleAttribute, .dataset, Object.assign/defineProperty. Names
-built from pieces at run time get past it: new code is still read.
+anything but a written-out aria-* name, toggleAttribute, .dataset, Object.assign/defineProperty. These
+readable checks say why something changed; what makes the check exact is the next rule.
+And when a published script (site.js, apply.js, umami.js) isn't byte for byte its pin in JS_PINS (any change
+updates its pin in the same reviewed commit; stamp.py never touches the pins), when Pages would publish any
+other .js, .mjs or .cjs file, or when a page loads a script other than site.js and apply.js (decision 5440).
 And when any published text file (HTML, JS, CSS, SVG, XML, JSON, TXT) names kerja-dev's project ref,
 in any case, or a published stylesheet loads from another site (url()) or uses @import.
 """
@@ -76,6 +79,17 @@ TEXT_TYPES = (".html", ".htm", ".js", ".mjs", ".css", ".svg", ".xml", ".json", "
 UMAMI_FILE = "assets/umami.js"
 UMAMI_VERSION = "3.4.1"
 UMAMI_SHA256 = "654f12c7548be726eba5b71d5ef8bffc2a41a39a0053e2a49a847869ccd7ac3f"
+# Every published script, pinned by its full SHA-256 (decision 5440): a changed byte in any of them fails,
+# and Pages may publish no other script. Any change to one of these files updates its pin here, in the same
+# reviewed commit. tools/stamp.py never touches these pins. (Updating the tracker changes umami.js and,
+# through TRACKER.src's stamp, site.js: both pins change in that commit.)
+JS_PINS = {
+    "assets/site.js": "8696c5092f6cdd0c53c966322bb39ade8d1e451e4f4705f0095018206982c9bc",
+    "assets/apply.js": "cc09c490614b662424eb367a720fa0e64103b7aa0b7848c8d0b3394be5a9b1a1",
+    "assets/umami.js": UMAMI_SHA256,
+}
+SCRIPT_TYPES = (".js", ".mjs", ".cjs")
+PAGE_SCRIPTS = {"assets/site.js", "assets/apply.js"}  # the only scripts a page may load; site.js adds umami.js
 COLLECTOR = "https://gateway.umami.is"  # Umami Cloud's collector origin: the tracker's data-host-url
 COLLECTOR_URL = COLLECTOR + "/api/send"  # the one address it posts to: connect-src allows exactly this (Q534, 5409)
 UMAMI_WEBSITE_ID = "b33e8625-5183-4fd3-973d-9e1feb90f868"  # trykerja.com in Zayd's Umami Cloud account (5421); public, not a secret
@@ -84,7 +98,7 @@ UUID = re.compile(r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12
 TRACKER_ATTRS = {"data-host-url": COLLECTOR, "data-do-not-track": "true", "data-domains": "trykerja.com",
                  "data-exclude-search": "true", "data-exclude-hash": "true"}
 SITE_JS = "assets/site.js"  # the one file that adds the tracker, after its storage test (decision 5431)
-LOADER_SHA256 = "6d3e1f33d55c0ff7832e1a7bdbdd334e6f5b2e1d03125d03c7dfd6a07f4d63aa"  # site.js's [tracker-loader] block
+LOADER_SHA256 = "39ea8da4763abd6dae4770a285331de6edc4af11a1d145fa90465bf0c9a12ee8"  # site.js's [tracker-loader] block
 LOADER_BLOCK = re.compile(r"[ \t]*// \[tracker-loader\].*?// \[/tracker-loader\]\n", re.S)
 # site.js's TRACKER config, byte for byte, with its ?v= stamp written as STAMP (so tools/stamp.py can keep
 # the stamp current; the stamp itself is checked against assets/umami.js, which UMAMI_SHA256 pins) (5438).
@@ -304,6 +318,12 @@ for page in [f for f in FILES if f.endswith((".html", ".htm"))]:
     scripts = [(i, a) for i, (t, a) in enumerate(p.tags) if t == "script" and a.get("src")]
     if any("umami" in a["src"].split("?")[0].lower() for _, a in scripts):
         fail(page, "a static Umami tracker tag: only assets/site.js may add it, after its storage test")
+    for _, a in scripts:
+        target = os.path.normpath(os.path.join(os.path.dirname(page), a["src"].split("?")[0].split("#")[0])).replace(os.sep, "/").lstrip("/")
+        if a["src"].startswith("/"):
+            target = a["src"].split("?")[0].lstrip("/")
+        if target not in PAGE_SCRIPTS:
+            fail(page, f"loads a script other than site.js and apply.js: {a['src'].split('?')[0]}")
     events = 0
     # The click events: Umami's attribute on buttons only (it holds links), data-count on links; known
     # names, and only short lowercase words as their data.
@@ -416,6 +436,20 @@ else:
         fail(SITE_JS, f"outside its pinned TRACKER config and [tracker-loader]: {what}")
     if not any(m.startswith(f"FAIL  {SITE_JS}:") for m in problems):
         print(f"ok    {SITE_JS}: adds the tracker (umami.js?v={stamp}, Kerja's website ID, the six attributes) only from the pinned storage-tested loader")
+# Every published script by its full SHA-256 (JS_PINS), and no other script published (decision 5440).
+for f in FILES:
+    if f.lower().endswith(SCRIPT_TYPES) and f not in JS_PINS:
+        fail(f, "a published script with no pin: Pages may publish only the scripts in JS_PINS")
+for f, want in JS_PINS.items():
+    path = os.path.join(ROOT, f)
+    if not os.path.isfile(path):
+        fail(f, "missing")
+        continue
+    got = hashlib.sha256(open(path, "rb").read()).hexdigest()
+    if got != want:
+        fail(f, f"SHA-256 {got} isn't its pin {want}: a change to a published script must update its pin in JS_PINS, in the same reviewed commit")
+    elif f != UMAMI_FILE:
+        print(f"ok    {f}: SHA-256 {got}, as pinned")
 for f in FILES:
     if f.endswith((".js", ".mjs")) and f not in (SITE_JS, UMAMI_FILE):
         for what in forbidden(open(os.path.join(ROOT, f), encoding="utf-8", errors="replace").read()):

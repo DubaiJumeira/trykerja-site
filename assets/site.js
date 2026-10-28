@@ -63,7 +63,8 @@
       var tag = document.createElement("script");
       tag.src = new URL(TRACKER.src, self.src).href;
       tag.defer = true;
-      for (var k in TRACKER.attrs) tag.setAttribute(k, TRACKER.attrs[k]);
+      // Own keys only: nothing added to Object.prototype can reach the tag (decision 5440).
+      Object.keys(TRACKER.attrs).forEach(function (k) { tag.setAttribute(k, TRACKER.attrs[k]); });
       document.head.appendChild(tag);
     } catch (e) { /* not loaded: nothing is counted */ }
   })();
