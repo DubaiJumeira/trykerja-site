@@ -1,14 +1,17 @@
 #!/usr/bin/env python3
 """The local preview with a mock of the beta application's function (decisions 5289, 5290).
-Standard library only. For testing the form before kerja-dev answers; never part of a published page.
+Standard library only. For local previews: the published pages post to kerja-prod (decision 5360), and
+a preview never does. Never part of a published page (tools/ isn't published).
 
   python3 -I tools/apply_mock.py [--port 8091] [--delay 0.6]
 
 It serves this folder on http://127.0.0.1:<port>/ as a static server does, and answers the contract
 (kerja-artifacts/beta-apply/contract.md) at /functions/v1/submit-application. In the pages it serves
 (and only there: the files on disk never change), the form's data-endpoint is swapped for
-http://localhost:<port>/functions/v1/submit-application. localhost is another origin than 127.0.0.1,
-so the browser sends the CORS preflight, as it will to Supabase.
+http://localhost:<port>/functions/v1/submit-application, and so is kerja-prod's function in the CSP's
+connect-src (the sites audit's A3), so the page's own policy lets the preview's request through.
+localhost is another origin than 127.0.0.1, so the browser sends the CORS preflight, as it will to
+Supabase.
 
 The answers, as the contract's:
   OPTIONS            204, with the CORS headers for http://127.0.0.1:<any port> and http://localhost:<any port>
@@ -40,6 +43,8 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PATH = "/functions/v1/submit-application"
 ORIGIN_OK = re.compile(r"^http://(127\.0\.0\.1|localhost)(:\d{1,5})?$")
 ENDPOINT_ATTR = re.compile(r'data-endpoint="[^"]*"')
+CSP_META = re.compile(r'(<meta http-equiv="Content-Security-Policy" content=")([^"]*)(")', re.I)
+PROD_FUNCTION = "https://eppqufcgcwhoprwzfhxy.supabase.co/functions/v1/submit-application"
 
 URLISH = re.compile(r"(://|www\.|\b[a-z0-9-]+\.(com|net|org|io|co|id|me|app|ly|xyz|info|link)\b)", re.I)
 EMAIL = re.compile(r"^[^\s@]+@[^\s@.]+(\.[^\s@.]+)+$")
@@ -78,6 +83,16 @@ def refused(b):
     if b.get("privacy") is not True:
         bad.append("privacy")
     return bad
+
+
+def mock_connect(policy, mock):
+    """The CSP with kerja-prod's function swapped for the mock's in connect-src, and nothing else changed."""
+    out = []
+    for d in policy.split(";"):
+        if d.split() and d.split()[0].lower() == "connect-src":
+            d = d.replace(PROD_FUNCTION, mock)
+        out.append(d)
+    return ";".join(out)
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
@@ -182,7 +197,9 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             path = os.path.join(path, "index.html")
         if path.endswith(".html") and os.path.isfile(path) and urlsplit(self.path).path.endswith(("/", ".html")):
             html = open(path, encoding="utf-8").read()
-            html = ENDPOINT_ATTR.sub(f'data-endpoint="http://localhost:{self.port}{PATH}"', html)
+            mock = f"http://localhost:{self.port}{PATH}"
+            html = ENDPOINT_ATTR.sub(f'data-endpoint="{mock}"', html)
+            html = CSP_META.sub(lambda m: m.group(1) + mock_connect(m.group(2), mock) + m.group(3), html)
             data = html.encode("utf-8")
             self.send_response(200)
             self.send_header("Content-Type", "text/html; charset=utf-8")
