@@ -116,9 +116,9 @@
           <p class="ap-note">Semua isian wajib diisi, kecuali yang bertanda opsional.</p>
           <noscript><p class="ap-nojs">Formulir ini butuh JavaScript. Untuk mendaftar, kirim email ke <a class="ap-a" href="mailto:hello@trykerja.com">hello@trykerja.com</a>.</p></noscript>
         </div>
-        <!-- The endpoint: kerja-dev's submit-application function, for this branch only.
-             It MUST become kerja-prod's URL (project ref eppqufcgcwhoprwzfhxy), after G2 and before anything is published. -->
-        <form class="apply-form" id="apply-form" method="post" data-endpoint="https://oiyjmnsaqefrpfrbopjy.supabase.co/functions/v1/submit-application">
+        <!-- The endpoint: kerja-prod's submit-application function (decision 5360), the only address this page's
+             connect-src allows. Local previews use tools/apply_mock.py, which swaps it (and connect-src) in the copy it serves. -->
+        <form class="apply-form" id="apply-form" method="post" data-endpoint="https://eppqufcgcwhoprwzfhxy.supabase.co/functions/v1/submit-application">
           <div class="ap-alert" id="apply-alert" tabindex="-1" hidden>
             <div id="apply-alert-fields" hidden>
               <p class="ap-alert-t">Ada yang perlu dicek:</p>
