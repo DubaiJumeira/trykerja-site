@@ -1,0 +1,9 @@
+# GitHub Pages builds this site with Jekyll (there is no .nojekyll). The pages have no front matter,
+# so Jekyll copies every file as it is; this list only keeps the repo's notes and tools off
+# trykerja.com. Jekyll also leaves out every name starting with "." or "_" (this file included).
+exclude:
+  - README.md
+  - tools
+# No theme: without this line Pages adds its default theme (Primer) and with it /assets/css/style.css,
+# a file that isn't in this repo (legal.trykerja.com, which has no theme line, serves it).
+theme: null
