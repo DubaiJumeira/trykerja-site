@@ -1,7 +1,24 @@
-/* Kerja website: the mobile menu and the steps of Welcome's map story.
-   Join the beta's form has its own script, apply.js. Nothing else uses JavaScript. */
+/* Kerja website: the statistics opt-out marker, the mobile menu and the steps of Welcome's map story.
+   Join the beta's form has its own script, apply.js; the statistics tracker is umami.js. */
 (function () {
   "use strict";
+
+  // Website statistics (README.md, "Website statistics"; decision 5404): a page opened with #kerja-me
+  // tells this browser's Umami tracker never to send anything from this site, by the localStorage flag
+  // the tracker itself reads before every send ("umami.disabled"); #kerja-me-off takes the flag away.
+  // This file comes before assets/umami.js in every page and both are deferred, so it always runs
+  // first: even the visit that carries the marker sends nothing. The marker then leaves the address bar.
+  var optOut = function () {
+    var mark = location.hash;
+    if (mark !== "#kerja-me" && mark !== "#kerja-me-off") return;
+    try {
+      if (mark === "#kerja-me") localStorage.setItem("umami.disabled", "1");
+      else localStorage.removeItem("umami.disabled");
+    } catch (e) { /* storage blocked in this browser: nothing to keep */ }
+    if (history.replaceState) history.replaceState(null, "", location.pathname + location.search);
+  };
+  optOut();
+  window.addEventListener("hashchange", optOut);
 
   // Menu: <button class="menu-btn" aria-controls="menu" aria-expanded="false"> opens <dialog id="menu">.
   var btn = document.querySelector(".menu-btn");
