@@ -1,4 +1,5 @@
-/* Kerja website: the statistics opt-out marker, the mobile menu and the steps of Welcome's map story.
+/* Kerja website: the statistics opt-out marker and link counter, the mobile menu and the steps of
+   Welcome's map story.
    Join the beta's form has its own script, apply.js; the statistics tracker is umami.js. */
 (function () {
   "use strict";
@@ -19,6 +20,28 @@
   };
   optOut();
   window.addEventListener("hashchange", optOut);
+
+  // Counting a tap on a link (decisions 5403, 5409): a link with data-count="<event>" (and data-count-at,
+  // data-count-lang) is counted with umami.track(), which starts its request at once, with fetch's
+  // keepalive, so it can finish after the page has gone (Umami 3.4.1, src/tracker/index.ts:384-399).
+  // This never calls preventDefault and waits for nothing: the link opens at once, and a count that
+  // doesn't make it is lost rather than the tap delayed. Links never carry Umami's own data-umami-event,
+  // which holds a link until Umami has answered (index.ts:349-365); the menu button keeps it, as Umami
+  // doesn't hold a button (index.ts:370). Without the tracker (blocked, Do Not Track, #kerja-me), nothing.
+  document.addEventListener("click", function (e) {
+    var el = e.target && e.target.closest ? e.target.closest("[data-count]") : null;
+    var umami = window.umami;
+    if (!el || !umami || typeof umami.track !== "function") return;
+    var data = {}, any = false;
+    for (var i = 0; i < el.attributes.length; i++) {
+      var a = el.attributes[i];
+      if (a.name.indexOf("data-count-") === 0) { data[a.name.slice(11)] = a.value; any = true; }
+    }
+    try {
+      var sent = any ? umami.track(el.getAttribute("data-count"), data) : umami.track(el.getAttribute("data-count"));
+      if (sent && typeof sent.then === "function") sent.then(null, function () {});
+    } catch (err) { /* a count never stops a tap */ }
+  }, true);
 
   // Menu: <button class="menu-btn" aria-controls="menu" aria-expanded="false"> opens <dialog id="menu">.
   var btn = document.querySelector(".menu-btn");

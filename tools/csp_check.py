@@ -16,8 +16,8 @@ Fails (exit 1) when a page:
   <style> blocks in style-src (none listed when it has none); plus style-src-attr 'unsafe-inline'
   on Welcome (index.html, id/index.html) only; and on Join the beta (download/index.html,
   id/download/index.html) only, kerja-prod's function after connect-src 'self'; then, on every page,
-  Umami's collector URL, https://gateway.umami.is/api/send, last in connect-src (5402, Q534). So any other source, keyword or
-  directive fails (https:, data: or * in script-src, script-src-attr, style-src-elem, 'unsafe-eval',
+  Umami's collector URL, https://gateway.umami.is/api/send, last in connect-src (5402, Q534). So any
+  other source, keyword or directive fails (https:, data: or * in script-src, script-src-attr, style-src-elem, 'unsafe-eval',
   form-action *, a missing directive…);
 - has an inline script, an on…= attribute or a javascript: URL;
 - has style="" attributes on a page whose policy doesn't allow them, or Welcome's allowance with no
@@ -30,8 +30,10 @@ Fails (exit 1) when a page:
   data-domains="trykerja.com", data-exclude-search="true" and data-exclude-hash="true", and no other
   attribute (so no data-performance, data-before-send, data-tag, data-distinct-id…), after site.js
   (whose #kerja-me opt-out must run first);
-- has a data-umami-event other than the five click events, or data-umami-event-* data other than
-  "at" and "lang", or a value that isn't a short lowercase word (no data a visitor types or owns).
+- has data-umami-event on a link (Umami would hold the tap until its collector answers; links count
+  with data-count, through site.js, Q535) or with any name but menu-open, or data-umami-event-* data;
+- has a data-count other than the link events, or data-count-* data other than "at" and "lang", or a
+  value that isn't a short lowercase word (no data a visitor types or owns).
 And when assets/umami.js isn't byte for byte the pinned Umami release (its SHA-256, UMAMI_SHA256: the
 copy may not be edited; README.md, "Website statistics", says how to update it). With --publish, also
 when a page's data-website-id is still the placeholder.
@@ -66,8 +68,9 @@ PLACEHOLDER_ID = "00000000-0000-0000-0000-000000000000"  # until Zayd's Umami Cl
 UUID = re.compile(r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$")
 TRACKER_ATTRS = {"data-host-url": COLLECTOR, "data-do-not-track": "true", "data-domains": "trykerja.com",
                  "data-exclude-search": "true", "data-exclude-hash": "true"}
-CLICK_EVENTS = {"apply-open", "menu-open", "lang-switch", "testflight", "testflight-app"}
-EVENT_DATA = {"data-umami-event-at", "data-umami-event-lang"}
+BUTTON_EVENTS = {"menu-open"}  # data-umami-event: Umami counts a button without holding it (index.ts:370)
+LINK_EVENTS = {"apply-open", "lang-switch", "testflight", "testflight-app"}  # data-count, counted by site.js
+COUNT_DATA = {"data-count-at", "data-count-lang"}
 WORD = re.compile(r"^[a-z][a-z0-9_-]{0,23}$")
 
 
@@ -250,17 +253,24 @@ for page in [f for f in FILES if f.endswith((".html", ".htm"))]:
                 fail(page, "the Umami website ID is still the placeholder (README.md, \"Website statistics\")")
             else:
                 notes.add("the Umami website ID is the placeholder: replace it before publishing (README.md, \"Website statistics\")")
-    # The click events: known names, and only short lowercase words as their data.
+    # The click events: Umami's attribute on buttons only (it holds links), data-count on links; known
+    # names, and only short lowercase words as their data.
     for t, a in p.tags:
         if "data-umami-event" in a:
             events += 1
-            if a["data-umami-event"] not in CLICK_EVENTS:
-                fail(page, f"an unknown click event {a['data-umami-event']!r}")
+            if t == "a":
+                fail(page, f"a link with data-umami-event={a['data-umami-event']!r}: Umami would hold the tap (use data-count)")
+            elif a["data-umami-event"] not in BUTTON_EVENTS:
+                fail(page, f"an unknown button event {a['data-umami-event']!r}")
+        if "data-count" in a:
+            events += 1
+            if a["data-count"] not in LINK_EVENTS:
+                fail(page, f"an unknown link event {a['data-count']!r}")
         for k, v in a.items():
-            if k.startswith("data-umami-event-") and (k not in EVENT_DATA or not WORD.match(v or "")):
+            if k.startswith("data-umami-event-"):
+                fail(page, f"event data {k}={v!r} isn't allowed on data-umami-event")
+            if k.startswith("data-count-") and (k not in COUNT_DATA or not WORD.match(v or "") or "data-count" not in a):
                 fail(page, f"event data {k}={v!r} isn't allowed")
-            if k.startswith("data-umami-event-") and "data-umami-event" not in a:
-                fail(page, f"{k} without data-umami-event")
     if not any(m.startswith(f"FAIL  {page}:") for m in problems):
         print(f"ok    {page}: CSP exactly as allowed, referrer {REFERRER}, {len(blocks)} inline style block(s) hashed, {attrs} style attribute(s), tracker tag as pinned, {events} click event(s)")
 
