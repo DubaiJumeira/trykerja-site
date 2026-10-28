@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'sha256-ftlsA0RZH98RbIQI+AjVCQ3J902Of/2USl+6/hI5cNg='; img-src 'self' data:; font-src 'self'; connect-src 'self'; form-action 'none'; base-uri 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'sha256-ftlsA0RZH98RbIQI+AjVCQ3J902Of/2USl+6/hI5cNg='; img-src 'self' data:; font-src 'self'; connect-src 'self' https://gateway.umami.is/api/send; form-action 'none'; base-uri 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <title>Our promise: safe, private and professional · Kerja</title>
 <meta name="description" content="What Kerja promises about safety, privacy and who can reach you, and how the app keeps it.">
@@ -27,8 +27,8 @@
 <link rel="preload" href="../assets/fonts/bricolage-display.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../assets/fonts/jakarta-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="../assets/site.css?v=9ec48e72">
-<link rel="stylesheet" href="../assets/promise.css?v=9bfabdf7">
-<script src="../assets/site.js?v=64ddca5c" defer></script>
+<link rel="stylesheet" href="../assets/promise.css?v=57d6e942">
+<script src="../assets/site.js?v=8696c509" defer></script>
 <noscript><style>.menu-btn,.copy-btn{display:none!important}</style></noscript>
 </head>
 <body>
@@ -41,9 +41,9 @@
         <a href="../how-it-works/">How it works</a>
         <a href="../promise/" aria-current="page">Our promise</a>
       </nav>
-      <div class="lang bar-lang" role="group" aria-label="Language"><span class="lang-on" aria-current="page">EN<span class="vh"> English</span></span><span class="lang-sep" aria-hidden="true">/</span><a class="lang-to" href="../id/promise/" hreflang="id" lang="id">ID<span class="vh"> Bahasa Indonesia</span></a></div>
-      <a class="pill bar-pill" href="../download/">Join the beta</a>
-      <button class="round menu-btn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="menu"><svg class="i" width="20" height="20" viewBox="0 0 24 24" stroke-width="2.4" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg></button>
+      <div class="lang bar-lang" role="group" aria-label="Language"><span class="lang-on" aria-current="page">EN<span class="vh"> English</span></span><span class="lang-sep" aria-hidden="true">/</span><a class="lang-to" data-count="lang-switch" data-count-lang="id" data-count-at="bar" href="../id/promise/" hreflang="id" lang="id">ID<span class="vh"> Bahasa Indonesia</span></a></div>
+      <a class="pill bar-pill" data-count="apply-open" data-count-at="bar" href="../download/">Join the beta</a>
+      <button class="round menu-btn" type="button" data-umami-event="menu-open" aria-label="Menu" aria-expanded="false" aria-controls="menu"><svg class="i" width="20" height="20" viewBox="0 0 24 24" stroke-width="2.4" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg></button>
     </div>
   </div>
 </header>
@@ -58,8 +58,8 @@
       <a href="../how-it-works/">How it works</a>
       <a href="../promise/" aria-current="page">Our promise</a>
     </div>
-    <div class="lang menu-lang" role="group" aria-label="Language"><span class="lang-on" aria-current="page">EN<span class="vh"> English</span></span><span class="lang-sep" aria-hidden="true">/</span><a class="lang-to" href="../id/promise/" hreflang="id" lang="id">ID<span class="vh"> Bahasa Indonesia</span></a></div>
-    <a class="pill pill-block" href="../download/">Join the beta</a>
+    <div class="lang menu-lang" role="group" aria-label="Language"><span class="lang-on" aria-current="page">EN<span class="vh"> English</span></span><span class="lang-sep" aria-hidden="true">/</span><a class="lang-to" data-count="lang-switch" data-count-lang="id" data-count-at="menu" href="../id/promise/" hreflang="id" lang="id">ID<span class="vh"> Bahasa Indonesia</span></a></div>
+    <a class="pill pill-block" data-count="apply-open" data-count-at="menu" href="../download/">Join the beta</a>
   </div>
 </dialog>
 <main id="main" tabindex="-1">
@@ -124,7 +124,7 @@
           <li>No ads. We never sell your data. No tracking across other apps.</li>
           <li>Notifications never show what people write.</li>
           <li>Delete your account any time, in the app: your profile, photos and messages go at once. Reports are kept for a year, for safety.</li>
-          <li>This website has no analytics and no cookies.</li>
+          <li><span class="pr-optout" data-optout-line><span id="pr-optout-on">This website has no cookies. It counts visits and a few taps, never your name, your email or what you type in the form.</span> <button class="pr-optout-btn" type="button" data-optout="stop" aria-describedby="pr-optout-on" hidden>Don’t count my visits</button><span id="pr-optout-off" hidden>Your visits aren’t counted in this browser.</span> <button class="pr-optout-btn" type="button" data-optout="count" aria-describedby="pr-optout-off" hidden>Count them again</button></span></li>
         </ul>
       </div>
     </section>
@@ -144,7 +144,7 @@
           <li><a class="link" href="https://legal.trykerja.com/privacy/">Privacy policy</a></li>
           <li><a class="link" href="https://legal.trykerja.com/terms/">Terms of use</a></li>
         </ul>
-        <a class="pill pill-block pr-pill" href="../download/">Join the Canggu beta</a>
+        <a class="pill pill-block pr-pill" data-count="apply-open" data-count-at="last" href="../download/">Join the Canggu beta</a>
       </div>
     </section>
   </div>
@@ -156,12 +156,12 @@
     <ul class="foot-links">
       <li><a class="link" href="../how-it-works/">How it works</a></li>
       <li><a class="link" href="../promise/">Our promise</a></li>
-      <li><a class="link" href="../download/">Join the beta</a></li>
+      <li><a class="link" data-count="apply-open" data-count-at="foot" href="../download/">Join the beta</a></li>
       <li><a class="link" href="https://legal.trykerja.com/privacy/">Privacy</a></li>
       <li><a class="link" href="https://legal.trykerja.com/terms/">Terms</a></li>
     </ul>
-    <p class="contact"><a class="link" href="mailto:hello@trykerja.com">hello@trykerja.com</a><span class="sep" aria-hidden="true">·</span><span class="plain">Instagram @trykerja</span></p>
-    <div class="lang foot-lang" role="group" aria-label="Language"><span class="lang-on" aria-current="page">EN<span class="vh"> English</span></span><span class="lang-sep" aria-hidden="true">/</span><a class="lang-to" href="../id/promise/" hreflang="id" lang="id">ID<span class="vh"> Bahasa Indonesia</span></a></div>
+    <p class="contact"><a class="link" href="mailto:hello@trykerja.com">hello@trykerja.com</a><span class="sep" aria-hidden="true">·</span><a class="link" href="https://www.instagram.com/trykerja/" rel="noopener" data-count="instagram" data-count-at="foot">Instagram @trykerja</a></p>
+    <div class="lang foot-lang" role="group" aria-label="Language"><span class="lang-on" aria-current="page">EN<span class="vh"> English</span></span><span class="lang-sep" aria-hidden="true">/</span><a class="lang-to" data-count="lang-switch" data-count-lang="id" data-count-at="foot" href="../id/promise/" hreflang="id" lang="id">ID<span class="vh"> Bahasa Indonesia</span></a></div>
     <p class="foot-meaning">Kerja means “work” in Indonesian.</p>
     <div class="foot-small"><p>Apple, iPhone and TestFlight are trademarks of Apple Inc.</p><p>© 2026 Kerja</p></div>
   </div>

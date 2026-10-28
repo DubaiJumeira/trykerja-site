@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'sha256-blf9WhBRk+NXh0prSpGNj34q3s6bpj4diqnfCnS1rmI='; img-src 'self' data:; font-src 'self'; connect-src 'self' https://eppqufcgcwhoprwzfhxy.supabase.co/functions/v1/submit-application; form-action 'none'; base-uri 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'sha256-blf9WhBRk+NXh0prSpGNj34q3s6bpj4diqnfCnS1rmI='; img-src 'self' data:; font-src 'self'; connect-src 'self' https://eppqufcgcwhoprwzfhxy.supabase.co/functions/v1/submit-application https://gateway.umami.is/api/send; form-action 'none'; base-uri 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <title>Join the Kerja beta for iPhone in Canggu</title>
 <meta name="description" content="A small, free beta through Apple’s TestFlight, in two steps.">
@@ -28,8 +28,8 @@
 <link rel="preload" href="../assets/fonts/jakarta-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="../assets/site.css?v=9ec48e72">
 <link rel="stylesheet" href="../assets/download.css?v=64562eaf">
-<script src="../assets/site.js?v=64ddca5c" defer></script>
-<script src="../assets/apply.js?v=345138f6" defer></script>
+<script src="../assets/site.js?v=8696c509" defer></script>
+<script src="../assets/apply.js?v=cc09c490" defer></script>
 <noscript><style>.menu-btn,.apply-form{display:none!important}</style></noscript>
 </head>
 <!-- The page's state: "open" (the default) or "full" (once the beta's cap of 60 testers is reached). Change only this attribute. -->
@@ -43,8 +43,8 @@
         <a href="../how-it-works/">How it works</a>
         <a href="../promise/">Our promise</a>
       </nav>
-      <div class="lang bar-lang" role="group" aria-label="Language"><span class="lang-on" aria-current="page">EN<span class="vh"> English</span></span><span class="lang-sep" aria-hidden="true">/</span><a class="lang-to" href="../id/download/" hreflang="id" lang="id">ID<span class="vh"> Bahasa Indonesia</span></a></div>
-      <button class="round menu-btn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="menu"><svg class="i" width="20" height="20" viewBox="0 0 24 24" stroke-width="2.4" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg></button>
+      <div class="lang bar-lang" role="group" aria-label="Language"><span class="lang-on" aria-current="page">EN<span class="vh"> English</span></span><span class="lang-sep" aria-hidden="true">/</span><a class="lang-to" data-count="lang-switch" data-count-lang="id" data-count-at="bar" href="../id/download/" hreflang="id" lang="id">ID<span class="vh"> Bahasa Indonesia</span></a></div>
+      <button class="round menu-btn" type="button" data-umami-event="menu-open" aria-label="Menu" aria-expanded="false" aria-controls="menu"><svg class="i" width="20" height="20" viewBox="0 0 24 24" stroke-width="2.4" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg></button>
     </div>
   </div>
 </header>
@@ -59,8 +59,8 @@
       <a href="../how-it-works/">How it works</a>
       <a href="../promise/">Our promise</a>
     </div>
-    <div class="lang menu-lang" role="group" aria-label="Language"><span class="lang-on" aria-current="page">EN<span class="vh"> English</span></span><span class="lang-sep" aria-hidden="true">/</span><a class="lang-to" href="../id/download/" hreflang="id" lang="id">ID<span class="vh"> Bahasa Indonesia</span></a></div>
-    <a class="pill pill-block" href="../download/" aria-current="page">Join the beta</a>
+    <div class="lang menu-lang" role="group" aria-label="Language"><span class="lang-on" aria-current="page">EN<span class="vh"> English</span></span><span class="lang-sep" aria-hidden="true">/</span><a class="lang-to" data-count="lang-switch" data-count-lang="id" data-count-at="menu" href="../id/download/" hreflang="id" lang="id">ID<span class="vh"> Bahasa Indonesia</span></a></div>
+    <a class="pill pill-block" data-count="apply-open" data-count-at="menu" href="../download/" aria-current="page">Join the beta</a>
   </div>
 </dialog>
 <main id="main" tabindex="-1">
@@ -82,7 +82,7 @@
     <ol class="dl-steps beta-open">
       <li class="dl-step">
         <p class="dl-n" aria-hidden="true">1</p>
-        <h2 class="dl-t"><a class="dl-tf" href="https://apps.apple.com/app/testflight/id899247664">Get TestFlight.<svg class="i" width="20" height="20" viewBox="0 0 24 24" stroke-width="2.8" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a></h2>
+        <h2 class="dl-t"><a class="dl-tf" data-count="testflight-app" href="https://apps.apple.com/app/testflight/id899247664">Get TestFlight.<svg class="i" width="20" height="20" viewBox="0 0 24 24" stroke-width="2.8" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a></h2>
         <p class="dl-d">It’s Apple’s free app for testing new apps.</p>
       </li>
       <li class="dl-step">
@@ -99,7 +99,7 @@
     <div class="dl-act">
       <div class="beta-open dl-invite">
         <!-- Invite: when Apple approves the "Canggu testers" public TestFlight link, add it as this link's href and set <body data-beta="open">. -->
-        <a class="pill pill-block">Open the Canggu beta invite</a>
+        <a class="pill pill-block" data-count="testflight">Open the Canggu beta invite</a>
       </div>
 
       <div class="beta-open dl-qr">
@@ -229,7 +229,7 @@
         <h2 class="dl-h" id="dl-android">On Android</h2>
         <div class="beta-full" hidden>
           <p class="dl-p">Kerja is iPhone-only for now. Apply above, and we’ll tell you when Android is ready.</p>
-          <a class="link dl-to" href="#apply">Go to the form</a>
+          <a class="link dl-to" data-count="apply-open" data-count-at="form" href="#apply">Go to the form</a>
         </div>
         <p class="dl-p beta-open">Kerja is iPhone-only for now. Email hello@trykerja.com, and we’ll tell you when Android is ready.</p>
       </section>
@@ -243,12 +243,12 @@
     <ul class="foot-links">
       <li><a class="link" href="../how-it-works/">How it works</a></li>
       <li><a class="link" href="../promise/">Our promise</a></li>
-      <li><a class="link" href="../download/">Join the beta</a></li>
+      <li><a class="link" data-count="apply-open" data-count-at="foot" href="../download/">Join the beta</a></li>
       <li><a class="link" href="https://legal.trykerja.com/privacy/">Privacy</a></li>
       <li><a class="link" href="https://legal.trykerja.com/terms/">Terms</a></li>
     </ul>
-    <p class="contact"><a class="link" href="mailto:hello@trykerja.com">hello@trykerja.com</a><span class="sep" aria-hidden="true">·</span><span class="plain">Instagram @trykerja</span></p>
-    <div class="lang foot-lang" role="group" aria-label="Language"><span class="lang-on" aria-current="page">EN<span class="vh"> English</span></span><span class="lang-sep" aria-hidden="true">/</span><a class="lang-to" href="../id/download/" hreflang="id" lang="id">ID<span class="vh"> Bahasa Indonesia</span></a></div>
+    <p class="contact"><a class="link" href="mailto:hello@trykerja.com">hello@trykerja.com</a><span class="sep" aria-hidden="true">·</span><a class="link" href="https://www.instagram.com/trykerja/" rel="noopener" data-count="instagram" data-count-at="foot">Instagram @trykerja</a></p>
+    <div class="lang foot-lang" role="group" aria-label="Language"><span class="lang-on" aria-current="page">EN<span class="vh"> English</span></span><span class="lang-sep" aria-hidden="true">/</span><a class="lang-to" data-count="lang-switch" data-count-lang="id" data-count-at="foot" href="../id/download/" hreflang="id" lang="id">ID<span class="vh"> Bahasa Indonesia</span></a></div>
     <p class="foot-meaning">Kerja means “work” in Indonesian.</p>
     <div class="foot-small"><p>Apple, iPhone and TestFlight are trademarks of Apple Inc.</p><p>© 2026 Kerja</p></div>
   </div>

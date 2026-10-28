@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'sha256-ftlsA0RZH98RbIQI+AjVCQ3J902Of/2USl+6/hI5cNg='; img-src 'self' data:; font-src 'self'; connect-src 'self'; form-action 'none'; base-uri 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'sha256-ftlsA0RZH98RbIQI+AjVCQ3J902Of/2USl+6/hI5cNg='; img-src 'self' data:; font-src 'self'; connect-src 'self' https://gateway.umami.is/api/send; form-action 'none'; base-uri 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <title>Janji kami: aman, privat, dan profesional · Kerja</title>
 <meta name="description" content="Janji Kerja soal keamanan, privasi, dan siapa yang bisa menghubungimu, serta cara aplikasi menepatinya.">
@@ -27,8 +27,8 @@
 <link rel="preload" href="../../assets/fonts/bricolage-display.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../../assets/fonts/jakarta-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="../../assets/site.css?v=9ec48e72">
-<link rel="stylesheet" href="../../assets/promise.css?v=9bfabdf7">
-<script src="../../assets/site.js?v=64ddca5c" defer></script>
+<link rel="stylesheet" href="../../assets/promise.css?v=57d6e942">
+<script src="../../assets/site.js?v=8696c509" defer></script>
 <noscript><style>.menu-btn,.copy-btn{display:none!important}</style></noscript>
 </head>
 <body>
@@ -41,9 +41,9 @@
         <a href="../how-it-works/">Cara kerja</a>
         <a href="../promise/" aria-current="page">Janji kami</a>
       </nav>
-      <div class="lang bar-lang" role="group" aria-label="Bahasa"><a class="lang-to" href="../../promise/" hreflang="en" lang="en">EN<span class="vh"> English</span></a><span class="lang-sep" aria-hidden="true">/</span><span class="lang-on" aria-current="page">ID<span class="vh"> Bahasa Indonesia</span></span></div>
-      <a class="pill bar-pill" href="../download/">Gabung beta</a>
-      <button class="round menu-btn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="menu"><svg class="i" width="20" height="20" viewBox="0 0 24 24" stroke-width="2.4" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg></button>
+      <div class="lang bar-lang" role="group" aria-label="Bahasa"><a class="lang-to" data-count="lang-switch" data-count-lang="en" data-count-at="bar" href="../../promise/" hreflang="en" lang="en">EN<span class="vh"> English</span></a><span class="lang-sep" aria-hidden="true">/</span><span class="lang-on" aria-current="page">ID<span class="vh"> Bahasa Indonesia</span></span></div>
+      <a class="pill bar-pill" data-count="apply-open" data-count-at="bar" href="../download/">Gabung beta</a>
+      <button class="round menu-btn" type="button" data-umami-event="menu-open" aria-label="Menu" aria-expanded="false" aria-controls="menu"><svg class="i" width="20" height="20" viewBox="0 0 24 24" stroke-width="2.4" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg></button>
     </div>
   </div>
 </header>
@@ -58,8 +58,8 @@
       <a href="../how-it-works/">Cara kerja</a>
       <a href="../promise/" aria-current="page">Janji kami</a>
     </div>
-    <div class="lang menu-lang" role="group" aria-label="Bahasa"><a class="lang-to" href="../../promise/" hreflang="en" lang="en">EN<span class="vh"> English</span></a><span class="lang-sep" aria-hidden="true">/</span><span class="lang-on" aria-current="page">ID<span class="vh"> Bahasa Indonesia</span></span></div>
-    <a class="pill pill-block" href="../download/">Gabung beta</a>
+    <div class="lang menu-lang" role="group" aria-label="Bahasa"><a class="lang-to" data-count="lang-switch" data-count-lang="en" data-count-at="menu" href="../../promise/" hreflang="en" lang="en">EN<span class="vh"> English</span></a><span class="lang-sep" aria-hidden="true">/</span><span class="lang-on" aria-current="page">ID<span class="vh"> Bahasa Indonesia</span></span></div>
+    <a class="pill pill-block" data-count="apply-open" data-count-at="menu" href="../download/">Gabung beta</a>
   </div>
 </dialog>
 <main id="main" tabindex="-1">
@@ -124,7 +124,7 @@
           <li>Tanpa iklan. Kami tidak pernah menjual datamu. Tanpa pelacakan di aplikasi lain.</li>
           <li>Notifikasi tidak pernah menampilkan isi tulisan orang.</li>
           <li>Hapus akunmu kapan saja, di aplikasi: profil, foto, dan pesanmu langsung terhapus. Laporan disimpan selama setahun, demi keamanan.</li>
-          <li>Situs ini tidak memakai analitik maupun cookie.</li>
+          <li><span class="pr-optout" data-optout-line><span id="pr-optout-on">Situs ini tidak memakai cookie. Kami menghitung kunjungan dan beberapa klik, tanpa nama, email, atau apa pun yang kamu ketik di formulir.</span> <button class="pr-optout-btn" type="button" data-optout="stop" aria-describedby="pr-optout-on" hidden>Jangan hitung kunjunganku</button><span id="pr-optout-off" hidden>Kunjunganmu tidak dihitung di browser ini.</span> <button class="pr-optout-btn" type="button" data-optout="count" aria-describedby="pr-optout-off" hidden>Hitung lagi</button></span></li>
         </ul>
       </div>
     </section>
@@ -144,7 +144,7 @@
           <li><a class="link" href="https://legal.trykerja.com/privacy/" hreflang="en">Kebijakan privasi (dalam bahasa Inggris)</a></li>
           <li><a class="link" href="https://legal.trykerja.com/terms/" hreflang="en">Ketentuan penggunaan (dalam bahasa Inggris)</a></li>
         </ul>
-        <a class="pill pill-block pr-pill" href="../download/">Gabung beta Canggu</a>
+        <a class="pill pill-block pr-pill" data-count="apply-open" data-count-at="last" href="../download/">Gabung beta Canggu</a>
       </div>
     </section>
   </div>
@@ -156,12 +156,12 @@
     <ul class="foot-links">
       <li><a class="link" href="../how-it-works/">Cara kerja</a></li>
       <li><a class="link" href="../promise/">Janji kami</a></li>
-      <li><a class="link" href="../download/">Gabung beta</a></li>
+      <li><a class="link" data-count="apply-open" data-count-at="foot" href="../download/">Gabung beta</a></li>
       <li><a class="link" href="https://legal.trykerja.com/privacy/" hreflang="en">Privasi (dalam bahasa Inggris)</a></li>
       <li><a class="link" href="https://legal.trykerja.com/terms/" hreflang="en">Ketentuan (dalam bahasa Inggris)</a></li>
     </ul>
-    <p class="contact"><a class="link" href="mailto:hello@trykerja.com">hello@trykerja.com</a><span class="sep" aria-hidden="true">·</span><span class="plain">Instagram @trykerja</span></p>
-    <div class="lang foot-lang" role="group" aria-label="Bahasa"><a class="lang-to" href="../../promise/" hreflang="en" lang="en">EN<span class="vh"> English</span></a><span class="lang-sep" aria-hidden="true">/</span><span class="lang-on" aria-current="page">ID<span class="vh"> Bahasa Indonesia</span></span></div>
+    <p class="contact"><a class="link" href="mailto:hello@trykerja.com">hello@trykerja.com</a><span class="sep" aria-hidden="true">·</span><a class="link" href="https://www.instagram.com/trykerja/" rel="noopener" data-count="instagram" data-count-at="foot">Instagram @trykerja</a></p>
+    <div class="lang foot-lang" role="group" aria-label="Bahasa"><a class="lang-to" data-count="lang-switch" data-count-lang="en" data-count-at="foot" href="../../promise/" hreflang="en" lang="en">EN<span class="vh"> English</span></a><span class="lang-sep" aria-hidden="true">/</span><span class="lang-on" aria-current="page">ID<span class="vh"> Bahasa Indonesia</span></span></div>
     <p class="foot-meaning">Nama Kerja berasal dari kata “kerja” dalam bahasa Indonesia.</p>
     <div class="foot-small"><p>Apple, iPhone, dan TestFlight adalah merek dagang Apple Inc.</p><p>© 2026 Kerja</p></div>
   </div>

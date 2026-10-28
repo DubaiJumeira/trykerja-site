@@ -8,7 +8,10 @@
      403 (an Origin the server doesn't allow), 500, anything else, or no answer at all: the
           "didn't go through" line, with hello@trykerja.com.
    Every word the visitor sees is in the page, in its language; this file holds none.
-   No cookies, no storage, no analytics, nothing sent anywhere else.
+   No cookies, and nothing kept in the browser. Umami counts visits and a few taps (README.md,
+   "Website statistics"); from this form, only apply-sent or apply-error with the answer's kind, never a
+   field (count(), below). The only storage kept on the site is umami.disabled, written only when someone
+   opts out (site.js). Nothing else is sent anywhere.
    Shown in a frame by another page, it does nothing, so Send stays disabled (the sites audit's A6:
    Pages can't send frame-ancestors). */
 (function () {
@@ -212,9 +215,11 @@
       })
       .then(function (r) {
         if (r.status === 200 && r.json.ok === true) {
+          count("apply-sent");
           success(body.first_name);
           return;
         }
+        count("apply-error", r.status === 400 ? "invalid" : r.status === 429 ? "too_many" : r.status === 403 ? "origin" : "server");
         if (r.status === 400 && Array.isArray(r.json.fields) && r.json.fields.length) {
           var named = KEYS.filter(function (key) { return r.json.fields.indexOf(key) !== -1; });
           if (named.length) {
@@ -225,10 +230,25 @@
         }
         showAlert(r.status === 429 ? "busy" : "fail");
       }, function () {
+        count("apply-error", "offline");
         showAlert("fail");
       })
       .then(cleanUp, cleanUp);
   });
+
+  // Website statistics (README.md, "Website statistics"; decision 5403): once the server has answered
+  // (or the request failed), one Umami event: apply-sent, or apply-error with the kind of answer
+  // (invalid, too_many, origin, server or offline). Its only data is that kind, one of the five words
+  // above; never a field, a value or anything typed. Without the tracker (blocked, Do Not Track, the
+  // #kerja-me opt-out) it does nothing, and nothing here can stop the form.
+  function count(name, kind) {
+    try {
+      var umami = window.umami;
+      if (!umami || typeof umami.track !== "function") return;
+      var sent = kind ? umami.track(name, { kind: kind }) : umami.track(name);
+      if (sent && typeof sent.then === "function") sent.then(null, function () {});
+    } catch (e) { /* statistics never touch the form */ }
+  }
 
   // "You're on the list": the heading, the form and its note make way for the thanks, by first name.
   function success(name) {

@@ -6,7 +6,10 @@ file always has a new URL and no browser can keep an old copy.
   python3 -I tools/stamp.py           rewrite the pages' URLs from the files as they are now
   python3 -I tools/stamp.py --check   change nothing; list every URL and fail if one is stale or missing
 
-Run it after any picture, stylesheet or script changes. Fonts are left alone (the stylesheets load them)."""
+Run it after any picture, stylesheet or script changes. Fonts are left alone (the stylesheets load them).
+The statistics tracker has no tag in any page: assets/site.js adds it (decision 5431), so its stamp lives
+there, in TRACKER.src ("umami.js?v=…"). It is brought up to date first, so the pages' site.js stamps
+follow it."""
 import hashlib, os, re, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -48,6 +51,24 @@ def srcset(page, value):
     return ", ".join(out)
 
 TAG = re.compile(r"<(img|source|link|script)\b[^>]*>", re.S)
+SITE_JS = os.path.join(ROOT, "assets", "site.js")
+TRACKER_SRC = re.compile(r'(src: "umami\.js\?v=)([0-9a-f]{8})(")')
+
+def tracker_stamp():
+    js = open(SITE_JS, encoding="utf-8").read()
+    found = TRACKER_SRC.findall(js)
+    if len(found) != 1:
+        problems.append(f"assets/site.js: {len(found)} tracker src stamps (one expected)")
+        return
+    want = digest(os.path.join(ROOT, "assets", "umami.js"))
+    have = found[0][1]
+    listed.append(("assets/site.js", f"umami.js?v={want} (the tracker site.js adds)", "ok" if have == want else "STALE"))
+    if have != want:
+        problems.append(f"assets/site.js: stale umami.js?v={have} (want {want})")
+        if not CHECK:
+            open(SITE_JS, "w", encoding="utf-8").write(TRACKER_SRC.sub(lambda m: m.group(1) + want + m.group(3), js, count=1))
+
+tracker_stamp()
 
 for page in PAGES:
     p = os.path.join(ROOT, page)
