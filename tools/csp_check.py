@@ -38,8 +38,9 @@ Fails (exit 1) when a page:
   hidden <button type="button">s, or has data-count or data-umami-event on that line, on any element
   around it or in it (the opt-out must send nothing, decision 5412); or has one on another page.
 And when assets/umami.js isn't byte for byte the pinned Umami release (its SHA-256, UMAMI_SHA256: the
-copy may not be edited; README.md, "Website statistics", says how to update it). With --publish, also
-when a page's data-website-id is still the placeholder.
+copy may not be edited; README.md, "Website statistics", says how to update it), or when a page's
+data-website-id is neither Kerja's Umami website ID (UMAMI_WEBSITE_ID) nor, without --publish, the old
+placeholder.
 And when any published text file (HTML, JS, CSS, SVG, XML, JSON, TXT) names kerja-dev's project ref,
 in any case, or a published stylesheet loads from another site (url()) or uses @import.
 """
@@ -67,7 +68,8 @@ UMAMI_VERSION = "3.4.1"
 UMAMI_SHA256 = "654f12c7548be726eba5b71d5ef8bffc2a41a39a0053e2a49a847869ccd7ac3f"
 COLLECTOR = "https://gateway.umami.is"  # Umami Cloud's collector origin: the tracker's data-host-url
 COLLECTOR_URL = COLLECTOR + "/api/send"  # the one address it posts to: connect-src allows exactly this (Q534, 5409)
-PLACEHOLDER_ID = "00000000-0000-0000-0000-000000000000"  # until Zayd's Umami Cloud website exists
+UMAMI_WEBSITE_ID = "b33e8625-5183-4fd3-973d-9e1feb90f868"  # trykerja.com in Zayd's Umami Cloud account (5421); public, not a secret
+PLACEHOLDER_ID = "00000000-0000-0000-0000-000000000000"  # the branch's stand-in before the account (5405)
 UUID = re.compile(r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$")
 TRACKER_ATTRS = {"data-host-url": COLLECTOR, "data-do-not-track": "true", "data-domains": "trykerja.com",
                  "data-exclude-search": "true", "data-exclude-hash": "true"}
@@ -272,6 +274,8 @@ for page in [f for f in FILES if f.endswith((".html", ".htm"))]:
                 fail(page, "the Umami website ID is still the placeholder (README.md, \"Website statistics\")")
             else:
                 notes.add("the Umami website ID is the placeholder: replace it before publishing (README.md, \"Website statistics\")")
+        elif wid != UMAMI_WEBSITE_ID:
+            fail(page, f"the tracker's data-website-id isn't Kerja's Umami website ID ({UMAMI_WEBSITE_ID})")
     # The click events: Umami's attribute on buttons only (it holds links), data-count on links; known
     # names, and only short lowercase words as their data.
     for t, a in p.tags:
