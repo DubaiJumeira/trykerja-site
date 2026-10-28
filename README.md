@@ -2,7 +2,7 @@
 
 The Kerja website: four static pages (Welcome, How it works, Our promise, Join the beta), the same four in Indonesian under `/id/`, and a 404 page. Plain HTML and CSS, one small script (`assets/site.js`) for the mobile menu, the Copy button and the steps of Welcome's map story. No build step, no packages, no analytics, no cookies, no requests to other sites.
 
-Ready for GitHub Pages: deploy from branch `main`, folder `/ (root)`. `.nojekyll` makes Pages serve the files as they are.
+Ready for GitHub Pages: deploy from branch `main`, folder `/ (root)`. Pages builds it with Jekyll, which copies the pages as they are (none has front matter) and, by `_config.yml`, leaves this README and `tools/` off the site (see Security, below).
 
 ## Switch the Join the beta page's state
 
@@ -61,5 +61,38 @@ Pages link to each other with relative paths, so they also work on a preview add
 - `assets/screens/`: the app screens, each a whole 9:20 screen from a 1080 × 2400 master (status bar to bottom space) taken from the app on Android with sample profiles only, as WebP at 1x, 2x and 3x of the 252 px phone screen (`-1x` 252 × 560, `-2x` 504 × 1120, `-3x` 756 × 1680). The pages show them in the CSS phone outline (`.device` in `site.css`), whole, never cropped or zoomed.
 - `assets/story/`: the map story's map of Canggu, the sample faces and the cafés' names (see above).
 - `tools/stamp.py`: the cache-busting stamps; `tools/draw_map.py`: draws the map story's map and pins; `tools/qr.mjs`: draws a QR code (needs `toqr`, see above).
+- `tools/csp_check.py`: checks every page's Content-Security-Policy and referrer tags against the page (see Security, below).
+- `_config.yml`: what Pages leaves off the site (see Security, below).
 - `id/`: the four pages in Indonesian (see above).
 - `assets/og.jpg`: the share preview (1200 × 630), used by both languages. `assets/qr-download.svg`: the QR code to https://trykerja.com/download; `assets/qr-download-id.svg`: the one to https://trykerja.com/id/download.
+
+## Security
+
+The security audit of 28 October 2026 (decisions 5329 to 5334). Every finding, with its severity and whether it is done, is in `kerja-artifacts/sec-audit/sites.md`.
+
+**The Content-Security-Policy.** Every page carries these two tags right after the viewport tag, before anything it loads:
+
+```html
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'sha256-ftlsA0RZH98RbIQI+AjVCQ3J902Of/2USl+6/hI5cNg='; img-src 'self' data:; font-src 'self'; connect-src 'self'; form-action 'none'; base-uri 'none'; object-src 'none'">
+<meta name="referrer" content="no-referrer">
+```
+
+- `script-src 'self'`: `assets/site.js` only. No inline script, no `on…=` attribute, no `eval`, no `javascript:` link.
+- `style-src 'self'` and one hash: the stylesheets in `assets/`, and the one inline block, `<noscript><style>.menu-btn,.copy-btn{display:none!important}</style></noscript>` (it only applies with JavaScript off). Change that block and its hash must change with it.
+- **Welcome only** (`index.html`, `id/index.html`) adds `style-src-attr 'unsafe-inline'`, for the map story's 13 `style=""` attributes that `tools/draw_map.py` writes (each pin's `--x`, `--y` and `--more`, the pills' widths, the names' offsets). It is the only `unsafe-inline`: style attributes on those two pages, never a script or a `<style>` block.
+- `img-src 'self' data:`: the pictures in `assets/`, and the 1 × 1 GIF in two `<picture>` fallbacks (Welcome's hero phone under 600 px, the story's map under 1024 px or with reduced motion).
+- `font-src 'self'`: the WOFF2 files in `assets/fonts/`.
+- `connect-src 'self'`: no page fetches anything, but Chrome's DevTools and Lighthouse fetch through the page (DevTools' `/.well-known/appspecific/com.chrome.devtools.json`, Lighthouse's `robots.txt`); with `'none'` those showed as CSP violations in the console whenever DevTools was open and failed Lighthouse's robots.txt audit (SEO 100 to 92). **Join the beta** (`download/`, `id/download/`) also allows exactly one other address, kerja-prod's function `https://eppqufcgcwhoprwzfhxy.supabase.co/functions/v1/submit-application`, for the beta application form after G2. Never kerja-dev's.
+- `form-action 'none'`, `base-uri 'none'`, `object-src 'none'`: no form is ever submitted by the browser itself, no `<base>`, no plugins.
+- `no-referrer`: no page needs a `Referer`. A `fetch` to another site still carries the page's `Origin` (checked in Chrome and Safari), which is what the beta function checks.
+- A meta tag can't carry `frame-ancestors`, `report-uri`, `report-to` or `sandbox`, so none is there (browsers would ignore them and log a warning).
+
+**After changing any page,** run `python3 -I tools/csp_check.py` (or `python3 -I tools/csp_check.py <folder>`; it walks the folder, so it needs no git checkout and sees new, uncommitted pages). It checks what Pages would publish (the rule below) and fails when a page hasn't exactly one CSP meta and one referrer meta before anything it loads; when the referrer isn't exactly `no-referrer`; when the CSP isn't exactly the one above for that page, directive by directive and in that order (style-src lists the hash of each of the page's own inline `<style>` blocks, and none if it has none; Welcome adds `style-src-attr 'unsafe-inline'`; Join the beta adds kerja-prod's function to `connect-src`), so any other source, keyword or directive fails; when a page has an inline script, an `on…=` attribute or a `javascript:` URL, style attributes anywhere but Welcome (or Welcome without them), a form whose `data-endpoint` isn't kerja-prod's function, anything loaded from another site, or a `target="_blank"` link without `rel="noopener"`; when any published HTML, JS, CSS, SVG, XML, JSON or TXT file names kerja-dev's project ref, in any case; and when a published stylesheet loads from another site or uses `@import`.
+
+**What GitHub Pages can't do.** Pages sends no security headers and can't be told to (no `_headers` file, no settings): no `Strict-Transport-Security` (http:// does get a 301 to https://, as "Enforce HTTPS" is on, but browsers aren't told to remember it, and the domain can't be preloaded), no CSP header and so no `frame-ancestors`, no `X-Frame-Options`, no `X-Content-Type-Options: nosniff`, no `Referrer-Policy` header, no `Permissions-Policy`, no `Cross-Origin-Opener-Policy`. The cache is always `max-age=600`, every answer says `Server: GitHub.com` and carries `Access-Control-Allow-Origin: *`. The meta tags cover the CSP (all but `frame-ancestors`) and the referrer. The rest would need a proxy in front of Pages (Cloudflare, for example): Zayd's decision, not a change in this repo. Without `frame-ancestors`, another site can show these pages in a frame; they have no account, sign-in or button that acts for anyone.
+
+**What Pages publishes.** Pages builds `main` with Jekyll (there is no `.nojekyll`): a file without front matter is copied as it is, so every page, stylesheet, script and picture is served byte for byte; names starting with `.` or `_` are left out (`.gitattributes`, `_config.yml`); and `_config.yml` leaves out `README.md` and `tools/` (the scripts, and the form's local mock once it is here). `theme: null` stops Pages adding its default theme (Primer) and the `/assets/css/style.css` that comes with it, which isn't in this repo (legal.trykerja.com, with no theme line, serves one). `robots.txt`, `sitemap.xml`, the favicons and the fonts' OFL licences are public on purpose, and so, probably, is `CNAME`: Pages' build leaves it out only through its default `exclude` list, which a custom `exclude` replaces (legal.trykerja.com, with no `exclude`, answers 404 for it). It only holds the domain name, and the domain works either way. Never start a file with a `---` line unless Jekyll is meant to build it. Before decision 5331, a `.nojekyll` file had Pages serve every file of the repo, so `README.md`, `tools/draw_map.py`, `tools/stamp.py`, `tools/qr.mjs`, `.gitattributes` and `.nojekyll` were all reachable on trykerja.com. (The repo itself is public on GitHub, so nothing secret was ever in them; it is about not serving notes and tools under the site's name.) If a Jekyll build ever failed, Pages would keep the last good site; putting `.nojekyll` back undoes this.
+
+**Third parties: none.** Every page loads only its own files (no fonts, scripts, styles, maps or pictures from elsewhere), so there is nothing to pin with Subresource Integrity. No analytics, no cookies, no storage. The links to other sites (OpenStreetMap's copyright page, TestFlight on the App Store, WhatsApp's share link, legal.trykerja.com, `mailto:`) load nothing until clicked, and none opens a new window.
+
+**Scripts.** `assets/site.js` writes text only with `textContent` and never `innerHTML`, `insertAdjacentHTML`, `document.write`, `eval` or `new Function`. The `mailto:` and WhatsApp links are written out percent-encoded in the pages.
