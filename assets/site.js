@@ -1,5 +1,5 @@
-/* Kerja website: the mobile menu, the Copy button and the steps of Welcome's map story.
-   Nothing else uses JavaScript. */
+/* Kerja website: the mobile menu, the Copy button, the waitlist's "No email app?" panel and the steps
+   of Welcome's map story. Nothing else uses JavaScript. */
 (function () {
   "use strict";
 
@@ -50,6 +50,17 @@
         select();
       }
     });
+  });
+
+  // Join the waitlist (decision 5348): its buttons are mailto: links, and where no mail app answers
+  // (a computer without one, an in-app browser) a tap shows nothing. So a click on a mailto: link in a
+  // .waitlist block (a tap, or Enter on the focused link) also opens that block's "No email app?"
+  // panel. The mailto goes as before: nothing is prevented, nothing scrolls or takes focus, no timer.
+  document.addEventListener("click", function (e) {
+    var link = e.target && e.target.closest ? e.target.closest('.waitlist a[href^="mailto:"]') : null;
+    var block = link && link.closest(".waitlist");
+    var panel = block && block.querySelector("details.noemail");
+    if (panel) panel.open = true;
   });
 
   // The map story on Welcome (welcome.css): desktop only, with motion allowed. As each step's line
