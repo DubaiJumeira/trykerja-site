@@ -33,7 +33,10 @@ Fails (exit 1) when a page:
 - has data-umami-event on a link (Umami would hold the tap until its collector answers; links count
   with data-count, through site.js, Q535) or with any name but menu-open, or data-umami-event-* data;
 - has a data-count other than the link events, or data-count-* data other than "at" and "lang", or a
-  value that isn't a short lowercase word (no data a visitor types or owns).
+  value that isn't a short lowercase word (no data a visitor types or owns);
+- (Our promise, EN and ID) hasn't exactly one visitor opt-out line (data-optout-line) with its two
+  hidden <button type="button">s, or has data-count or data-umami-event on that line, on any element
+  around it or in it (the opt-out must send nothing, decision 5412); or has one on another page.
 And when assets/umami.js isn't byte for byte the pinned Umami release (its SHA-256, UMAMI_SHA256: the
 copy may not be edited; README.md, "Website statistics", says how to update it). With --publish, also
 when a page's data-website-id is still the placeholder.
@@ -72,6 +75,7 @@ BUTTON_EVENTS = {"menu-open"}  # data-umami-event: Umami counts a button without
 LINK_EVENTS = {"apply-open", "lang-switch", "testflight", "testflight-app", "instagram"}  # data-count, counted by site.js
 COUNT_DATA = {"data-count-at", "data-count-lang"}
 WORD = re.compile(r"^[a-z][a-z0-9_-]{0,23}$")
+PROMISE = {"promise/index.html", "id/promise/index.html"}  # where the visitors' opt-out lives (decision 5412)
 
 
 def expected_csp(page, style_hashes):
@@ -147,15 +151,30 @@ def walk():
     return out
 
 
+VOID = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "source", "track", "wbr"}
+
+
 class Page(HTMLParser):
+    """Every start tag with its attributes, and the indexes of the elements open around it."""
     def __init__(self):
         super().__init__(convert_charrefs=True)
-        self.tags = []
+        self.tags, self.parents, self.stack = [], [], []
 
     def handle_starttag(self, tag, attrs):
         self.tags.append((tag, dict(attrs)))
+        self.parents.append(list(self.stack))
+        if tag not in VOID:
+            self.stack.append(len(self.tags) - 1)
 
-    handle_startendtag = handle_starttag
+    def handle_startendtag(self, tag, attrs):
+        self.tags.append((tag, dict(attrs)))
+        self.parents.append(list(self.stack))
+
+    def handle_endtag(self, tag):
+        for k in range(len(self.stack) - 1, -1, -1):
+            if self.tags[self.stack[k]][0] == tag:
+                del self.stack[k:]
+                break
 
 
 problems = []
@@ -271,6 +290,21 @@ for page in [f for f in FILES if f.endswith((".html", ".htm"))]:
                 fail(page, f"event data {k}={v!r} isn't allowed on data-umami-event")
             if k.startswith("data-count-") and (k not in COUNT_DATA or not WORD.match(v or "") or "data-count" not in a):
                 fail(page, f"event data {k}={v!r} isn't allowed")
+    # The visitors' opt-out (5412): once on each Our promise page, nowhere else; two hidden <button
+    # type="button">s (site.js shows them); and nothing on it, around it or in it that would send.
+    lines = [i for i, (t, a) in enumerate(p.tags) if "data-optout-line" in a]
+    if page in PROMISE and len(lines) != 1:
+        fail(page, f"{len(lines)} opt-out lines (one expected)")
+    if page not in PROMISE and lines:
+        fail(page, "an opt-out line outside Our promise")
+    for i in lines:
+        inside = [j for j in range(len(p.tags)) if i in p.parents[j]]
+        buttons = [p.tags[j] for j in inside if p.tags[j][0] == "button"]
+        if sorted(a.get("data-optout") or "" for _, a in buttons) != ["count", "stop"] or any(a.get("type") != "button" or "hidden" not in a for _, a in buttons):
+            fail(page, "the opt-out line needs exactly its two hidden <button type=\"button\"> (stop, count)")
+        for j in p.parents[i] + [i] + inside:
+            if {"data-count", "data-umami-event"} & set(p.tags[j][1]):
+                fail(page, f"the opt-out would send: <{p.tags[j][0]}> on, around or in it carries data-count or data-umami-event")
     if not any(m.startswith(f"FAIL  {page}:") for m in problems):
         print(f"ok    {page}: CSP exactly as allowed, referrer {REFERRER}, {len(blocks)} inline style block(s) hashed, {attrs} style attribute(s), tracker tag as pinned, {events} click event(s)")
 

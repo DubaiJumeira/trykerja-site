@@ -1,5 +1,5 @@
-/* Kerja website: the statistics opt-out marker and link counter, the mobile menu and the steps of
-   Welcome's map story.
+/* Kerja website: the statistics opt-out marker, link counter and Our promise's visitor opt-out, the
+   mobile menu and the steps of Welcome's map story.
    Join the beta's form has its own script, apply.js; the statistics tracker is umami.js. */
 (function () {
   "use strict";
@@ -42,6 +42,53 @@
       if (sent && typeof sent.then === "function") sent.then(null, function () {});
     } catch (err) { /* a count never stops a tap */ }
   }, true);
+
+  // The visitors' own opt-out, on Our promise (decision 5412; the auditor's words are in
+  // kerja-artifacts/promise-text.md). "Don’t count my visits" sets the same flag as #kerja-me
+  // (localStorage "umami.disabled", read by the tracker before every send); "Count them again" removes
+  // it, as #kerja-me-off does. The line swaps only once the flag has been saved and read back, and the
+  // page opens on the line that matches the flag. Where storage can't be read, the buttons stay hidden
+  // and the first sentence shows alone, as without JavaScript: a tap couldn't stop the counting. The
+  // buttons, and every element around them, carry no data-count or data-umami-event (csp_check.py
+  // fails if one does), so a tap sends nothing; nothing else is ever written.
+  var line = document.querySelector("[data-optout-line]");
+  var stopBtn = line && line.querySelector('[data-optout="stop"]');
+  var countBtn = line && line.querySelector('[data-optout="count"]');
+  if (stopBtn && countBtn) {
+    var onText = document.getElementById(stopBtn.getAttribute("aria-describedby"));
+    var offText = document.getElementById(countBtn.getAttribute("aria-describedby"));
+    var FLAG = "umami.disabled";
+    var storage = function () {
+      try { var s = window.localStorage; s.getItem(FLAG); return s; } catch (e) { return null; }
+    };
+    var show = function (off, focus) {
+      onText.hidden = stopBtn.hidden = off;
+      offText.hidden = countBtn.hidden = !off;
+      if (focus) (off ? countBtn : stopBtn).focus();
+    };
+    var render = function () {
+      var s = storage();
+      if (s) show(!!s.getItem(FLAG), false);
+    };
+    var choose = function (off) {
+      var s = storage(), saved = false;
+      try {
+        if (s) {
+          if (off) s.setItem(FLAG, "1");
+          else s.removeItem(FLAG);
+          saved = off ? s.getItem(FLAG) === "1" : s.getItem(FLAG) === null;
+        }
+      } catch (e) { saved = false; }
+      if (saved) { show(off, true); return; }
+      // Not saved: no button can work here, so none stays; the first sentence shows alone.
+      stopBtn.hidden = countBtn.hidden = offText.hidden = true;
+      onText.hidden = false;
+    };
+    stopBtn.addEventListener("click", function () { choose(true); });
+    countBtn.addEventListener("click", function () { choose(false); });
+    render();
+    window.addEventListener("hashchange", render);
+  }
 
   // Menu: <button class="menu-btn" aria-controls="menu" aria-expanded="false"> opens <dialog id="menu">.
   var btn = document.querySelector(".menu-btn");

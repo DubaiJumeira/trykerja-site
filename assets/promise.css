@@ -58,3 +58,10 @@
 
   .foot { margin-top: 150px; }
 }
+
+/* "Your data stays yours": the website line's opt-out (decision 5412). Buttons in the page's link style
+   (orangeShadow, bold, underlined on hover), inline in the sentence; the padding brings the tap area to
+   44 px and the negative margin keeps the line where it was. site.js shows them; [hidden] always wins. */
+.pr-optout [hidden] { display: none !important; }
+.pr-optout-btn { color: var(--orange-shadow); font-weight: 700; white-space: nowrap; padding: 10px 0; margin: -10px 0; }
+.pr-optout-btn:hover { text-decoration: underline; text-underline-offset: 3px; }
