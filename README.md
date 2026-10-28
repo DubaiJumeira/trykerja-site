@@ -73,7 +73,7 @@ The security audit of 28 October 2026 (decisions 5329 to 5334). Every finding, w
 **The Content-Security-Policy.** Every page carries these two tags right after the viewport tag, before anything it loads:
 
 ```html
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'sha256-ftlsA0RZH98RbIQI+AjVCQ3J902Of/2USl+6/hI5cNg='; img-src 'self' data:; font-src 'self'; connect-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'sha256-ftlsA0RZH98RbIQI+AjVCQ3J902Of/2USl+6/hI5cNg='; img-src 'self' data:; font-src 'self'; connect-src 'self'; form-action 'none'; base-uri 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 ```
 
@@ -82,7 +82,7 @@ The security audit of 28 October 2026 (decisions 5329 to 5334). Every finding, w
 - **Welcome only** (`index.html`, `id/index.html`) adds `style-src-attr 'unsafe-inline'`, for the map story's 13 `style=""` attributes that `tools/draw_map.py` writes (each pin's `--x`, `--y` and `--more`, the pills' widths, the names' offsets). It is the only `unsafe-inline`: style attributes on those two pages, never a script or a `<style>` block.
 - `img-src 'self' data:`: the pictures in `assets/`, and the 1 × 1 GIF in two `<picture>` fallbacks (Welcome's hero phone under 600 px, the story's map under 1024 px or with reduced motion).
 - `font-src 'self'`: the WOFF2 files in `assets/fonts/`.
-- `connect-src 'none'`: no page fetches anything. **Join the beta** (`download/`, `id/download/`) allows exactly one address instead, kerja-prod's function `https://eppqufcgcwhoprwzfhxy.supabase.co/functions/v1/submit-application`, for the beta application form after G2. Never kerja-dev's.
+- `connect-src 'self'`: no page fetches anything, but Chrome's DevTools and Lighthouse fetch through the page (DevTools' `/.well-known/appspecific/com.chrome.devtools.json`, Lighthouse's `robots.txt`); with `'none'` those showed as CSP violations in the console whenever DevTools was open and failed Lighthouse's robots.txt audit (SEO 100 to 92). **Join the beta** (`download/`, `id/download/`) also allows exactly one other address, kerja-prod's function `https://eppqufcgcwhoprwzfhxy.supabase.co/functions/v1/submit-application`, for the beta application form after G2. Never kerja-dev's.
 - `form-action 'none'`, `base-uri 'none'`, `object-src 'none'`: no form is ever submitted by the browser itself, no `<base>`, no plugins.
 - `no-referrer`: no page needs a `Referer`. A `fetch` to another site still carries the page's `Origin` (checked in Chrome and Safari), which is what the beta function checks.
 - A meta tag can't carry `frame-ancestors`, `report-uri`, `report-to` or `sandbox`, so none is there (browsers would ignore them and log a warning).
