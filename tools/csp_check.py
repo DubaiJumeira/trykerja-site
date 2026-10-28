@@ -69,7 +69,7 @@ UUID = re.compile(r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12
 TRACKER_ATTRS = {"data-host-url": COLLECTOR, "data-do-not-track": "true", "data-domains": "trykerja.com",
                  "data-exclude-search": "true", "data-exclude-hash": "true"}
 BUTTON_EVENTS = {"menu-open"}  # data-umami-event: Umami counts a button without holding it (index.ts:370)
-LINK_EVENTS = {"apply-open", "lang-switch", "testflight", "testflight-app"}  # data-count, counted by site.js
+LINK_EVENTS = {"apply-open", "lang-switch", "testflight", "testflight-app", "instagram"}  # data-count, counted by site.js
 COUNT_DATA = {"data-count-at", "data-count-lang"}
 WORD = re.compile(r"^[a-z][a-z0-9_-]{0,23}$")
 

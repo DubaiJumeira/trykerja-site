@@ -67,6 +67,7 @@ Page views and a few named clicks are counted with **Umami Cloud** (Umami Softwa
 | `lang-switch` | the EN / ID switch's other language | all nine | `data-count`, `site.js` | `lang`: the language chosen (`en`, `id`); `at`: `bar`, `menu` or `foot` |
 | `testflight` | "Open the Canggu beta invite" (no `href` until Apple's link) | Join the beta, `open` state | `data-count`, `site.js` | none |
 | `testflight-app` | "Get TestFlight." (the App Store) | Join the beta, `open` state | `data-count`, `site.js` | none |
+| `instagram` | "Instagram @trykerja", a link to https://www.instagram.com/trykerja/ (`rel="noopener"`, same window; its text unchanged, now styled as a link like the email beside it) | every footer, and Welcome's "Hi, I'm Zayd." | `data-count`, `site.js` | `at`: `foot` or `zayd` |
 | `apply-sent` | the form, after a 200 | Join the beta | `apply.js`, `umami.track` | none |
 | `apply-error` | the form, after any other answer or none | Join the beta | `apply.js`, `umami.track` | `kind`: `invalid` (400), `too_many` (429), `origin` (403), `server` (anything else) or `offline` (no answer) |
 
