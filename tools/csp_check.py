@@ -3,6 +3,7 @@
 for kerja-dev. Standard library only; reads files, changes nothing; needs no git checkout.
 
   python3 -I tools/csp_check.py [<site folder>]   (this repo by default)
+  python3 -I tools/csp_check.py --publish         also fails while the Umami website ID is the placeholder
 
 It walks the folder and checks what GitHub Pages would publish (everything with a .nojekyll file;
 otherwise all but names starting with "." or "_" and the `exclude:` list of _config.yml).
@@ -14,15 +15,26 @@ Fails (exit 1) when a page:
   order, whitespace aside): the base policy, with the SHA-256 of each of the page's own inline
   <style> blocks in style-src (none listed when it has none); plus style-src-attr 'unsafe-inline'
   on Welcome (index.html, id/index.html) only; and on Join the beta (download/index.html,
-  id/download/index.html) only, kerja-prod's function after connect-src 'self'. So any other
-  source, keyword or directive fails (https:, data: or * in script-src, script-src-attr,
-  style-src-elem, 'unsafe-eval', form-action *, a missing directive…);
+  id/download/index.html) only, kerja-prod's function after connect-src 'self'; then, on every page,
+  Umami's collector origin last in connect-src (decision 5402). So any other source, keyword or
+  directive fails (https:, data: or * in script-src, script-src-attr, style-src-elem, 'unsafe-eval',
+  form-action *, a missing directive…);
 - has an inline script, an on…= attribute or a javascript: URL;
 - has style="" attributes on a page whose policy doesn't allow them, or Welcome's allowance with no
   style attribute to need it;
 - has a form whose data-endpoint isn't kerja-prod's function;
 - loads anything from another site (src, srcset, a stylesheet, preload, icon or manifest href);
-- has a target="_blank" link without rel="noopener".
+- has a target="_blank" link without rel="noopener";
+- hasn't exactly one Umami tracker tag: <script src="…assets/umami.js?v=…" defer> with exactly
+  data-website-id (a UUID), data-host-url (the collector), data-do-not-track="true",
+  data-domains="trykerja.com", data-exclude-search="true" and data-exclude-hash="true", and no other
+  attribute (so no data-performance, data-before-send, data-tag, data-distinct-id…), after site.js
+  (whose #kerja-me opt-out must run first);
+- has a data-umami-event other than the five click events, or data-umami-event-* data other than
+  "at" and "lang", or a value that isn't a short lowercase word (no data a visitor types or owns).
+And when assets/umami.js isn't byte for byte the pinned Umami release (its SHA-256, UMAMI_SHA256: the
+copy may not be edited; README.md, "Website statistics", says how to update it). With --publish, also
+when a page's data-website-id is still the placeholder.
 And when any published text file (HTML, JS, CSS, SVG, XML, JSON, TXT) names kerja-dev's project ref,
 in any case, or a published stylesheet loads from another site (url()) or uses @import.
 """
@@ -33,7 +45,9 @@ import re
 import sys
 from html.parser import HTMLParser
 
-ROOT = os.path.abspath(sys.argv[1] if len(sys.argv) > 1 else os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+ARGS = [a for a in sys.argv[1:] if not a.startswith("--")]
+PUBLISH = "--publish" in sys.argv
+ROOT = os.path.abspath(ARGS[0] if ARGS else os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 DEV_REF = re.compile(r"oiyjmnsaqefrpfrbopjy", re.I)  # kerja-dev's project ref: never published (decision 5300)
 PROD_FUNCTION = "https://eppqufcgcwhoprwzfhxy.supabase.co/functions/v1/submit-application"  # kerja-prod's
 WELCOME = {"index.html", "id/index.html"}
@@ -41,10 +55,23 @@ JOIN = {"download/index.html", "id/download/index.html"}
 REFERRER = "no-referrer"
 RESOURCE_TAGS = ("link", "script", "style", "img", "picture", "source")
 TEXT_TYPES = (".html", ".htm", ".js", ".mjs", ".css", ".svg", ".xml", ".json", ".txt", ".webmanifest")
+# Website statistics (decisions 5402 to 5405): Umami 3.4.1's tracker, from the official image
+# ghcr.io/umami-software/umami:3.4.1, /app/public/script.js (tools/umami_fetch.py gets it again).
+UMAMI_FILE = "assets/umami.js"
+UMAMI_VERSION = "3.4.1"
+UMAMI_SHA256 = "654f12c7548be726eba5b71d5ef8bffc2a41a39a0053e2a49a847869ccd7ac3f"
+COLLECTOR = "https://gateway.umami.is"  # Umami Cloud's collector origin; the tracker posts to /api/send
+PLACEHOLDER_ID = "00000000-0000-0000-0000-000000000000"  # until Zayd's Umami Cloud website exists
+UUID = re.compile(r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$")
+TRACKER_ATTRS = {"data-host-url": COLLECTOR, "data-do-not-track": "true", "data-domains": "trykerja.com",
+                 "data-exclude-search": "true", "data-exclude-hash": "true"}
+CLICK_EVENTS = {"apply-open", "menu-open", "lang-switch", "testflight", "testflight-app"}
+EVENT_DATA = {"data-umami-event-at", "data-umami-event-lang"}
+WORD = re.compile(r"^[a-z][a-z0-9_-]{0,23}$")
 
 
 def expected_csp(page, style_hashes):
-    connect = "'self'" + (" " + PROD_FUNCTION if page in JOIN else "")
+    connect = "'self'" + (" " + PROD_FUNCTION if page in JOIN else "") + " " + COLLECTOR
     directives = [
         "default-src 'self'",
         "script-src 'self'",
@@ -128,6 +155,7 @@ class Page(HTMLParser):
 
 
 problems = []
+notes = set()
 
 
 def fail(path, msg):
@@ -194,8 +222,46 @@ for page in [f for f in FILES if f.endswith((".html", ".htm"))]:
         for u in urls:
             if re.match(r"^\s*(https?:)?//", u, re.I):
                 fail(page, f"<{t}> loads from another site: {u.split('?')[0]}")
+    # The Umami tracker: one tag, exactly these attributes, after site.js.
+    scripts = [(i, a) for i, (t, a) in enumerate(p.tags) if t == "script" and a.get("src")]
+    trackers = [(i, a) for i, a in scripts if a["src"].split("?")[0].endswith(UMAMI_FILE)]
+    events = 0
+    if len(trackers) != 1:
+        fail(page, f"{len(trackers)} Umami tracker tags (one expected)")
+    else:
+        i, a = trackers[0]
+        if not re.search(r"\?v=[0-9a-f]{8}$", a["src"]) or "defer" not in a:
+            fail(page, "the tracker tag isn't a stamped, deferred script")
+        site = [j for j, b in scripts if b["src"].split("?")[0].endswith("assets/site.js")]
+        if not site or site[0] > i:
+            fail(page, "the tracker comes before site.js, whose opt-out must run first")
+        extra = sorted(set(a) - set(TRACKER_ATTRS) - {"src", "defer", "data-website-id"})
+        if extra:
+            fail(page, f"the tracker has other attributes: {extra}")
+        for k, v in TRACKER_ATTRS.items():
+            if a.get(k) != v:
+                fail(page, f"the tracker's {k} is {a.get(k)!r}, not {v!r}")
+        wid = a.get("data-website-id") or ""
+        if not UUID.match(wid):
+            fail(page, "the tracker's data-website-id isn't a UUID")
+        elif wid == PLACEHOLDER_ID:
+            if PUBLISH:
+                fail(page, "the Umami website ID is still the placeholder (README.md, \"Website statistics\")")
+            else:
+                notes.add("the Umami website ID is the placeholder: replace it before publishing (README.md, \"Website statistics\")")
+    # The click events: known names, and only short lowercase words as their data.
+    for t, a in p.tags:
+        if "data-umami-event" in a:
+            events += 1
+            if a["data-umami-event"] not in CLICK_EVENTS:
+                fail(page, f"an unknown click event {a['data-umami-event']!r}")
+        for k, v in a.items():
+            if k.startswith("data-umami-event-") and (k not in EVENT_DATA or not WORD.match(v or "")):
+                fail(page, f"event data {k}={v!r} isn't allowed")
+            if k.startswith("data-umami-event-") and "data-umami-event" not in a:
+                fail(page, f"{k} without data-umami-event")
     if not any(m.startswith(f"FAIL  {page}:") for m in problems):
-        print(f"ok    {page}: CSP exactly as allowed, referrer {REFERRER}, {len(blocks)} inline style block(s) hashed, {attrs} style attribute(s)")
+        print(f"ok    {page}: CSP exactly as allowed, referrer {REFERRER}, {len(blocks)} inline style block(s) hashed, {attrs} style attribute(s), tracker tag as pinned, {events} click event(s)")
 
 # kerja-dev in any published text file; stylesheets load nothing from elsewhere.
 for f in FILES:
@@ -211,7 +277,20 @@ for f in FILES:
         if re.search(r"@import", text, re.I):
             fail(f, "@import")
 
+# The tracker's copy: byte for byte the pinned release, never edited.
+umami_path = os.path.join(ROOT, UMAMI_FILE)
+if not os.path.isfile(umami_path):
+    fail(UMAMI_FILE, "missing")
+else:
+    got = hashlib.sha256(open(umami_path, "rb").read()).hexdigest()
+    if got != UMAMI_SHA256:
+        fail(UMAMI_FILE, f"SHA-256 {got} isn't Umami {UMAMI_VERSION}'s {UMAMI_SHA256}: the copy may not be edited")
+    else:
+        print(f"ok    {UMAMI_FILE}: Umami {UMAMI_VERSION}, SHA-256 {UMAMI_SHA256}")
+
 for line in problems:
     print(line)
+for line in sorted(notes):
+    print("NOTE  " + line)
 print(f"checked {len(FILES)} published files: " + ("all pass" if not problems else f"{len(problems)} problem(s)"))
 sys.exit(1 if problems else 0)
