@@ -19,6 +19,12 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://trykerja.com/promise/"/>
   </url>
   <url>
+    <loc>https://trykerja.com/roadmap/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://trykerja.com/roadmap/"/>
+    <xhtml:link rel="alternate" hreflang="id" href="https://trykerja.com/id/roadmap/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://trykerja.com/roadmap/"/>
+  </url>
+  <url>
     <loc>https://trykerja.com/download/</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://trykerja.com/download/"/>
     <xhtml:link rel="alternate" hreflang="id" href="https://trykerja.com/id/download/"/>
@@ -41,6 +47,12 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://trykerja.com/promise/"/>
     <xhtml:link rel="alternate" hreflang="id" href="https://trykerja.com/id/promise/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://trykerja.com/promise/"/>
+  </url>
+  <url>
+    <loc>https://trykerja.com/id/roadmap/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://trykerja.com/roadmap/"/>
+    <xhtml:link rel="alternate" hreflang="id" href="https://trykerja.com/id/roadmap/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://trykerja.com/roadmap/"/>
   </url>
   <url>
     <loc>https://trykerja.com/id/download/</loc>

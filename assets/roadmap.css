@@ -1,0 +1,44 @@
+/* Roadmap (/roadmap/, /id/roadmap/). Loaded after site.css; every colour comes from site.css's :root.
+   Calm, like Our promise: only the last call, copied from How it works, rises in. */
+
+/* ---------- Sections ---------- */
+.rm { margin-top: 64px; }
+.rm-h { font-size: 28px; line-height: 32px; letter-spacing: -.03em; }
+
+/* In the beta now: Welcome's lagoon-dot strip (.strip in site.css), with its link under the list. */
+.rm .strip { margin-top: 20px; }
+
+/* Coming next and After that: sand cards like Coming soon's (site.css), with no badge (the headings
+   already say when): the feature's name in Bricolage, its line under it in Jakarta, ink-2.
+   One card per row on phones, two from 600 px, three from 1080 px. */
+.rm-cards { margin-top: 20px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; }
+.rm-cards li { padding: 18px; border-radius: 20px; background: var(--sand); }
+.rm-card-name { font: 700 21px/25px var(--font-title); letter-spacing: -.015em; color: var(--ink); text-wrap: balance; }
+.rm-card-line { margin-top: 8px; font: 400 16px/24px var(--font-body); color: var(--ink-2); text-wrap: pretty; }
+
+/* What should we build next? One line; its email is a text link (no count). The padding brings the
+   tap area to 44 px and the negative margin keeps the line where it is (as Our promise's opt-out). */
+.rm-ask { margin-top: 14px; }
+.rm-ask a { color: var(--orange-shadow); font-weight: 700; text-decoration: none; white-space: nowrap; padding: 10px 0; margin: -10px 0; }
+.rm-ask a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+@media (min-width: 600px) {
+  .rm-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* ---------- Desktop ---------- */
+@media (min-width: 1080px) {
+  .rm-top .lede { max-width: 760px; }
+
+  .rm { margin-top: 110px; }
+  .rm-h { font-size: 40px; line-height: 44px; letter-spacing: -.035em; }
+
+  .rm .strip { margin-top: 28px; }
+
+  .rm-cards { margin-top: 28px; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .rm-cards li { padding: 24px; border-radius: 24px; }
+  .rm-card-name { font-size: 26px; line-height: 30px; }
+  .rm-card-line { margin-top: 10px; font-size: 18px; line-height: 28px; }
+
+  .rm-ask { margin-top: 16px; }
+}
