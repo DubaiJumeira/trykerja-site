@@ -33,7 +33,10 @@ Fails (exit 1) when a page:
   value that isn't a short lowercase word (no data a visitor types or owns);
 - (Our promise, EN and ID) hasn't exactly one visitor opt-out line (data-optout-line) with its two
   hidden <button type="button">s, or has data-count or data-umami-event on that line, on any element
-  around it or in it (the opt-out must send nothing, decision 5412); or has one on another page.
+  around it or in it (the opt-out must send nothing, decision 5412); or has one on another page;
+- (the session link page, s/ and id/s/, SESSION_LINK, decision 5503) has any <script> (site.js included:
+  no Umami there), data-count or data-umami-event, or a menu or menu button: nothing runs and nothing is
+  counted on it.
 And when assets/umami.js isn't byte for byte the pinned Umami release (its SHA-256, UMAMI_SHA256: the
 copy may not be edited; README.md, "Website statistics", says how to update it). And when assets/site.js,
 which alone loads the tracker:
@@ -173,6 +176,9 @@ LINK_EVENTS = {"apply-open", "lang-switch", "testflight", "testflight-app", "ins
 COUNT_DATA = {"data-count-at", "data-count-lang"}
 WORD = re.compile(r"^[a-z][a-z0-9_-]{0,23}$")
 PROMISE = {"promise/index.html", "id/promise/index.html"}  # where the visitors' opt-out lives (decision 5412)
+# The session link page (decisions 5501 to 5503): what a browser shows for https://trykerja.com/s/#<code>. It loads
+# no script at all, so its CSP is the base policy with no style hash (it has no inline <style>), as for any page.
+SESSION_LINK = {"s/index.html", "id/s/index.html"}
 
 
 def expected_csp(page, style_hashes):
@@ -386,8 +392,19 @@ for page in [f for f in FILES if f.lower().endswith(PAGE_TYPES)]:
         for j in p.parents[i] + [i] + inside:
             if {"data-count", "data-umami-event"} & set(p.tags[j][1]):
                 fail(page, f"the opt-out would send: <{p.tags[j][0]}> on, around or in it carries data-count or data-umami-event")
+    # The session link page (decision 5503): nothing runs and nothing is counted there. No <script> at all
+    # (not even site.js, so no Umami), no data-count or data-umami-event, and no menu (its button needs site.js).
+    if page in SESSION_LINK:
+        for t, a in p.tags:
+            if t == "script":
+                fail(page, f"a <script> ({(a.get('src') or 'inline').split('?')[0]}): the session link page loads no script")
+            if {"data-count", "data-umami-event"} & set(a):
+                fail(page, f"<{t}> carries data-count or data-umami-event: the session link page counts nothing")
+            if t == "dialog" or {"menu", "menu-btn"} & set((a.get("class") or "").split()):
+                fail(page, f"a menu (<{t}>): the session link page has none")
     if not any(m.startswith(f"FAIL  {page}:") for m in problems):
-        print(f"ok    {page}: CSP exactly as allowed, referrer {REFERRER}, {len(blocks)} inline style block(s) hashed, {attrs} style attribute(s), no static tracker tag, {events} click event(s)")
+        print(f"ok    {page}: CSP exactly as allowed, referrer {REFERRER}, {len(blocks)} inline style block(s) hashed, {attrs} style attribute(s), no static tracker tag, {events} click event(s)"
+              + (", no script, no menu (the session link page)" if page in SESSION_LINK else ""))
 
 # kerja-dev in any published text file; stylesheets load nothing from elsewhere.
 for f in FILES:
