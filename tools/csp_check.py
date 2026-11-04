@@ -162,7 +162,7 @@ def forbidden(text):
             found.append(f"createElement({arg})")
     return found
 BUTTON_EVENTS = {"menu-open"}  # data-umami-event: Umami counts a button without holding it (index.ts:370)
-LINK_EVENTS = {"get-kerja", "lang-switch", "instagram"}  # data-count, counted by site.js
+LINK_EVENTS = {"get-kerja", "app-store", "lang-switch", "instagram"}  # data-count, counted by site.js
 COUNT_DATA = {"data-count-at", "data-count-lang"}
 WORD = re.compile(r"^[a-z][a-z0-9_-]{0,23}$")
 PROMISE = {"promise/index.html", "id/promise/index.html"}  # where the visitors' opt-out lives (decision 5412)

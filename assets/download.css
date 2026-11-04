@@ -7,9 +7,14 @@
 .dl-top { padding-top: 52px; }
 .dl-strip { margin-top: 26px; }
 
-/* ---------- The list's form, then the QR card (a computer only, decision 5271) ---------- */
+/* ---------- The App Store badge, the list's form, then the QR card (a computer only, decision 5271) ---------- */
 .dl-act { margin-top: 28px; }
 .dl-qr { display: none; }
+/* Website step 2: Apple's badge is the page's main button, unchanged (never recoloured, cropped or redrawn),
+   as tall as the pills (56, 60 on a computer), with more than a quarter of its height clear around it. */
+.dl-badge { display: inline-flex; border-radius: 10px; }
+.dl-badge img { width: auto; height: 56px; }
+.dl-badge + .apply { margin-top: 28px; }
 
 /* ---------- The list's form (decisions 5289, 5290) ----------
    Where the waitlist was. A white card, with the app's
@@ -114,7 +119,9 @@
   .dl-strip { margin-top: 44px; }
 
   /* On a computer, the QR card to open this page on an iPhone, under the form. */
-  .dl-act { margin-top: 16px; }
+  .dl-act { margin-top: 32px; }
+  .dl-badge img { height: 60px; }
+  .dl-badge + .apply { margin-top: 32px; }
   .dl-qr {
     display: flex; align-items: center; gap: 48px; padding: 32px 40px; border-radius: 32px;
     background: var(--white); box-shadow: inset 0 0 0 1px var(--hairline);

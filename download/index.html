@@ -27,7 +27,7 @@
 <link rel="preload" href="../assets/fonts/bricolage-display.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../assets/fonts/jakarta-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="../assets/site.css?v=972639a4">
-<link rel="stylesheet" href="../assets/download.css?v=e91c2cf1">
+<link rel="stylesheet" href="../assets/download.css?v=2976d6b3">
 <script src="../assets/site.js?v=8696c509" defer></script>
 <script src="../assets/apply.js?v=cc09c490" defer></script>
 <noscript><style>.menu-btn,.apply-form{display:none!important}</style></noscript>
@@ -68,7 +68,7 @@
   <div class="wrap">
     <div class="dl-top">
       <h1 class="h1">Get Kerja</h1>
-      <p class="lede">Kerja for iPhone is almost here. Leave your details, and we’ll write to you the day it’s on the App Store.</p>
+      <p class="lede">Kerja is free on the App Store, for iPhone. On Android? Join the list below.</p>
     </div>
 
     <div class="strip dl-strip">
@@ -80,6 +80,10 @@
     </div>
 
     <div class="dl-act">
+      <!-- The main button (website step 2): Apple's own "Download on the App Store" badge, unchanged and served from
+           this site, to Kerja's App Store page. -->
+      <a class="dl-badge" data-count="app-store" href="https://apps.apple.com/app/id6819042558"><img src="../assets/app-store-badge.svg?v=a26fc5b3" width="168" height="56" alt="Download on the App Store"></a>
+
       <!-- The list's form (decisions 5289, 5290; its contract is in kerja-artifacts). assets/apply.js sends it as JSON
            to the form's data-endpoint; without JavaScript the form is hidden (the <noscript> style in the head) and
            the line under the heading shows instead. -->
