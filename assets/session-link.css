@@ -1,7 +1,7 @@
 /* The session link page, /s/ and /id/s/ (decisions 5500 to 5504), loaded after site.css: what a browser
-   shows for a session link (https://trykerja.com/s/ with its code after the #) when Kerja doesn't open it. Logo, the words, the beta pill and
-   the EN / ID switch, nothing else: no nav, no bar pill, no menu, no footer, and no script.
-   site.css's colours, type, pill and switch only. */
+   shows for a session link (https://trykerja.com/s/ with its code after the #) when Kerja doesn't open it. Logo, the words, the Get Kerja pill
+   (to the App Store page), the line under it, the EN / ID switch and the trademark line as a plain footer line (website step 2),
+   nothing else: no nav, no bar pill, no menu, no site footer, and no script. site.css's colours, type, pill and switch only. */
 
 /* The bar holds the logo and the switch at every width. Phones: the same 20 px on both sides (site.css
    keeps 12 on the right for the menu button, which this page hasn't). */
@@ -16,8 +16,16 @@
 .session-link .pill { margin-top: 28px; }
 /* "link-nya" (ID) never breaks at its hyphen. */
 .session-link .nowrap { white-space: nowrap; }
+/* The line under the pill, as Welcome's line under its hero button (welcome.css, .hero-small). */
+.session-link .sl-small { margin-top: 14px; text-align: center; font: 500 13px/18px var(--font-body); color: var(--ink-soft); }
+
+/* The trademark line: one plain footer line under the block, in the footer's small type (site.css, .foot-small). */
+.sl-foot { border-top: 1px solid var(--hairline); }
+.sl-foot p { padding: 24px 0 32px; font: 400 12px/18px var(--font-body); color: var(--ink-soft); }
 
 @media (min-width: 1080px) {
   .bar-in { padding-right: 0; }
   .session-link .pill { align-self: flex-start; margin-top: 36px; }
+  .session-link .sl-small { margin-top: 16px; text-align: left; font-size: 15px; line-height: 20px; }
+  .sl-foot p { padding-bottom: 40px; font-size: 13px; }
 }
