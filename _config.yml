@@ -4,6 +4,9 @@
 exclude:
   - README.md
   - tools
+# The one dot name published: .well-known, for apple-app-site-association, which tells iPhones that
+# a session link, https://trykerja.com/s/ with its code after the #, opens Kerja (decision 5500).
+include: [".well-known"]
 # No theme: without this line Pages adds its default theme (Primer) and with it /assets/css/style.css,
 # a file that isn't in this repo (legal.trykerja.com, which has no theme line, serves it).
 theme: null
