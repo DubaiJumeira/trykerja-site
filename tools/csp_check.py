@@ -89,8 +89,8 @@ UMAMI_SHA256 = "654f12c7548be726eba5b71d5ef8bffc2a41a39a0053e2a49a847869ccd7ac3f
 # reviewed commit. tools/stamp.py never touches these pins. (Updating the tracker changes umami.js and,
 # through TRACKER.src's stamp, site.js: both pins change in that commit.)
 JS_PINS = {
-    "assets/site.js": "8696c5092f6cdd0c53c966322bb39ade8d1e451e4f4705f0095018206982c9bc",
-    "assets/apply.js": "cc09c490614b662424eb367a720fa0e64103b7aa0b7848c8d0b3394be5a9b1a1",
+    "assets/site.js": "cd7b44de46de94880931c6f549d17c91f9c45eb37c909f819c13c968e405abde",
+    "assets/apply.js": "7fd353e331df5b4693bf92c1f1e9bfc4e1f60a61f08c55c0471c95a1a3588079",
     "assets/umami.js": UMAMI_SHA256,
 }
 SCRIPT_TYPES = (".js", ".mjs", ".cjs")

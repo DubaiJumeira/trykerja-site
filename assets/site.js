@@ -1,6 +1,6 @@
 /* Kerja website: the statistics opt-out marker, the statistics tracker's loader, the link counter and
    Our promise's visitor opt-out, the mobile menu and the steps of Welcome's map story.
-   Join the beta's form has its own script, apply.js; the statistics tracker is umami.js, which only
+   Get Kerja's form has its own script, apply.js; the statistics tracker is umami.js, which only
    this file adds to a page. */
 (function () {
   "use strict";

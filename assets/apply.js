@@ -1,6 +1,6 @@
-/* Kerja website: the beta application form on Join the beta (/download/ and /id/download/),
+/* Kerja website: the list's form on Get Kerja (/download/ and /id/download/),
    decisions 5289 and 5290. It sends the form as JSON to the form's data-endpoint, as the contract
-   (kerja-artifacts/beta-apply/contract.md) says, and shows the answer in place:
+   (named in README.md) says, and shows the answer in place:
      200: the form is replaced by "You're on the list" (also for a filled honeypot or an email
           already on the list: the server never tells them apart);
      400: each field the server names gets its error line, as the checks here do;
