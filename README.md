@@ -10,7 +10,9 @@ Every page's words for Kerja's first App Store version are the auditor's, word f
 
 **Get Kerja** (`/download/`, `/id/download/`, once Join the beta) has one state: the strip, the list's form, the QR code to open the page on an iPhone (on a computer), and What to expect, Better with a friend and On Android. It waits for the App Store with no store link. The open and full states, the TestFlight steps, the invite button and the scan-to-install code are gone (`assets/screens/step-kerja-*.webp`, the steps' picture, is no longer on any page).
 
-**Help and support** (`/support/`, `/id/support/`) is the App Store listing's Support URL. It is built like Our promise (the same head, bar, menu, footer and `promise.css`), with no form: how to reach a person, report, block, delete an account, sign in, work at a café, notifications, the legal pages, and the contact line. Its Indonesian section headings wait for the auditor (question Q603): each is left empty, with a comment, until then.
+**Help and support** (`/support/`, `/id/support/`) is the App Store listing's Support URL. It is built like Our promise (the same head, bar, menu, footer and `promise.css`), with no form: how to reach a person, report, block, delete an account, sign in, work at a café, notifications, the legal pages, and the contact line. Its Indonesian section headings are the auditor's (Q603), and on both pages apostrophes are ’, as on the rest of the site (Q604).
+
+**The share picture** (Q610) is `assets/og-canggu-bali.jpg`, every page's `og:image` in both languages: frame 47e-2 remade with only its line changed, to "Canggu, Bali · trykerja.com", under a new name, since link previews are cached by URL and `og:image` carries no `?v=` stamp. The first one, `assets/og.jpg` ("Canggu beta · trykerja.com"), is on no page now and stays in the repo until Zayd decides (open item 1398).
 
 ## The list's form (decisions 5289, 5290)
 
@@ -153,7 +155,7 @@ Pages link to each other with relative paths, so they also work on a preview add
 - `tools/csp_check.py`: checks every page's Content-Security-Policy and referrer tags against the page (see Security, below).
 - `_config.yml`: what Pages leaves off the site (see Security, below).
 - `id/`: the six pages in Indonesian (see above).
-- `assets/og.jpg`: the share preview (1200 × 630), used by both languages. `assets/qr-download.svg`: the QR code to https://trykerja.com/download; `assets/qr-download-id.svg`: the one to https://trykerja.com/id/download.
+- `assets/og-canggu-bali.jpg`: the share preview (1200 × 630), used by both languages (`assets/og.jpg`, the first one, is on no page: open item 1398). `assets/qr-download.svg`: the QR code to https://trykerja.com/download; `assets/qr-download-id.svg`: the one to https://trykerja.com/id/download.
 
 ## Security
 
