@@ -31,6 +31,12 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://trykerja.com/download/"/>
   </url>
   <url>
+    <loc>https://trykerja.com/support/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://trykerja.com/support/"/>
+    <xhtml:link rel="alternate" hreflang="id" href="https://trykerja.com/id/support/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://trykerja.com/support/"/>
+  </url>
+  <url>
     <loc>https://trykerja.com/id/</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://trykerja.com/"/>
     <xhtml:link rel="alternate" hreflang="id" href="https://trykerja.com/id/"/>
@@ -59,5 +65,11 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://trykerja.com/download/"/>
     <xhtml:link rel="alternate" hreflang="id" href="https://trykerja.com/id/download/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://trykerja.com/download/"/>
+  </url>
+  <url>
+    <loc>https://trykerja.com/id/support/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://trykerja.com/support/"/>
+    <xhtml:link rel="alternate" hreflang="id" href="https://trykerja.com/id/support/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://trykerja.com/support/"/>
   </url>
 </urlset>

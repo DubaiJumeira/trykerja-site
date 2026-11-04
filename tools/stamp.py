@@ -14,8 +14,8 @@ import hashlib, os, re, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PAGES = ["index.html", "how-it-works/index.html", "promise/index.html", "roadmap/index.html", "download/index.html",
-         "404.html", "id/index.html", "id/how-it-works/index.html", "id/promise/index.html", "id/roadmap/index.html",
-         "id/download/index.html"]
+         "support/index.html", "404.html", "id/index.html", "id/how-it-works/index.html", "id/promise/index.html",
+         "id/roadmap/index.html", "id/download/index.html", "id/support/index.html"]
 CHECK = "--check" in sys.argv
 
 def digest(path):
