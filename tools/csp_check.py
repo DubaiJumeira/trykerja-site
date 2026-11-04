@@ -14,7 +14,7 @@ Fails (exit 1) when a page:
 - has a CSP that isn't exactly the one README.md's "Security" part gives for it (directives in that
   order, whitespace aside): the base policy, with the SHA-256 of each of the page's own inline
   <style> blocks in style-src (none listed when it has none); plus style-src-attr 'unsafe-inline'
-  on Welcome (index.html, id/index.html) only; and on Join the beta (download/index.html,
+  on Welcome (index.html, id/index.html) only; and on Get Kerja (download/index.html,
   id/download/index.html) only, kerja-prod's function after connect-src 'self'; then, on every page,
   Umami's collector URL, https://gateway.umami.is/api/send, last in connect-src (5402, Q534). So any
   other source, keyword or directive fails (https:, data: or * in script-src, script-src-attr, style-src-elem, 'unsafe-eval',
@@ -159,7 +159,7 @@ def forbidden(text):
             found.append(f"createElement({arg})")
     return found
 BUTTON_EVENTS = {"menu-open"}  # data-umami-event: Umami counts a button without holding it (index.ts:370)
-LINK_EVENTS = {"get-kerja", "lang-switch", "testflight", "testflight-app", "instagram"}  # data-count, counted by site.js
+LINK_EVENTS = {"get-kerja", "lang-switch", "instagram"}  # data-count, counted by site.js
 COUNT_DATA = {"data-count-at", "data-count-lang"}
 WORD = re.compile(r"^[a-z][a-z0-9_-]{0,23}$")
 PROMISE = {"promise/index.html", "id/promise/index.html"}  # where the visitors' opt-out lives (decision 5412)
