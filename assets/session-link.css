@@ -1,0 +1,23 @@
+/* The session link page, /s/ and /id/s/ (decisions 5500 to 5504), loaded after site.css: what a browser
+   shows for a session link (https://trykerja.com/s/ with its code after the #) when Kerja doesn't open it. Logo, the words, the beta pill and
+   the EN / ID switch, nothing else: no nav, no bar pill, no menu, no footer, and no script.
+   site.css's colours, type, pill and switch only. */
+
+/* The bar holds the logo and the switch at every width. Phones: the same 20 px on both sides (site.css
+   keeps 12 on the right for the menu button, which this page hasn't). */
+.bar-in { padding-right: 20px; }
+
+/* Centred on the screen under the bar, as the 404's block is. */
+.session-link {
+  min-height: calc(100svh - var(--bar-h)); padding: 0 0 40px;
+  display: flex; flex-direction: column; justify-content: center;
+}
+.session-link .h1 { text-wrap: balance; }
+.session-link .pill { margin-top: 28px; }
+/* "link-nya" (ID) never breaks at its hyphen. */
+.session-link .nowrap { white-space: nowrap; }
+
+@media (min-width: 1080px) {
+  .bar-in { padding-right: 0; }
+  .session-link .pill { align-self: flex-start; margin-top: 36px; }
+}
