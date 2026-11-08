@@ -5,10 +5,10 @@
 .rm { margin-top: 64px; }
 .rm-h { font-size: 28px; line-height: 32px; letter-spacing: -.03em; }
 
-/* In the beta now: Welcome's lagoon-dot strip (.strip in site.css), with its link under the list. */
+/* In Kerja now: Welcome's lagoon-dot strip (.strip in site.css), with its link under the list. */
 .rm .strip { margin-top: 20px; }
 
-/* Coming next and After that: sand cards like Coming soon's (site.css), with no badge (the headings
+/* Coming next and After that: sand cards like the On the roadmap cards (site.css), with no badge (the headings
    already say when): the feature's name in Bricolage, its line under it in Jakarta, ink-2.
    One card per row on phones, two from 600 px, three from 1080 px. */
 .rm-cards { margin-top: 20px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; }

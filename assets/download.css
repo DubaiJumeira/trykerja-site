@@ -1,53 +1,18 @@
-/* Join the beta (/download/), frames 47d-1 to 47d-5. No effects on this page.
-   Colours only from site.css's :root. */
-
-/* ---------- The two states (decision 5201; was three, 3978) ----------
-   <body data-beta="open | full"> is the only switch; "open" is the default.
-   .beta-open (the open line, the two steps, the invite and the QR) shows in "open" only.
-   .beta-full (the full line and the beta application in the invite's place) shows in "full" only. Its
-   elements also carry the hidden attribute, so the page reads as open even where this file isn't
-   applied; "full" shows them here. One state is ever displayed, so only one is in the
-   accessibility tree. The two steps show only in "open", at every width (decision 4214). */
-body[data-beta="full"] .beta-open,
-body:not([data-beta="full"]) .beta-full { display: none; }
-body[data-beta="full"] .beta-full { display: block; }
-body[data-beta="full"] span.beta-full { display: inline; }
-/* The waitlist state's QR card (Zayd, decision 5271): on a computer only, under the form,
-   to open this page on an iPhone. After the rule above, so it wins at the same specificity. */
-body[data-beta="full"] .dl-qr-soon { display: none; }
+/* Get Kerja (/download/), frames 47d-1 to 47d-5. No effects on this page.
+   Colours only from site.css's :root. Website step 1 (launch words): the page has one state, the
+   former "full" one: the strip, the list's form, the QR card on a computer, and the three columns.
+   The open state, its two install steps and the invite are gone, with their rules. */
 
 /* ---------- First screen ---------- */
 .dl-top { padding-top: 52px; }
 .dl-strip { margin-top: 26px; }
 
-/* ---------- The two steps ---------- */
-.dl-steps { margin-top: 12px; display: flex; flex-direction: column; gap: 12px; }
-.dl-step {
-  min-width: 0; padding: 22px 20px 24px; border-radius: 24px;
-  background: var(--white); box-shadow: inset 0 0 0 1px var(--hairline);
-  display: flex; flex-direction: column;
-}
-.dl-n { font: 800 56px/52px var(--font-head); letter-spacing: -.04em; font-variant-numeric: tabular-nums; color: var(--ink); }
-.dl-t { margin-top: 14px; font: 800 24px/30px var(--font-head); letter-spacing: -.02em; color: var(--ink); }
-/* "Get TestFlight." is a text link (orangeShadow on white, 5.2:1); a 44 px target that keeps the 30 px line. */
-.dl-tf {
-  display: inline-flex; align-items: center; gap: 6px; min-height: 44px; margin: -7px 0;
-  color: var(--orange-shadow); text-decoration: none;
-}
-.dl-tf:hover { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 2px; }
-.dl-d { margin-top: 8px; font: 400 16px/24px var(--font-body); color: var(--ink-2); text-wrap: pretty; }
-.dl-shot { margin-top: 22px; }
-/* Step 2's line (copy v3, decision 4215): "tap the button below" wherever the invite pill shows,
-   "scan the code below" where the QR card replaces it (from 1080 px, the QR's own breakpoint).
-   Only one is ever displayed, so only one is in the accessibility tree. */
-.dl-d-scan { display: none; }
-
-/* ---------- The invite, the QR, or the beta application ---------- */
+/* ---------- The list's form, then the QR card (a computer only, decision 5271) ---------- */
 .dl-act { margin-top: 28px; }
 .dl-qr { display: none; }
 
-/* ---------- The beta application (decisions 5289, 5290) ----------
-   In the opens-soon state, where the waitlist was. A white card, as the steps are, with the app's
+/* ---------- The list's form (decisions 5289, 5290) ----------
+   Where the waitlist was. A white card, with the app's
    fields (design system v4: sand, 56 tall, radius 20, no border; labels 16/22 600), choice chips for
    the two radio groups (sand; the chosen one lemon with an ink outline, as the app's chips), ticks
    in an ink box, and the orange Send pill. --error only for a refused field's outline and its line.
@@ -148,19 +113,8 @@ body[data-beta="full"] .dl-qr-soon { display: none; }
   .dl-top .lede { max-width: 720px; }
   .dl-strip { margin-top: 44px; }
 
-  .dl-steps { margin-top: 16px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-  .dl-step { padding: 32px 32px 36px; border-radius: 32px; }
-  .dl-n { font-size: 72px; line-height: 66px; }
-  .dl-t { font-size: 28px; line-height: 34px; }
-  .dl-tf { margin: -5px 0; }
-  .dl-tf svg { width: 22px; height: 22px; }
-  .dl-d { font-size: 18px; line-height: 28px; }
-  .dl-d-tap { display: none; }
-  .dl-d-scan { display: block; }
-
-  /* On a computer the QR card takes the invite pill's place (open state only). */
+  /* On a computer, the QR card to open this page on an iPhone, under the form. */
   .dl-act { margin-top: 16px; }
-  .dl-invite { display: none; }
   .dl-qr {
     display: flex; align-items: center; gap: 48px; padding: 32px 40px; border-radius: 32px;
     background: var(--white); box-shadow: inset 0 0 0 1px var(--hairline);
@@ -168,9 +122,9 @@ body[data-beta="full"] .dl-qr-soon { display: none; }
   .dl-qr-img { flex: none; width: 200px; height: 200px; border: 1.5px solid var(--ink); border-radius: 18px; background: var(--white); }
   .dl-qr-t { font: 800 40px/46px var(--font-head); letter-spacing: -.03em; color: var(--ink); text-wrap: balance; }
 
-  /* Soon: the beta application where the invite was. Its heading and note on the left, the fields
-     on the right; "You're on the list." across both. */
-  body[data-beta="full"] .apply {
+  /* The list's form: its heading and note on the left, the fields on the right; "You're on the list."
+     across both. */
+  .apply {
     display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); column-gap: 64px; align-items: start;
     padding: 48px; border-radius: 32px;
   }
@@ -181,7 +135,7 @@ body[data-beta="full"] .dl-qr-soon { display: none; }
   .ap-done { grid-column: 1 / -1; }
   .ap-done-t { margin-top: 20px; font-size: 56px; line-height: 60px; letter-spacing: -.035em; }
   .ap-done-p { margin-top: 14px; max-width: 760px; font-size: 21px; line-height: 32px; }
-  body[data-beta="full"] .dl-qr-soon { display: flex; margin-top: 32px; }
+  .dl-qr-soon { margin-top: 32px; }
 
   .dl-more { margin-top: 130px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 56px; align-items: start; }
   .dl-col + .dl-col { margin-top: 0; }

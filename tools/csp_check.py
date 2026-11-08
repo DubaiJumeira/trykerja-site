@@ -14,7 +14,7 @@ Fails (exit 1) when a page:
 - has a CSP that isn't exactly the one README.md's "Security" part gives for it (directives in that
   order, whitespace aside): the base policy, with the SHA-256 of each of the page's own inline
   <style> blocks in style-src (none listed when it has none); plus style-src-attr 'unsafe-inline'
-  on Welcome (index.html, id/index.html) only; and on Join the beta (download/index.html,
+  on Welcome (index.html, id/index.html) only; and on Get Kerja (download/index.html,
   id/download/index.html) only, kerja-prod's function after connect-src 'self'; then, on every page,
   Umami's collector URL, https://gateway.umami.is/api/send, last in connect-src (5402, Q534). So any
   other source, keyword or directive fails (https:, data: or * in script-src, script-src-attr, style-src-elem, 'unsafe-eval',
@@ -93,8 +93,8 @@ UMAMI_SHA256 = "654f12c7548be726eba5b71d5ef8bffc2a41a39a0053e2a49a847869ccd7ac3f
 # reviewed commit. tools/stamp.py never touches these pins. (Updating the tracker changes umami.js and,
 # through TRACKER.src's stamp, site.js: both pins change in that commit.)
 JS_PINS = {
-    "assets/site.js": "8696c5092f6cdd0c53c966322bb39ade8d1e451e4f4705f0095018206982c9bc",
-    "assets/apply.js": "cc09c490614b662424eb367a720fa0e64103b7aa0b7848c8d0b3394be5a9b1a1",
+    "assets/site.js": "cd7b44de46de94880931c6f549d17c91f9c45eb37c909f819c13c968e405abde",
+    "assets/apply.js": "7fd353e331df5b4693bf92c1f1e9bfc4e1f60a61f08c55c0471c95a1a3588079",
     "assets/umami.js": UMAMI_SHA256,
 }
 SCRIPT_TYPES = (".js", ".mjs", ".cjs")
@@ -169,7 +169,7 @@ def forbidden(text):
             found.append(f"createElement({arg})")
     return found
 BUTTON_EVENTS = {"menu-open"}  # data-umami-event: Umami counts a button without holding it (index.ts:370)
-LINK_EVENTS = {"apply-open", "lang-switch", "testflight", "testflight-app", "instagram"}  # data-count, counted by site.js
+LINK_EVENTS = {"get-kerja", "lang-switch", "instagram"}  # data-count, counted by site.js
 COUNT_DATA = {"data-count-at", "data-count-lang"}
 WORD = re.compile(r"^[a-z][a-z0-9_-]{0,23}$")
 PROMISE = {"promise/index.html", "id/promise/index.html"}  # where the visitors' opt-out lives (decision 5412)
