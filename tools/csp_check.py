@@ -61,9 +61,13 @@ updates its pin in the same reviewed commit; stamp.py never touches the pins), w
 other .js, .mjs or .cjs file, or when a page loads a script other than site.js and apply.js (decision 5440).
 And when any published text file (HTML, JS, CSS, SVG, XML, JSON, TXT) names kerja-dev's project ref,
 in any case, or a published stylesheet loads from another site (url()) or uses @import.
+And when Apple's app-site-association (.well-known/apple-app-site-association, decision 5500) is missing,
+wouldn't be published (_config.yml's include: lists .well-known), isn't JSON or isn't byte for byte its pin
+(AASA_SHA256), or when Pages would publish any other file under .well-known.
 """
 import base64
 import hashlib
+import json
 import os
 import re
 import sys
@@ -94,6 +98,12 @@ JS_PINS = {
     "assets/umami.js": UMAMI_SHA256,
 }
 SCRIPT_TYPES = (".js", ".mjs", ".cjs")
+# Apple's app-site-association (decision 5500): a session link, https://trykerja.com/s/#<13 characters>, opens
+# Kerja (app.kerja and app.kerja.dev). Jekyll leaves out dot names, so _config.yml's include: publishes
+# .well-known; this file must be published, be JSON, be the only published file under .well-known, and be
+# byte for byte its pin. Any change to it updates AASA_SHA256 in the same reviewed commit.
+AASA_FILE = ".well-known/apple-app-site-association"
+AASA_SHA256 = "f2f3fd4ba87b3877f5f1b155b88c0d581aca78418f0f2a12a46d6f938f0995a6"
 # What each published file is (decision 5442). Pages: .html only, with every page check. Scripts: SCRIPT_TYPES,
 # pinned in JS_PINS. Other document types a browser would render with scripts may not be published at all.
 # Every other published file (SVG, XML, JSON, TXT, CSS, pictures, fonts, anything else) may contain no script
@@ -486,6 +496,28 @@ for f in FILES:
     if f.endswith((".js", ".mjs")) and f not in (SITE_JS, UMAMI_FILE):
         for what in forbidden(open(os.path.join(ROOT, f), encoding="utf-8", errors="replace").read()):
             fail(f, f"{what}: only site.js's pinned loader may add a script")
+
+# Apple's app-site-association: published through _config.yml's include:, JSON, byte for byte its pin, and
+# the only published file under .well-known (decision 5500).
+aasa_path = os.path.join(ROOT, AASA_FILE)
+if not os.path.isfile(aasa_path):
+    fail(AASA_FILE, "missing")
+else:
+    aasa = open(aasa_path, "rb").read()
+    if AASA_FILE not in FILES:
+        fail(AASA_FILE, "Pages wouldn't publish it: _config.yml's include: must list .well-known")
+    try:
+        json.loads(aasa.decode("utf-8"))
+    except ValueError:
+        fail(AASA_FILE, "not JSON")
+    got = hashlib.sha256(aasa).hexdigest()
+    if got != AASA_SHA256:
+        fail(AASA_FILE, f"SHA-256 {got} isn't its pin {AASA_SHA256}: a change to it must update AASA_SHA256, in the same reviewed commit")
+    if not any(m.startswith(f"FAIL  {AASA_FILE}:") for m in problems):
+        print(f"ok    {AASA_FILE}: published, JSON, SHA-256 {got}, as pinned")
+for f in FILES:
+    if f.startswith(".well-known/") and f != AASA_FILE:
+        fail(f, f"published under .well-known, where only {AASA_FILE} may be")
 
 for line in problems:
     print(line)
