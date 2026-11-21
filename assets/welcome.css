@@ -269,15 +269,15 @@
   }
   @container (width < 425.31px) {
     .pin[data-pin="1"] { --more: '+3'; }
-    .pin[data-pin="4"] .pin-mark { display: none; }
+    .pin[data-pin="3"] .pin-mark { display: none; }
   }
   @container (width < 291.88px) {
     .pin[data-pin="1"] { --more: '+4'; }
-    .pin[data-pin="4"] .pin-mark { display: none; }
+    .pin[data-pin="3"] .pin-mark { display: none; }
   }
   @container (width < 255.69px) {
     .pin[data-pin="1"] { --more: '+5'; }
-    .pin[data-pin="4"] .pin-mark { display: none; }
+    .pin[data-pin="3"] .pin-mark { display: none; }
   }
   /* pins: end */
 

@@ -58,13 +58,14 @@ W, H = 640, 620
 # 553 px at 1024 px wide; it is narrower only in short windows).
 MIN_WIDTH = 240
 
-# Who is working where (decisions 5249, 5250 and 5256): cast v3 only, each person at one café, one
-# café with four people so the app's "+N" shows; faces only at Miel Specialty Coffee and B Work Bali
-# (the window holds both) and one more café. Their faces are assets/story/face-<first name>-2x.webp
-# and -3x.webp (26 pt at 2x and 3x: the cast-v3 portrait, whole, as the app's Avatar shows it).
+# Who is working where (decisions 5249, 5250 and 5256; for 1.6, the auditor's UUUUUUUUUUUU 8 and
+# VVVVVVVVVVVV 4, Q1546 (b)): only the five cast-v3 members the 1.6 words allow (section 7's cast),
+# each person at one café, one café with four people so the app's "+N" shows: B Work Bali, faces
+# Amira, Daria and Freya, then "+1" for Nico; Miel Specialty Coffee quiet; Imani at Barboa Bali.
+# Their faces are assets/story/face-<first name>-2x.webp and -3x.webp (26 pt at 2x and 3x: the cast-v3
+# portrait, whole, as the app's Avatar shows it).
 PEOPLE = {
-    "B Work Bali": ["Daria Novak", "Elena Castell", "Nico Albers", "Tobias Lund"],
-    "Miel Specialty Coffee": ["Amira Khalil"],
+    "B Work Bali": ["Amira Khalil", "Daria Novak", "Freya Halden", "Nico Albers"],
     "Barboa Bali": ["Imani Brooks"],
 }
 # The cafés' names are drawn into an image (decision 5256: never page text): one row per name, in
