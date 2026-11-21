@@ -6,6 +6,10 @@
 /* ---------- First screen ---------- */
 .dl-top { padding-top: 52px; }
 .dl-strip { margin-top: 26px; }
+/* Release day (the 1.6 words' section 5): Apple's badge under the top line, unchanged (never recoloured, cropped
+   or redrawn), as tall as the pills (56, 60 on a computer), as site-launch-2 sized it (decision 5595). */
+.dl-badge { display: inline-flex; margin-top: 24px; border-radius: 10px; }
+.dl-badge img { width: auto; height: 56px; }
 
 /* ---------- The list's form, then the QR card (a computer only, decision 5271) ---------- */
 .dl-act { margin-top: 28px; }
@@ -113,6 +117,7 @@
   .dl-top .lede { max-width: 720px; }
   .dl-strip { margin-top: 44px; }
 
+  .dl-badge img { height: 60px; }
   /* On a computer, the QR card to open this page on an iPhone, under the form. */
   .dl-act { margin-top: 16px; }
   .dl-qr {
