@@ -98,12 +98,12 @@ JS_PINS = {
     "assets/umami.js": UMAMI_SHA256,
 }
 SCRIPT_TYPES = (".js", ".mjs", ".cjs")
-# Apple's app-site-association (decision 5500): a session link, https://trykerja.com/s/#<13 characters>, opens
-# Kerja (app.kerja and app.kerja.dev). Jekyll leaves out dot names, so _config.yml's include: publishes
+# Apple's app-site-association (decision 5500): a session link, https://trykerja.com/s/#<13 characters>, and, since
+# 1.6 (Q1290), an invite link, https://trykerja.com/i/#<13 characters>, open Kerja (app.kerja and app.kerja.dev). Jekyll leaves out dot names, so _config.yml's include: publishes
 # .well-known; this file must be published, be JSON, be the only published file under .well-known, and be
 # byte for byte its pin. Any change to it updates AASA_SHA256 in the same reviewed commit.
 AASA_FILE = ".well-known/apple-app-site-association"
-AASA_SHA256 = "f2f3fd4ba87b3877f5f1b155b88c0d581aca78418f0f2a12a46d6f938f0995a6"
+AASA_SHA256 = "9824f8e0eda0ff42a9c9a948c7477f1e2b9fafafd1bf1df797fd9b0f2c5ff933"  # /s/ and /i/ (RRRRRRRRRRRRR 4, Q1290)
 # What each published file is (decision 5442). Pages: .html only, with every page check. Scripts: SCRIPT_TYPES,
 # pinned in JS_PINS. Other document types a browser would render with scripts may not be published at all.
 # Every other published file (SVG, XML, JSON, TXT, CSS, pictures, fonts, anything else) may contain no script
