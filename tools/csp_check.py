@@ -34,7 +34,8 @@ Fails (exit 1) when a page:
 - (Our promise, EN and ID) hasn't exactly one visitor opt-out line (data-optout-line) with its two
   hidden <button type="button">s, or has data-count or data-umami-event on that line, on any element
   around it or in it (the opt-out must send nothing, decision 5412); or has one on another page;
-- (the session link page, s/ and id/s/, SESSION_LINK, decision 5503) has any <script> (site.js included:
+- (the session link page, s/ and id/s/, SESSION_LINK, decision 5503, and since 1.6 the invite link page, i/
+  and id/i/, its twin: TTTTTTTTTTTTT 2) has any <script> (site.js included:
   no Umami there), data-count or data-umami-event, or a menu or menu button: nothing runs and nothing is
   counted on it.
 And when assets/umami.js isn't byte for byte the pinned Umami release (its SHA-256, UMAMI_SHA256: the
@@ -178,7 +179,8 @@ WORD = re.compile(r"^[a-z][a-z0-9_-]{0,23}$")
 PROMISE = {"promise/index.html", "id/promise/index.html"}  # where the visitors' opt-out lives (decision 5412)
 # The session link page (decisions 5501 to 5503): what a browser shows for https://trykerja.com/s/#<code>. It loads
 # no script at all, so its CSP is the base policy with no style hash (it has no inline <style>), as for any page.
-SESSION_LINK = {"s/index.html", "id/s/index.html"}
+# Since 1.6, the invite link page, https://trykerja.com/i/#<code>, is its twin (TTTTTTTTTTTTT 2), with the same rules.
+SESSION_LINK = {"s/index.html", "id/s/index.html", "i/index.html", "id/i/index.html"}
 
 
 def expected_csp(page, style_hashes):
